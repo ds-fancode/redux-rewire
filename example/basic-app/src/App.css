@@ -1,0 +1,17 @@
+.App {
+  text-align: center;
+}
+
+
+@media (prefers-reduced-motion: no-preference) {
+
+}
+
+.App-header {
+  padding: 10px;
+  font-size: calc(10px + 2vmin);
+}
+
+.App-link {
+  color: #a13848;
+}

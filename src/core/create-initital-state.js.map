@@ -1,0 +1,1 @@
+{"version":3,"file":"create-initital-state.js","sourceRoot":"","sources":["create-initital-state.ts"],"names":[],"mappings":";;;AAEa,QAAA,WAAW,GAAG,cAAc,CAAA;AAElC,MAAM,kBAAkB,GAA2B,UACxD,WAAW,EACX,YAAY;IAEZ,IAAI,OAAO,YAAY,KAAK,QAAQ,EAAE;QACpC,uCACK,YAAY,KACf,CAAC,mBAAW,CAAC,EAAE,WAAW,IAC3B;KACF;SAAM;QACL,OAAO,YAAY,CAAA;KACpB;AACH,CAAC,CAAA;AAZY,QAAA,kBAAkB,sBAY9B"}

@@ -1,0 +1,167 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es6": true,
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts",
+        ".tsx"
+      ]
+    },
+    "import/resolver": {
+      "typescript": {}
+    },
+    "import/ignore": [
+      "react-native"
+    ],
+    "react": {
+      "version": "detect"
+    }
+  },
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript"
+  ],
+  "plugins": [
+    "prettier",
+    "@typescript-eslint/eslint-plugin",
+    "react-native",
+    "eslint-plugin-import"
+  ],
+  "ignorePatterns": [
+    "**.*.js",
+    "*.d.ts"
+  ],
+  "rules": {
+    // Below to rules are only offed for a while
+    "no-unused-vars": "warn",
+    "no-useless-escape": "off",
+    // END
+    "prettier/prettier": "error",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "class",
+        "format": [
+          "PascalCase"
+        ]
+      }
+    ],
+    "spaced-comment": [
+      "error",
+      "always",
+      {
+        "markers": [
+          "/",
+          "#region",
+          "#endregion",
+          "region",
+          "endregion"
+        ]
+      }
+    ],
+    "no-console": "error",
+    "no-debugger": "error",
+    "no-eval": "error",
+    "no-trailing-spaces": "error",
+    "no-irregular-whitespace": "error",
+    "no-unsafe-finally": "error",
+    "no-var": "error",
+    "brace-style": [
+      "error",
+      "1tbs",
+      {
+        "allowSingleLine": true
+      }
+    ],
+    "semi": [
+      "error",
+      "never"
+    ],
+    "eqeqeq": [
+      "error",
+      "smart"
+    ],
+    "@typescript-eslint/type-annotation-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true,
+        "overrides": {
+          "colon": {
+            "before": false,
+            "after": true
+          }
+        }
+      }
+    ],
+    "quote-props": [
+      "error",
+      "as-needed",
+      {
+        "unnecessary": false,
+        "numbers": false
+      }
+    ],
+    "@typescript-eslint/prefer-namespace-keyword": "error",
+    "no-duplicate-case": "error",
+    "no-dupe-keys": "error",
+    "no-dupe-class-members": "error",
+    "no-dupe-args": "error",
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [],
+        "patterns": []
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "jest.mock.ts",
+        "jest.setup.ts"
+      ],
+      "env": {
+        "jest": true
+      },
+      "plugins": [
+        "jest"
+      ],
+      "rules": {
+        "no-unexpected-multiline": "off",
+        "no-unused-vars": "off",
+        "import/namespace": "off",
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error"
+      }
+    }
+  ]
+}

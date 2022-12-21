@@ -1,0 +1,61 @@
+Arguments: 
+  /Users/kamlesh.sharma/.nvm/versions/node/v16.16.0/bin/node /Users/kamlesh.sharma/.nvm/versions/node/v16.16.0/bin/yarn
+
+PATH: 
+  /Users/kamlesh.sharma/.nvm/versions/node/v16.16.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/kamlesh.sharma/Library/Application Support/JetBrains/Toolbox/scripts:/Users/kamlesh.sharma/Library/Android/sdk/emulator:/Users/kamlesh.sharma/Library/Android/sdk/platform-tools
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.16.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/kamlesh.sharma/workspace/fancode/redux-rewire/package.json: Unexpected token } in JSON at position 826
+      at JSON.parse (<anonymous>)
+      at /Users/kamlesh.sharma/.nvm/versions/node/v16.16.0/lib/node_modules/yarn/lib/cli.js:1629:59
+      at Generator.next (<anonymous>)
+      at step (/Users/kamlesh.sharma/.nvm/versions/node/v16.16.0/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /Users/kamlesh.sharma/.nvm/versions/node/v16.16.0/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "redux-rewire",
+    "version": "0.0.1",
+    "description": "State management library for react based applications",
+    "main": "src/index.ts",
+    "scripts": {
+      "test": "jest",
+      "test:watch": "jest -- --watch",
+      "test:ci": "jest --coverage && coveralls < coverage/lcov.info",
+      "lint": "eslint . --ext .ts,.tsx",
+      "lint:fix": "eslint --ext .ts,.tsx --fix",
+      "prettier": "prettier --check \"**/*.{ts,tsx}\"",
+      "prettier:fix": "prettier --write \"**/*.{ts,tsx}\"",
+      "build": "rm -rf ./lib && yarn tsc && yarn tsc --module CommonJS --outDir lib/cjs && node ./publish.js"
+    },
+    "author": "FanCode",
+    "license": "ISC",
+    "dependencies": {
+      "immer": "^9.0.12",
+      "react-redux": "^7.2.8",
+      "redux": "^4.1.2",
+      "redux-logger": "^3.0.6"
+    },
+    "devDependencies": {
+      "jest": "26.6.3",
+      
+    },
+    "peerDependencies": {
+      "react": "*"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

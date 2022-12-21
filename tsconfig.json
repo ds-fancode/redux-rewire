@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "newLine": "LF",
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true, // Verify
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["src/*"]
+    },
+    "lib": ["es2020", "dom", "ScriptHost"],
+    "target": "ES2015",
+    "module": "ES2020",
+    "declaration": true,
+    "outDir": "lib/esm",
+    "strict": true
+  },
+  "include": ["src"],
+  "exclude": [
+    "**/__tests__/*",
+    "node_modules",
+    "dist"
+  ]
+}

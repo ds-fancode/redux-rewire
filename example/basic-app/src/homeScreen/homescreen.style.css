@@ -1,0 +1,24 @@
+
+.container{
+  padding: 10px;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.actionContainer{
+  display: flex;
+  gap: 20px;
+  padding: 5px;
+}
+.item{
+  font-size: 2rem;
+}
+.listContainer{
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
