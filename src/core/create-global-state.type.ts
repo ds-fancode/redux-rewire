@@ -1,7 +1,7 @@
 import {
   ActionType,
   ActionGetKeyType,
-  ActionInputMap
+  ActionInputMap,
 } from './create-action-slice-type'
 import {ReducerGetKeyType, ReducerInputMap} from './create-reducer-slice-type'
 
@@ -20,5 +20,6 @@ export type CreateGlobalStateType = <
   key: string
   actionSlice: ActionGetKeyType<State, T, U>
   isMounted: boolean
+  autoMount: boolean
   actionsRef: any
 }

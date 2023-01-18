@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
-
-  }
+    "paths": {
+      "redux-rewire": ["../../src"]
+    }
+  },
+  "include": ["src"]
 }
