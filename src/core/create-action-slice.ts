@@ -3,11 +3,11 @@ import {RESERVED_ACTIONS} from '../constant'
 import {CreateActionSliceType} from './create-action-slice-type'
 import {createActionsReference} from './create-actions-reference'
 
-export const createActionSlice: CreateActionSliceType = function(
+export const createActionSlice: CreateActionSliceType = function (
   reducerSlice,
   actionMap
 ) {
-  return function(
+  return function (
     key,
     dispatch,
     getState,
@@ -26,7 +26,7 @@ export const createActionSlice: CreateActionSliceType = function(
     //#region create empty action
     const allAvailableActionKeys = [
       ...Object.keys(reducerActions),
-      ...Object.keys(actionMap)
+      ...Object.keys(actionMap),
     ]
 
     const freshActionsRef = createActionsReference(allAvailableActionKeys)
@@ -42,7 +42,7 @@ export const createActionSlice: CreateActionSliceType = function(
         reducerActions,
         reducers,
         asyncActions: actions,
-        actions
+        actions,
       }
     }
 
@@ -59,7 +59,7 @@ export const createActionSlice: CreateActionSliceType = function(
     //#endregion
 
     //#region map action to execute reducerSlice and ioAction
-    allAvailableActionKeys.forEach(actionKey => {
+    allAvailableActionKeys.forEach((actionKey) => {
       actions[actionKey] = (
         data: any,
         inputNewState?: any,
@@ -83,7 +83,7 @@ export const createActionSlice: CreateActionSliceType = function(
             ({returnAction, runIoAction}) => {
               return {
                 ioAction: runIoAction,
-                resultCallback: returnAction
+                resultCallback: returnAction,
               }
             }
           )
@@ -103,7 +103,7 @@ export const createActionSlice: CreateActionSliceType = function(
       reducers,
       reducerActions,
       asyncActions,
-      actions
+      actions,
     }
   }
 }
@@ -135,19 +135,21 @@ function createAsyncFunction(
          * Dispatching here only so that we can c apture logs in the bugsnag middleware
          * This will not cause any performance aas we are not forwarding it ahead to redux
          */
-        dispatch?.({
-          type: RESERVED_ACTIONS.ASYNC_ACTION,
-          componentKey: key,
-          asyncActionName: mapKey,
-          ioActions
-        })
+        if (ioActions?.length) {
+          dispatch?.({
+            type: `RESERVED_ACTIONS.ASYNC_ACTION/${key}/${mapKey}`,
+            componentKey: key,
+            asyncActionName: mapKey,
+            ioActions,
+          })
+        }
       } catch (e) {
         dispatch?.({
           type: RESERVED_ACTIONS.ASYNC_ACTION,
           componentKey: key,
           asyncActionName: mapKey,
           ioActions,
-          error: e
+          error: e,
         })
       }
       return ioActions
