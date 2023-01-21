@@ -22,7 +22,6 @@ export const RewireProvider = ({store, children, ...args}: ProviderProps) => {
       <Provider store={store} {...args}>
         {children}
       </Provider>
-      ;
     </RewireContext.Provider>
   )
 }
