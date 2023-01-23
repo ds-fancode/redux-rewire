@@ -79,17 +79,13 @@ export const createActionSlice: CreateActionSliceType = function (
             inputNewState,
             prevState
           )
-          const mappedInputForRunIO = ioActions.map(
-            ({returnAction, runIoAction}) => {
-              return {
-                ioAction: runIoAction,
-                resultCallback: returnAction,
-              }
-            }
-          )
           // execute IO
           if (typeof ioRunner === 'function') {
-            ioRunner(mappedInputForRunIO)
+            try {
+              ioRunner(ioActions)
+            } catch (err) {
+              console.error('error running ioRunner', err)
+            }
           }
         }
         return true

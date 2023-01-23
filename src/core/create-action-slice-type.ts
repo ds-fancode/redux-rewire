@@ -1,13 +1,7 @@
 import {AnyAction, Dispatch} from 'redux'
 import {ReducerGetKeyType, ReducerInputMap} from './create-reducer-slice-type'
 
-type IoReturnAction<ActionType> = {
-  returnAction?: ActionType | any
-  runIoAction: {
-    type: string
-    data: any
-  }
-}
+type IoReturnAction = any[]
 
 export type ActionInputFunction<State, ActionType> = (
   state: State,
@@ -16,7 +10,7 @@ export type ActionInputFunction<State, ActionType> = (
   compKey: string,
   globalState: {[key: string]: any},
   prevState: State
-) => IoReturnAction<ActionType>[]
+) => IoReturnAction
 
 export type ActionInputMap<State, ActionType> = {
   [key: string]: ActionInputFunction<State, ActionType>
@@ -27,7 +21,7 @@ export type ActionType<State, U extends ActionInputMap<State, any>> = {
     actionData: Parameters<U[key]>[2],
     newState?: State,
     prevState?: State
-  ) => IoReturnAction<any>[]
+  ) => IoReturnAction
 }
 
 export type CreateActionSliceType = <
