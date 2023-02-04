@@ -1,8 +1,8 @@
-import produce from "immer";
-import { AnyAction } from "redux";
-import { RESERVED_ACTIONS } from "../constant";
-import { createReducers } from "./create-reducer";
-import { CreateReducerSliceType } from "./create-reducer-slice-type";
+import produce from 'immer'
+import {AnyAction} from 'redux'
+import {RESERVED_ACTIONS} from '../constant'
+import {createReducers} from './create-reducer'
+import {CreateReducerSliceType} from './create-reducer-slice-type'
 
 export const createReducerSlice: CreateReducerSliceType = function (
   initialState,
@@ -11,7 +11,9 @@ export const createReducerSlice: CreateReducerSliceType = function (
   return (key, dispatch, getState, overrideInitialState) => {
     const finalInitialState: typeof initialState = overrideInitialState
       ? JSON.parse(JSON.stringify(overrideInitialState)) // overrideInitialState is used in __tests__ cases
-      : initialState;
+      : key && getState?.()?.[key]
+      ? getState?.()?.[key]
+      : initialState
     if (!key) {
       // return only references
       return {
@@ -19,12 +21,12 @@ export const createReducerSlice: CreateReducerSliceType = function (
         reducers,
         reducerActions: reducers,
         initialState: finalInitialState,
-      } as any;
+      } as any
     }
     const updatedReducerMap = Object.keys(reducers).reduce<{
-      [key: string]: any;
+      [key: string]: any
     }>((acc, reducerKey) => {
-      const combinedKey = `${key}/${reducerKey}`;
+      const combinedKey = `${key}/${reducerKey}`
       acc[combinedKey] = produce(
         (draftState: typeof initialState, action: AnyAction) => {
           try {
@@ -33,29 +35,26 @@ export const createReducerSlice: CreateReducerSliceType = function (
               action.payload,
               key,
               action.globalState
-            );
+            )
           } catch (e) {
             dispatch?.({
               type: RESERVED_ACTIONS.REDUCER_ACTION,
               componentKey: key,
               asyncActionName: combinedKey,
               error: e,
-            });
+            })
           }
-          return draftState;
+          return draftState
         }
-      );
-      return acc;
-    }, {});
+      )
+      return acc
+    }, {})
 
-    const updatedReducers = createReducers(
-      updatedReducerMap,
-      finalInitialState
-    );
+    const updatedReducers = createReducers(updatedReducerMap, finalInitialState)
 
-    const reducerKeys = Object.keys(reducers);
+    const reducerKeys = Object.keys(reducers)
 
-    const reducerActions: any = <{ [key: string]: (data: any) => any }>(
+    const reducerActions: any = <{[key: string]: (data: any) => any}>(
       reducerKeys.reduce<any>((acc, reducerKey) => {
         acc[reducerKey] = (
           data: any,
@@ -72,17 +71,17 @@ export const createReducerSlice: CreateReducerSliceType = function (
                 type: `${key}/${reducerKey}`,
                 payload: data,
                 globalState,
-              };
-        };
-        return acc;
+              }
+        }
+        return acc
       }, {})
-    );
+    )
 
     return {
       key,
       initialState: finalInitialState,
       reducerActions,
       reducers: updatedReducers,
-    };
-  };
-};
+    }
+  }
+}

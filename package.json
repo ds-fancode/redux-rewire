@@ -1,6 +1,6 @@
 {
   "name": "redux-rewire",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.7",
   "description": "State management library for react based applications",
   "main": "src/index.ts",
   "scripts": {
@@ -11,17 +11,15 @@
     "lint:fix": "eslint --ext .ts,.tsx --fix",
     "prettier": "prettier --check \"**/*.{ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{ts,tsx}\"",
-    "build": "rm -rf ./lib && yarn tsc && yarn tsc --module CommonJS --outDir lib/cjs",
-    "publish:lib": "yarn build && node ./publish.js",
+    "build": "rm -rf ./lib && yarn tsc && yarn tsc --module CommonJS --outDir lib/cjs && node ./publish.js",
     "postinstall": "yarn build"
   },
   "author": "FanCode",
   "license": "ISC",
   "dependencies": {
     "immer": "^9.0.12",
-    "react-redux": "^7.2.8",
-    "redux": "^4.1.2",
-    "redux-logger": "^3.0.6"
+    "react-redux": "^8.0.5",
+    "redux": "^4.2.0"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
@@ -32,6 +30,6 @@
     "typescript": "^4.9.4"
   },
   "peerDependencies": {
-    "react": "*"
+    "react": "18.x"
   }
 }

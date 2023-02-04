@@ -1,12 +1,14 @@
-import {useMemo} from 'react'
+import {useContext, useMemo} from 'react'
 import {shallowEqual} from 'react-redux'
 import {UseReduxStateType} from './use-global-state.type'
 import {useReduxState} from './use-redux-state'
-export const useGlobalState: UseReduxStateType = function(
+import {RewireContext} from '../shared/provider'
+export const useGlobalState: UseReduxStateType = function (
   globalStore,
   stateSelector = (_: any) => _,
   equalityFn = shallowEqual
 ) {
+  const {globalStoreInitMap, setGlobalStoreInitMap} = useContext(RewireContext)
   const [key, state, actions] = useReduxState(
     globalStore.key,
     globalStore.actionSlice,
@@ -16,8 +18,8 @@ export const useGlobalState: UseReduxStateType = function(
   )
   useMemo(() => {
     // global store mount action call
-    if (!globalStore.isMounted) {
-      globalStore.isMounted = true
+    if (globalStore.autoMount && !globalStoreInitMap[key]) {
+      setGlobalStoreInitMap(key)
       actions.mount?.(null)
     }
   }, [])

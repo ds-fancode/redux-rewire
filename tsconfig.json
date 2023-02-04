@@ -1,25 +1,33 @@
 {
   "compilerOptions": {
+    "incremental": true,
+    "rootDir": "src",
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "experimentalDecorators": true,
     "moduleResolution": "node",
     "newLine": "LF",
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": false,
     "sourceMap": true,
     "strictNullChecks": true,
     "skipLibCheck": true, // Verify
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./",
-    "paths": {
-      "src/*": ["src/*"]
-    },
+    "baseUrl": "src",
     "lib": ["es2020", "dom", "ScriptHost"],
     "target": "ES2015",
     "module": "ES2020",
     "declaration": true,
     "outDir": "lib/esm",
-    "strict": true
+    "strict": true,
+    "paths": {
+      "src/*": ["src/*"]
+    },
   },
   "include": ["src"],
   "exclude": [

@@ -1,7 +1,7 @@
 import {createActionsReferenceFromActionSlice} from './create-actions-reference'
 import {CreateGlobalStateType} from './create-global-state.type'
 
-export const createGlobalState: CreateGlobalStateType = function(
+export const createGlobalState: CreateGlobalStateType = function (
   key,
   actionSlice,
   autoMount = true
@@ -11,7 +11,8 @@ export const createGlobalState: CreateGlobalStateType = function(
   return {
     key,
     actionSlice,
+    autoMount,
     isMounted,
-    actionsRef
+    actionsRef,
   }
 }
