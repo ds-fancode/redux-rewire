@@ -5,6 +5,7 @@
 - [Installation](#Installation)
 - [Basic Usage](#Basic Usage)
 - [API Definitions](#API Definitions)
+- [Examples](#Examples)
 - [Advance Usage](#Advance Usage)
 - [About](#About)
 
@@ -31,7 +32,7 @@ Using yarn package manager
 yarn add redux-rewire -S
 ```
 
-## Basic usage
+## Basic Usage
 Initialise the redux-rewire at the root of the app.
 ```typescript jsx
 // App.js
@@ -165,7 +166,8 @@ const HomeScreen = (props) => {
 
 
 ```
----
+
+
 ## API Definitions
 | Api                | input                                          | Description | usage |
 |--------------------|------------------------------------------------|-------------|-------|
