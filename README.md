@@ -8,7 +8,7 @@
 - [Advance usage](#Advance Usage)
 - [About](#About)
 
-### Introduction
+## Introduction
 State management library for react application built on top of redux and react-redux, 
 works well with large scale frontend applications
 
@@ -21,7 +21,7 @@ Following are the benefits of redux-rewire
 - Full type safe: Redux-rewire is created with the intention to integrate will with large scale typescript projects
 
 
-### Installation
+## Installation
 Using npm
 ```shell
 npm install redux-rewire --save-prod
@@ -31,7 +31,7 @@ Using yarn package manager
 yarn add redux-rewire -S
 ```
 
-### Basic usage
+## Basic usage
 Initialise the redux-rewire at the root of the app.
 ```typescript jsx
 // App.js
@@ -166,7 +166,7 @@ const HomeScreen = (props) => {
 
 ```
 ---
-### API Definitions
+## API Definitions
 | Api                | input                                          | Description | usage |
 |--------------------|------------------------------------------------|-------------|-------|
 | createInitialState | (compKey, intialState)                         |             |       |
@@ -175,11 +175,11 @@ const HomeScreen = (props) => {
 | useReduxState      | (compKey, actionSlice, selectors)              |             |       |
 
 
-### Examples
+## Examples
 Please refer the [examples](https://github.com/ds-fancode/redux-rewire/tree/main/example) directory
 
-### Advance Usage
+## Advance Usage
 Coming Soon
-### About
+## About
 Redux-Rewire is developed and maintained by [Fancode](https://www.fancode.com/) and many amazing contributors.
 
