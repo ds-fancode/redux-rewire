@@ -3,9 +3,9 @@
 ## Content
 - [Introduction](#Introduction)
 - [Installation](#Installation)
-- [Basic usage](#Basic Usage)
-- [API Definition](#API Definition)
-- [Advance usage](#Advance Usage)
+- [Basic Usage](#Basic Usage)
+- [API Definitions](#API Definitions)
+- [Advance Usage](#Advance Usage)
 - [About](#About)
 
 ## Introduction
