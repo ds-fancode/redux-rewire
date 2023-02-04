@@ -3,10 +3,10 @@
 ## Content
 - [Introduction](#Introduction)
 - [Installation](#Installation)
-- [Basic Usage](#Basic Usage)
-- [API Definitions](#API Definitions)
+- [Basic Usage](#Basic-Usage)
+- [API Definitions](#api-definitions)
 - [Examples](#Examples)
-- [Advance Usage](#Advance Usage)
+- [Advance Usage](#Advance-Usage)
 - [About](#About)
 
 ## Introduction
