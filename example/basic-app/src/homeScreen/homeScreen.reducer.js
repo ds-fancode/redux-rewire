@@ -1,12 +1,12 @@
-import { createReducerSlice } from "redux-rewire";
-import { initialState } from "./homeScreen.init";
+import {createReducerSlice} from 'redux-rewire'
+import {initialState} from './homeScreen.init'
 
 export const reducerSlice = createReducerSlice(initialState, {
   mount: (state) => {
-    return state;
+    return state
   },
-  add: (state, actionData) => {
-    state.list.push(actionData);
-    return state;
+  add: (state, actionData, compKey, globalState) => {
+    state.list.push(actionData)
+    return state
   },
-});
+})
