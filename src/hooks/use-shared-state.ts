@@ -1,6 +1,5 @@
-import {useEffect, useMemo} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import {shallowEqual} from 'react-redux'
-import {createActionsReferenceFromActionSlice} from '../core/create-actions-reference'
 import {keyHandler} from '../helper/key-handler'
 import {useReduxState} from './use-redux-state'
 import {UseReduxStateType} from './use-shared-state.type'
@@ -13,16 +12,9 @@ export const useSharedState: UseReduxStateType = function(
 ) {
   const rootKey = keyHandler.getUniqueRoot(compKey)
   const finalKey = keyHandler.concat(rootKey, sharedStore.partialKey)
-  const actionsRef = useMemo(() => {
-    // check if new actions Ref creation is required
-    if (sharedStore.actionsRefsKeyMap[finalKey] === undefined) {
-      // create new actionRef for first mount of specific screen shared store
-      sharedStore.actionsRefsKeyMap[
-        finalKey
-      ] = createActionsReferenceFromActionSlice(sharedStore.actionSlice)
-    }
-    return sharedStore.actionsRefsKeyMap[finalKey]
-  }, [])
+  const [actionsRef, setActionsRef] = useState(
+    sharedStore.actionsRefsKeyMap[finalKey]
+  )
   const [key, state, actions] = useReduxState(
     finalKey,
     sharedStore.actionSlice,
@@ -30,6 +22,13 @@ export const useSharedState: UseReduxStateType = function(
     equalityFn,
     actionsRef
   )
+  useMemo(() => {
+    if (sharedStore.actionsRefsKeyMap[finalKey] !== actions) {
+      sharedStore.actionsRefsKeyMap[finalKey] = actions
+      setActionsRef(actions)
+    }
+  }, [actions])
+
   useMemo(() => {
     if (sharedStore.attachedComponentsCount[key] === undefined)
       sharedStore.attachedComponentsCount[key] = 0

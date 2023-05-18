@@ -59,38 +59,40 @@ export const createActionSlice: CreateActionSliceType = function (
     //#endregion
 
     //#region map action to execute reducerSlice and ioAction
-    allAvailableActionKeys.forEach((actionKey) => {
-      actions[actionKey] = (
-        data: any,
-        inputNewState?: any,
-        inputPrevState?: any
-      ) => {
-        const prevState =
-          inputPrevState ?? (getState?.() as any)[key] ?? initialState
-        // before runIO started run our reducers to reducerSlice states
-        if (reducerActions[actionKey]) reducerActions[actionKey](data)
+    if (actionsRef) {
+      allAvailableActionKeys.forEach((actionKey) => {
+        actions[actionKey] = (
+          data: any,
+          inputNewState?: any,
+          inputPrevState?: any
+        ) => {
+          const prevState =
+            inputPrevState ?? (getState?.() as any)[key] ?? initialState
+          // before runIO started run our reducers to reducerSlice states
+          if (reducerActions[actionKey]) reducerActions[actionKey](data)
 
-        // Async actions will get updated state after reducer work is done
-        // first make async called to make sure we have current state to be used in async action
+          // Async actions will get updated state after reducer work is done
+          // first make async called to make sure we have current state to be used in async action
 
-        if (asyncActions[actionKey]) {
-          const ioActions: any[] = asyncActions[actionKey](
-            data,
-            inputNewState,
-            prevState
-          )
-          // execute IO
-          if (typeof ioRunner === 'function') {
-            try {
-              ioRunner(ioActions)
-            } catch (err) {
-              console.error('error running ioRunner', err)
+          if (asyncActions[actionKey]) {
+            const ioActions: any[] = asyncActions[actionKey](
+              data,
+              inputNewState,
+              prevState
+            )
+            // execute IO
+            if (typeof ioRunner === 'function') {
+              try {
+                ioRunner(ioActions)
+              } catch (err) {
+                console.error('error running ioRunner', err)
+              }
             }
           }
+          return true
         }
-        return true
-      }
-    })
+      })
+    }
     //#endregion
 
     return {
