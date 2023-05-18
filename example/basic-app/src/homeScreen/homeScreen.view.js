@@ -3,9 +3,10 @@ import {actionSlice} from './homeScreen.actions'
 import './homescreen.style.css'
 import {useCallback, useRef} from 'react'
 import {configStore} from '../globalStore/configStore'
+import TodoListItem from './molecules/todoListItem/todoListItem.view'
 
 const HomeScreen = (props) => {
-  const [, state, actions] = useReduxState(
+  const [key, state, actions] = useReduxState(
     'home-screen',
     actionSlice,
     identitySelector
@@ -25,8 +26,8 @@ const HomeScreen = (props) => {
         <button onClick={addToDo}>ADD TO-DO</button>
       </div>
       <div className={'listContainer'}>
-        {state.list.map((v) => {
-          return <div className={'item'}>Test</div>
+        {state.list.map((v, index) => {
+          return <TodoListItem key={index} listIndex={index} parentKey={key} />
         })}
         {state.list.length === 0 ? <div>Your To Do list is empty</div> : null}
       </div>

@@ -12,9 +12,6 @@
   gap: 20px;
   padding: 5px;
 }
-.item{
-  font-size: 2rem;
-}
 .listContainer{
   display: flex;
   gap: 5px;
