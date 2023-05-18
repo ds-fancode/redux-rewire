@@ -8,6 +8,7 @@ export { createGlobalState } from "./core/create-global-state";
 export { identitySelector } from "./helper/idenity-selector";
 export { noneSelector } from "./helper/none-selector";
 export { keysSelector } from "./helper/keys-selector";
+export { getParentState } from "./helper/get-parent-state";
 export { RewireProvider, RewireContext } from "./shared/provider";
 /**
  * Advance feature capabilities
