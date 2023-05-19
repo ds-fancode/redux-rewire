@@ -4,7 +4,7 @@ import {keyHandler} from '../helper/key-handler'
 import {useReduxState} from './use-redux-state'
 import {UseReduxStateType} from './use-shared-state.type'
 
-export const useSharedState: UseReduxStateType = function(
+export const useSharedState: UseReduxStateType = function (
   compKey,
   sharedStore,
   stateSelector = (_: any) => _,

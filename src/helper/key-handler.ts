@@ -2,7 +2,7 @@ export const keyHandler = {
   separator: '/',
   componentIdMap: {} as {[key: string]: string | null | undefined},
   filterKeys(keys: any[], filterItems = [undefined, null]): string[] {
-    return keys.filter(key => !filterItems.includes(key))
+    return keys.filter((key) => !filterItems.includes(key))
   },
   setComponentId(
     key: string | null | undefined,
@@ -90,5 +90,5 @@ export const keyHandler = {
       }
     }
     return null
-  }
+  },
 }

@@ -1,6 +1,6 @@
 import {keyHandler} from './key-handler'
 
-export const sharedStoreSelector = function<T>(
+export const sharedStoreSelector = function <T>(
   storeKey: string,
   compKey: string,
   globalState: any,

@@ -1,6 +1,6 @@
 import {CreateSharedStateType} from './create-shared-state.type'
 
-export const createSharedState: CreateSharedStateType = function(
+export const createSharedState: CreateSharedStateType = function (
   key,
   actionSlice,
   autoMount = true
@@ -13,6 +13,6 @@ export const createSharedState: CreateSharedStateType = function(
     actionSlice,
     autoMount,
     attachedComponentsCount,
-    actionsRefsKeyMap
+    actionsRefsKeyMap,
   }
 }
