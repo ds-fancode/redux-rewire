@@ -5,12 +5,13 @@ export type UseReduxStateType = <
   State extends ReturnType<ActionSlice>['initialState'],
   ReturnState
 >(
-  compKey: string,
+  sharedKey: string,
   actionSlice: {
     partialKey: string
     actionSlice: ActionSlice
     autoMount: boolean
   },
   stateSelector: (state: State) => ReturnState,
+  commonKey?: string,
   equalityFn?: (left: ReturnState, right: ReturnState) => boolean
 ) => [string, ReturnState, ReturnType<ActionSlice>['actions']]

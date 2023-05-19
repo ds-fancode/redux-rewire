@@ -2,12 +2,12 @@
 import {CreateSharedStateType} from './create-shared-state.type'
 
 export const createSharedState: CreateSharedStateType = function (
-  key,
+  partialKey,
   actionSlice,
   autoMount = true
 ) {
   return {
-    partialKey: key,
+    partialKey,
     actionSlice,
     autoMount,
   }

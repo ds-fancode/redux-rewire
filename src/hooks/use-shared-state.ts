@@ -14,13 +14,13 @@ function createSharedCompCountKey(key: string) {
 }
 
 export const useSharedState: UseReduxStateType = function (
-  compKey,
+  sharedKey,
   sharedStore,
   stateSelector = (_: any) => _,
+  commonKey,
   equalityFn = shallowEqual
 ) {
-  const rootKey = keyHandler.getUniqueRoot(compKey)
-  const finalKey = keyHandler.concat(rootKey, sharedStore.partialKey)
+  const finalKey = keyHandler.concat(sharedKey, sharedStore.partialKey)
 
   const actionRefKey = createSharedActionRefKey(finalKey)
   const sharedCompCountKey = createSharedCompCountKey(finalKey)
@@ -31,6 +31,7 @@ export const useSharedState: UseReduxStateType = function (
     finalKey,
     sharedStore.actionSlice,
     stateSelector,
+    commonKey,
     equalityFn,
     globalStoreInitMap[actionRefKey]
   )

@@ -5,7 +5,7 @@ export type CreateSharedStateType = <
   State extends ReturnType<ActionSlice>['initialState'],
   ReturnState
 >(
-  key: string,
+  partialKey: string,
   actionSlice: ActionSlice,
   autoMount?: boolean
 ) => {

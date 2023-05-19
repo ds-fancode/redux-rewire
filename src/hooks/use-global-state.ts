@@ -33,6 +33,7 @@ export const useGlobalState: UseReduxStateType = function (
     globalStore.key,
     globalStore.actionSlice,
     stateSelector,
+    undefined,
     equalityFn,
     actionsRef
   )

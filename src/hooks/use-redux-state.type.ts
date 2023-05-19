@@ -8,6 +8,7 @@ export type UseReduxStateType = <
   key: string,
   actionSlice: ActionSlice,
   stateSelector: (state: State) => ReturnState,
+  parentKey?: string,
   equalityFn?: (left: ReturnState, right: ReturnState) => boolean,
   actionsRef?: any
 ) => [string, ReturnState, ReturnType<ActionSlice>['actions']]
