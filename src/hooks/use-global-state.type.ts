@@ -1,33 +1,15 @@
-import {
-  ActionType,
-  ActionInputMap,
-  ActionGetKeyType,
-} from '../core/create-action-slice-type'
-import {
-  ReducerGetKeyType,
-  ReducerInputMap,
-} from '../core/create-reducer-slice-type'
+import {CreateActionSliceType} from '../core/create-action-slice-type'
 
 export type UseReduxStateType = <
-  State,
-  T extends ReducerGetKeyType<State, ReducerInputMap<State>>,
-  U extends ActionInputMap<
-    ReturnType<T>['initialState'],
-    ReturnType<T>['reducerActions'] & ActionType<State, U>
-  >,
+  ActionSlice extends ReturnType<CreateActionSliceType>,
+  State extends ReturnType<ActionSlice>['initialState'],
   ReturnState
 >(
   actionSlice: {
     key: string
-    actionSlice: ActionGetKeyType<State, T, U>
-    isMounted: boolean
+    actionSlice: ActionSlice
     autoMount: boolean
-    actionsRef: any
   },
-  stateSelector: (state: ReturnType<T>['initialState']) => ReturnState,
+  stateSelector: (state: State) => ReturnState,
   equalityFn?: (left: ReturnState, right: ReturnState) => boolean
-) => [
-  string,
-  ReturnState,
-  ReturnType<T>['reducerActions'] & ActionType<ReturnType<T>['initialState'], U>
-]
+) => [string, ReturnState, ReturnType<ActionSlice>['actions']]

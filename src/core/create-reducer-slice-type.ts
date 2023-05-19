@@ -1,48 +1,35 @@
 import {AnyAction, Dispatch, Reducer} from 'redux'
+import {IReduxStore} from './create-global-state.type'
 import {CreateInitialStateType} from './create-initital-state.type'
 
-type ReducerInputFunction<State> = (
-  state: State,
-  actionData: any,
-  compKey: string,
-  globalState: {[key: string]: any}
-) => State | Omit<State, '__IDENTITY__'> // in-case we write a helper function for reducer this helps for no error
-
-export type ReducerInputMap<State> = {
-  [key: string]: ReducerInputFunction<State>
-}
-
-export type ReducerActionType<State, T extends ReducerInputMap<State>> = {
-  [key in keyof T]: (
-    actionData: Parameters<T[key]>[1],
-    globalState?: any
-  ) => AnyAction
-}
-
 export type CreateReducerSliceType = <
-  State extends ReturnType<CreateInitialStateType>,
+  InitialStateReturnType extends ReturnType<CreateInitialStateType>,
+  State extends InitialStateReturnType['state'],
   ReducerObjType extends {
-    [key: string]: ReducerInputFunction<State>
+    [reducerKey: string]: ReducerInputFunction<InitialStateReturnType['state']>
   }
 >(
-  initialState: State,
+  initialState: InitialStateReturnType,
   reducerMap: ReducerObjType
-) => ReducerGetKeyType<State, ReducerObjType>
-
-// intermediate separate function needed for type to work consistently
-export type ReducerGetKeyType<
-  State,
-  T extends {
-    [key: string]: ReducerInputFunction<State>
-  }
-> = (
+) => (
   key: string,
   dispatch?: Dispatch<AnyAction>,
-  getState?: () => any,
-  overrideInitialState?: any
+  getState?: () => IReduxStore,
+  overrideInitialState?: ReturnType<CreateInitialStateType>
 ) => {
   key: string
   initialState: State
   reducers: Reducer<any, AnyAction>
-  reducerActions: ReducerActionType<State, T>
+  reducerActions: {
+    [key in keyof ReducerObjType]: (
+      actionData: Parameters<ReducerObjType[key]>[0],
+      globalState?: IReduxStore
+    ) => AnyAction
+  }
+  defaultActionReturnValue: InitialStateReturnType['defaultActionReturnValue']
 }
+
+export type ReducerInputFunction<State> = (
+  actionData: any,
+  props: {state: State; reduxKey: string; reduxStore: IReduxStore}
+) => State

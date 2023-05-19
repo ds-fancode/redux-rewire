@@ -3,14 +3,14 @@ import React, {useCallback, useRef} from 'react'
 
 export const RewireContext = React.createContext<{
   globalStoreInitMap: {
-    [key: string]: boolean
+    [key: string]: any
   }
-  setGlobalStoreInitMap: (key: string) => void
+  setGlobalStoreInitMap: (key: string, value: any) => void
 }>({globalStoreInitMap: {}, setGlobalStoreInitMap: () => {}})
 export const RewireProvider = ({store, children, ...args}: ProviderProps) => {
-  const {current: globalStoreInitMap} = useRef<{[key: string]: boolean}>({})
-  const setGlobalStoreInitMap = useCallback((key: string) => {
-    globalStoreInitMap[key] = true
+  const {current: globalStoreInitMap} = useRef<{[key: string]: any}>({})
+  const setGlobalStoreInitMap = useCallback((key: string, value: any) => {
+    globalStoreInitMap[key] = value
   }, [])
   return (
     <RewireContext.Provider

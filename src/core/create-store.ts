@@ -12,7 +12,7 @@ import {IStoreOptions} from './create-store.type'
 
 export interface FCStore extends Store {
   reducerManager: ReturnType<typeof createReducerManager>
-  ioRunner: Function
+  ioRunner: (actionReturn: any) => any
 }
 
 function createReducerManager(initialReducers: ReducersMapObject) {
@@ -38,14 +38,17 @@ function createReducerManager(initialReducers: ReducersMapObject) {
       // If any reducers have been removed, clean up their state first
       if (keysToRemove.length > 0) {
         state = {...state}
-        for (let key of keysToRemove) {
+        for (const key of keysToRemove) {
           delete state[key]
         }
         keysToRemove = []
       }
-
       // Delegate to the combined reducer
-      return combinedReducer(state, action)
+      if (action.hasOwnProperty('payload')) {
+        // to handle action like '@@redux/INITk.w.i.7.y.8'
+        return combinedReducer(state, action)
+      }
+      return state
     },
 
     // Adds a new reducer with the specified key
@@ -91,10 +94,11 @@ export function configureStore<S extends {[x: string]: any}>(
   options: IStoreOptions
 ) {
   const {middlewares, ioRunner, debug} = options
-  const enableDebugger = debug ?? process.env.NODE_ENV !== 'production'
   const reducerManager = createReducerManager(initialReducer)
   let middlewareList: any = []
-
+  /**
+   * This order of middleware matters
+   */
   if (middlewares?.length) {
     middlewareList = middlewareList.concat(middlewares)
   }
@@ -102,7 +106,7 @@ export function configureStore<S extends {[x: string]: any}>(
    * Add dev to support for debugging in dev mode only
    */
   const composeEnhancers =
-    enableDebugger &&
+    debug &&
     typeof window === 'object' &&
     (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
       ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({

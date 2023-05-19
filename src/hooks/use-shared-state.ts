@@ -1,8 +1,17 @@
-import {useEffect, useMemo, useState} from 'react'
+import {useContext, useEffect, useMemo} from 'react'
 import {shallowEqual} from 'react-redux'
 import {keyHandler} from '../helper/key-handler'
 import {useReduxState} from './use-redux-state'
 import {UseReduxStateType} from './use-shared-state.type'
+import {RewireContext} from '../shared/provider'
+
+function createSharedActionRefKey(key: string) {
+  return keyHandler.concat(key, 'sharedActionRef')
+}
+
+function createSharedCompCountKey(key: string) {
+  return keyHandler.concat(key, 'sharedCompCountRef')
+}
 
 export const useSharedState: UseReduxStateType = function (
   compKey,
@@ -12,42 +21,49 @@ export const useSharedState: UseReduxStateType = function (
 ) {
   const rootKey = keyHandler.getUniqueRoot(compKey)
   const finalKey = keyHandler.concat(rootKey, sharedStore.partialKey)
-  const [actionsRef, setActionsRef] = useState(
-    sharedStore.actionsRefsKeyMap[finalKey]
-  )
+
+  const actionRefKey = createSharedActionRefKey(finalKey)
+  const sharedCompCountKey = createSharedCompCountKey(finalKey)
+
+  const {globalStoreInitMap, setGlobalStoreInitMap} = useContext(RewireContext)
+
   const [key, state, actions] = useReduxState(
     finalKey,
     sharedStore.actionSlice,
     stateSelector,
     equalityFn,
-    actionsRef
+    globalStoreInitMap[actionRefKey]
   )
   useMemo(() => {
-    if (sharedStore.actionsRefsKeyMap[finalKey] !== actions) {
-      sharedStore.actionsRefsKeyMap[finalKey] = actions
-      setActionsRef(actions)
+    if (globalStoreInitMap[actionRefKey] !== actions) {
+      setGlobalStoreInitMap(actionRefKey, actions)
     }
   }, [actions])
-
   useMemo(() => {
-    if (sharedStore.attachedComponentsCount[key] === undefined)
-      sharedStore.attachedComponentsCount[key] = 0
+    if (globalStoreInitMap[sharedCompCountKey] === undefined)
+      setGlobalStoreInitMap(sharedCompCountKey, 0)
 
     // if count is resetted to zero then new mount call is needed
-    if (sharedStore.attachedComponentsCount[key] === 0) {
+    if (globalStoreInitMap[sharedCompCountKey] === 0) {
       // shared store mount action call
       if (sharedStore.autoMount) actions.mount?.(null)
     }
     // increment on new component mount
-    sharedStore.attachedComponentsCount[key]++
+    setGlobalStoreInitMap(
+      sharedCompCountKey,
+      globalStoreInitMap[sharedCompCountKey] + 1
+    )
   }, [])
   useEffect(() => {
     return () => {
-      if (sharedStore.attachedComponentsCount[key] !== undefined) {
+      if (globalStoreInitMap[sharedCompCountKey] !== undefined) {
         // decrement on component unmount
-        sharedStore.attachedComponentsCount[key]--
+        setGlobalStoreInitMap(
+          sharedCompCountKey,
+          globalStoreInitMap[sharedCompCountKey] - 1
+        )
         // if count is resetted to zero then new unmount call is needed
-        if (sharedStore.attachedComponentsCount[key] === 0) {
+        if (globalStoreInitMap[sharedCompCountKey] === 0) {
           // shared store unmount action call
           if (sharedStore.autoMount) actions.unmount?.(null)
         }

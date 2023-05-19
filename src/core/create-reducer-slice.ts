@@ -5,7 +5,7 @@ import {createReducers} from './create-reducer'
 import {CreateReducerSliceType} from './create-reducer-slice-type'
 
 export const createReducerSlice: CreateReducerSliceType = function (
-  initialState,
+  {state: initialState, defaultActionReturnValue},
   reducers
 ) {
   return (key, dispatch, getState, overrideInitialState) => {
@@ -30,12 +30,11 @@ export const createReducerSlice: CreateReducerSliceType = function (
       acc[combinedKey] = produce(
         (draftState: typeof initialState, action: AnyAction) => {
           try {
-            return reducers[reducerKey](
-              draftState,
-              action.payload,
-              key,
-              action.globalState
-            )
+            return reducers[reducerKey](action.payload, {
+              state: draftState,
+              reduxKey: key,
+              reduxStore: action.globalState,
+            })
           } catch (e) {
             dispatch?.({
               type: RESERVED_ACTIONS.REDUCER_ACTION,
@@ -82,6 +81,7 @@ export const createReducerSlice: CreateReducerSliceType = function (
       initialState: finalInitialState,
       reducerActions,
       reducers: updatedReducers,
+      defaultActionReturnValue,
     }
   }
 }
