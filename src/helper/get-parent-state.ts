@@ -26,7 +26,7 @@ type getParentStateType = <
   globalState: {[key: string]: any}
 ) => ParentState
 
-export const getParentState: getParentStateType = function(
+export const getParentState: getParentStateType = function (
   key: string,
   parentInitialState: {[key: string]: any},
   globalState

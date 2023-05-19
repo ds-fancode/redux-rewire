@@ -1,27 +1,27 @@
-import { createInitialState } from "../create-initital-state";
-import { createReducerSlice } from "../create-reducer-slice";
+import {createInitialState} from '../create-initital-state'
+import {createReducerSlice} from '../create-reducer-slice'
 
-describe("createUpdateSlice", () => {
-  it("__tests__ single reducer", () => {
-    const state = createInitialState("test", {
-      collection: { loaded: false },
+describe('createUpdateSlice', () => {
+  it('__tests__ single reducer', () => {
+    const state = createInitialState('test', {
+      collection: {loaded: false},
       test2: null,
-    });
-    const { reducers, reducerActions } = createReducerSlice(state, {
+    })
+    const {reducers, reducerActions} = createReducerSlice(state, {
       loadCollections: (state, action) => {
-        return { ...state, collection: action.collection };
+        return {...state, collection: action.collection}
       },
       setUserData: (state, action) => {
-        return state;
+        return state
       },
-    })("test");
+    })('test')
     const updatedState = reducers(
       undefined,
-      reducerActions.loadCollections({ collection: 10 })
-    );
+      reducerActions.loadCollections({collection: 10})
+    )
     expect(updatedState).toEqual({
       ...state,
       collection: 10,
-    });
-  });
-});
+    })
+  })
+})

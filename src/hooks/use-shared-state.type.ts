@@ -1,11 +1,11 @@
 import {
   ActionType,
   ActionInputMap,
-  ActionGetKeyType
+  ActionGetKeyType,
 } from '../core/create-action-slice-type'
 import {
   ReducerGetKeyType,
-  ReducerInputMap
+  ReducerInputMap,
 } from '../core/create-reducer-slice-type'
 
 export type UseReduxStateType = <

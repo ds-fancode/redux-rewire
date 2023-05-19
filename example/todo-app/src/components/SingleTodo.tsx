@@ -1,43 +1,43 @@
-import React, { useEffect, useState } from "react";
-import { useRef } from "react";
-import { AiFillEdit, AiFillDelete } from "react-icons/ai";
-import { MdDone } from "react-icons/md";
-import { Todo } from "../models/models";
-import { Draggable } from "react-beautiful-dnd";
+import React, {useEffect, useState} from 'react'
+import {useRef} from 'react'
+import {AiFillEdit, AiFillDelete} from 'react-icons/ai'
+import {MdDone} from 'react-icons/md'
+import {Todo} from '../models/models'
+import {Draggable} from 'react-beautiful-dnd'
 
 const SingleTodo: React.FC<{
-  index: number;
-  todo: Todo;
-  todos: Array<Todo>;
-  setTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
-}> = ({ index, todo, todos, setTodos }) => {
-  const [edit, setEdit] = useState<boolean>(false);
-  const [editTodo, setEditTodo] = useState<string>(todo.todo);
+  index: number
+  todo: Todo
+  todos: Array<Todo>
+  setTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>
+}> = ({index, todo, todos, setTodos}) => {
+  const [edit, setEdit] = useState<boolean>(false)
+  const [editTodo, setEditTodo] = useState<string>(todo.todo)
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    inputRef.current?.focus();
-  }, [edit]);
+    inputRef.current?.focus()
+  }, [edit])
 
   const handleEdit = (e: React.FormEvent, id: number) => {
-    e.preventDefault();
+    e.preventDefault()
     setTodos(
-      todos.map((todo) => (todo.id === id ? { ...todo, todo: editTodo } : todo))
-    );
-    setEdit(false);
-  };
+      todos.map((todo) => (todo.id === id ? {...todo, todo: editTodo} : todo))
+    )
+    setEdit(false)
+  }
 
   const handleDelete = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-  };
+    setTodos(todos.filter((todo) => todo.id !== id))
+  }
 
   const handleDone = (id: number) => {
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
+        todo.id === id ? {...todo, isDone: !todo.isDone} : todo
       )
-    );
-  };
+    )
+  }
 
   return (
     <Draggable draggableId={todo.id.toString()} index={index}>
@@ -47,7 +47,7 @@ const SingleTodo: React.FC<{
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className={`todos__single ${snapshot.isDragging ? "drag" : ""}`}
+          className={`todos__single ${snapshot.isDragging ? 'drag' : ''}`}
         >
           {edit ? (
             <input
@@ -66,7 +66,7 @@ const SingleTodo: React.FC<{
               className="icon"
               onClick={() => {
                 if (!edit && !todo.isDone) {
-                  setEdit(!edit);
+                  setEdit(!edit)
                 }
               }}
             >
@@ -82,7 +82,7 @@ const SingleTodo: React.FC<{
         </form>
       )}
     </Draggable>
-  );
-};
+  )
+}
 
-export default SingleTodo;
+export default SingleTodo

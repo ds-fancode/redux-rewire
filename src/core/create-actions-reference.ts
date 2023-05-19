@@ -15,7 +15,7 @@ export function createActionsReferenceFromActionSlice(
 
   const allAvailableActionKeys = [
     ...Object.keys(reducerMap),
-    ...Object.keys(actionMap)
+    ...Object.keys(actionMap),
   ]
   return createActionsReference(allAvailableActionKeys)
 }

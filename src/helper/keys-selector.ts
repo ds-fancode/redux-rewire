@@ -5,8 +5,8 @@ type IKeysSelector = <
   keys: InputKeys[]
 ) => (state: Obj) => {[Key in InputKeys]: Obj[Key]}
 
-export const keysSelector: IKeysSelector = function(keys) {
-  return state =>
+export const keysSelector: IKeysSelector = function (keys) {
+  return (state) =>
     keys.reduce((acc, currentValue) => {
       acc[currentValue] = state[currentValue]
       return acc

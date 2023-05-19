@@ -3,7 +3,7 @@ import {useDispatch, useSelector, useStore} from 'react-redux'
 import {FCStore} from '../core/create-store'
 import {UseReduxStateType} from './use-redux-state.type'
 
-export const useReduxState: UseReduxStateType = function(
+export const useReduxState: UseReduxStateType = function (
   key,
   actionSlice,
   stateSelector = (_: any) => _,
