@@ -7743,6 +7743,9 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
+redux-rewire@../../lib/esm:
+  version "0.0.0"
+
 redux@^4.0.0, redux@^4.0.4:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.2.1.tgz#c08f4306826c49b5e9dc901dee0452ea8fce6197"
