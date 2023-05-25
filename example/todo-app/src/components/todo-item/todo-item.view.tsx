@@ -76,7 +76,7 @@ const TodoItem = (props: ITodoItemProps) => {
             <span
               className="icon"
               onClick={() => {
-                if (!state.isEditing && !todoItem.isDone) {
+                if (!state.isEditing) {
                   actions.setEditing(!state.isEditing)
                 }
               }}
