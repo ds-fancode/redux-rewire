@@ -7,11 +7,12 @@ newPackageJson.types = './esm/index.d.ts'
 delete newPackageJson.scripts
 delete newPackageJson.devDependencies
 
+delete newPackageJson.scripts.postinstall
 newPackageJson.dependencies = {}
 newPackageJson.peerDependencies = {
   ...newPackageJson.peerDependencies,
   'react-redux': '^8.0.5',
   redux: '^4.2.0',
-  typescript: '^4.9.4',
+  typescript: '^4.9.4'
 }
 fs.writeFileSync('./lib/package.json', JSON.stringify(newPackageJson))
