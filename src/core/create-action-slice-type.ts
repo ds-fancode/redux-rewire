@@ -11,14 +11,14 @@ export type CreateActionSliceType<> = <
     [key in keyof ReturnType<ReducerSlice>['reducerActions']]: (
       actionData: Parameters<
         ReturnType<ReducerSlice>['reducerActions'][key]
-      >[1],
+      >[0],
       props: {
         state: ReturnType<ReducerSlice>['initialState']
         actions: {
           [key in keyof ReturnType<ReducerSlice>['reducerActions']]: (
             actionData: Parameters<
               ReturnType<ReducerSlice>['reducerActions'][key]
-            >[1]
+            >[0]
           ) => ActionReturnType
         }
         reduxKey: string
