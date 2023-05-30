@@ -3,11 +3,11 @@ import {AppInit} from './App.init'
 
 
 export const AppReducer = createReducerSlice(AppInit, {
-  updateInput: (actionData: string, {state}) => {
+  updateInput: (state, actionData: string) => {
     state.inputTodo = actionData
     return state
   },
-  resetInput: (actionData, {state}) => {
+  resetInput: (state) => {
     state.inputTodo = ''
     return state
   },

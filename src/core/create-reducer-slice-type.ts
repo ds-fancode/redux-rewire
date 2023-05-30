@@ -22,7 +22,7 @@ export type CreateReducerSliceType = <
   reducers: Reducer<any, AnyAction>
   reducerActions: {
     [key in keyof ReducerObjType]: (
-      actionData: Parameters<ReducerObjType[key]>[0],
+      actionData: Parameters<ReducerObjType[key]>[1],
       globalState?: IReduxStore
     ) => AnyAction
   }
@@ -30,6 +30,7 @@ export type CreateReducerSliceType = <
 }
 
 export type ReducerInputFunction<State> = (
+  state: State,
   actionData: any,
-  props: {state: State; reduxKey: string; reduxStore: IReduxStore}
+  props: {reduxKey: string; reduxStore: IReduxStore}
 ) => State

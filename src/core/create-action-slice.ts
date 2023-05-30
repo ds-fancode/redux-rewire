@@ -113,7 +113,7 @@ function createAsyncFunction(
       const reduxStore = (getState && getState()) ?? {}
       const currentState = reduxStore[key] ?? newState ?? initialState
 
-      let ioActions: any[] = []
+      let ioActions: any = undefined
       try {
         ioActions = actionMap[mapKey](data, {
           state: currentState,

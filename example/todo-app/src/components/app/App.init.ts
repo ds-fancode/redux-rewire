@@ -4,6 +4,6 @@ export interface IAppInitType {
   inputTodo: string,
 }
 
-export const AppInit = createInitialState<IAppInitType, Promise<boolean>>('app', {
+export const AppInit = createInitialState<IAppInitType, boolean>('app', {
   inputTodo: ''
 })
