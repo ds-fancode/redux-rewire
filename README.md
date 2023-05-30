@@ -126,16 +126,16 @@ export const actionSlice = createActionSlice(reducerSlice, {
   },
 });
 ```
-Now, in the view file we will initial our state using useReduxState api which will add the component state to redux when the view if rendered for the first time
+Now, in the view file we will initial our state using useRewireState api which will add the component state to redux when the view if rendered for the first time
 
 ```typescript jsx
 // Following is the content of homeScreen.tsx
-import {identitySelector, useGlobalState, useReduxState} from 'redux-rewire'
+import {identitySelector, useGlobalState, useRewireState} from 'redux-rewire'
 import {actionSlice} from './homeScreen.actions'
 import {useCallback} from 'react'
 
 const HomeScreen = (props) => {
-  const [key, state, actions] = useReduxState(
+  const [key, state, actions] = useRewireState(
     'home-key',
     actionSlice,
     identitySelector
@@ -174,7 +174,7 @@ const HomeScreen = (props) => {
 | createInitialState | (compKey, intialState)                         |             |       |
 | createReducerSlice | (state, actionData, compKey, globalState)      |             |       |
 | createActionSlice  | (state, actions, actionData, key, globalState) |             |       |
-| useReduxState      | (compKey, actionSlice, selectors)              |             |       |
+| useRewireState     | (compKey, actionSlice, selectors)              |             |       |
 
 
 ## Examples

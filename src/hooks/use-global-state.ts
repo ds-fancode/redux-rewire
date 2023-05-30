@@ -1,8 +1,8 @@
 import {useContext, useMemo, useState} from 'react'
 import {shallowEqual} from 'react-redux'
 import {ActionGetKeyType} from '../core/create-action-slice-type'
-import {UseReduxStateType} from './use-global-state.type'
-import {useReduxState} from './use-redux-state'
+import {UseGlobalStateType} from './use-global-state.type'
+import {useRewireState} from './use-rewire-state'
 import {RewireContext} from '../shared/provider'
 import {keyHandler} from '../helper/key-handler'
 
@@ -14,7 +14,7 @@ function createGlobalMountKey(key: string) {
   return keyHandler.concat(key, 'globalMountRef')
 }
 
-export const useGlobalState: UseReduxStateType = function (
+export const useGlobalState: UseGlobalStateType = function (
   globalStore,
   stateSelector = (_: any) => _,
   equalityFn = shallowEqual
@@ -24,12 +24,12 @@ export const useGlobalState: UseReduxStateType = function (
 
   const {globalStoreInitMap, setGlobalStoreInitMap} = useContext(RewireContext)
 
-  // actionsRef undefined for first time, so that we get new actions from useReduxState
+  // actionsRef undefined for first time, so that we get new actions from useRewireState
   const [actionsRef, setActionsRef] = useState<
     ReturnType<ActionGetKeyType<any, any>>['actions'] | undefined
   >(globalStoreInitMap[actionRefKey]) // undefined for first time
 
-  const [key, state, actions] = useReduxState(
+  const [key, state, actions] = useRewireState(
     globalStore.key,
     globalStore.actionSlice,
     stateSelector,

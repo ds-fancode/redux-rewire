@@ -1,4 +1,4 @@
-export {useReduxState} from './hooks/use-redux-state'
+export {useRewireState} from './hooks/use-rewire-state'
 export {createInitialState, IdentityKey} from './core/create-initital-state'
 export {createReducerSlice} from './core/create-reducer-slice'
 export {createActionSlice} from './core/create-action-slice'

@@ -1,6 +1,6 @@
 import {CreateActionSliceType} from '../core/create-action-slice-type'
 
-export type UseReduxStateType = <
+export type UseRewireStateType = <
   ActionSlice extends ReturnType<CreateActionSliceType>,
   State extends ReturnType<ActionSlice>['initialState'],
   ReturnState

@@ -7,7 +7,6 @@ newPackageJson.types = './esm/index.d.ts'
 delete newPackageJson.scripts
 delete newPackageJson.devDependencies
 
-delete newPackageJson.scripts.postinstall
 newPackageJson.dependencies = {}
 newPackageJson.peerDependencies = {
   ...newPackageJson.peerDependencies,

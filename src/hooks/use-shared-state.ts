@@ -1,8 +1,8 @@
 import {useContext, useEffect, useMemo} from 'react'
 import {shallowEqual} from 'react-redux'
 import {keyHandler} from '../helper/key-handler'
-import {useReduxState} from './use-redux-state'
-import {UseReduxStateType} from './use-shared-state.type'
+import {useRewireState} from './use-rewire-state'
+import {UseSharedStateType} from './use-shared-state.type'
 import {RewireContext} from '../shared/provider'
 
 function createSharedActionRefKey(key: string) {
@@ -13,7 +13,7 @@ function createSharedCompCountKey(key: string) {
   return keyHandler.concat(key, 'sharedCompCountRef')
 }
 
-export const useSharedState: UseReduxStateType = function (
+export const useSharedState: UseSharedStateType = function (
   sharedKey,
   sharedStore,
   stateSelector = (_: any) => _,
@@ -27,7 +27,7 @@ export const useSharedState: UseReduxStateType = function (
 
   const {globalStoreInitMap, setGlobalStoreInitMap} = useContext(RewireContext)
 
-  const [key, state, actions] = useReduxState(
+  const [key, state, actions] = useRewireState(
     finalKey,
     sharedStore.actionSlice,
     stateSelector,

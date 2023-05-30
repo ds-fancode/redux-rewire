@@ -1,10 +1,10 @@
 import {useMemo} from 'react'
 import {useDispatch, useSelector, useStore} from 'react-redux'
 import {FCStore} from '../core/create-store'
-import {UseReduxStateType} from './use-redux-state.type'
+import {UseRewireStateType} from './use-rewire-state.type'
 import {keyHandler} from '../helper/key-handler'
 
-export const useReduxState: UseReduxStateType = function (
+export const useRewireState: UseRewireStateType = function (
   key,
   actionSlice,
   stateSelector = (_: any) => _,

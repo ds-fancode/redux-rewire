@@ -3,7 +3,7 @@ import {Draggable} from 'react-beautiful-dnd'
 import {AiFillDelete, AiFillEdit} from 'react-icons/ai'
 import {MdDone} from 'react-icons/md'
 import {CommonComponentProp} from '../../models/component-prop'
-import {identitySelector, noneSelector, useGlobalState, useReduxState, useSharedState} from 'redux-rewire'
+import {identitySelector, useGlobalState, useRewireState, useSharedState} from 'redux-rewire'
 import {todoStore} from '../../global-store/todo-store/todo-store'
 import {todoItemAction} from './todo-item.action'
 import {dropStore} from '../../shared-store/drop-store/drop-store'
@@ -13,7 +13,7 @@ interface ITodoItemProps extends CommonComponentProp {
 }
 
 const TodoItem = (props: ITodoItemProps) => {
-  const [, state, actions] = useReduxState(`todo-item-${props.id}`, todoItemAction, identitySelector, props.parentKey)
+  const [, state, actions] = useRewireState(`todo-item-${props.id}`, todoItemAction, identitySelector, props.parentKey)
   const [, todoItem, todoStoreAction] = useGlobalState(todoStore, state => state.todoList.find(item => item.id === props.id))
 
   const [, hoverCompletedTaskDropId] = useSharedState('todo-drop', dropStore, state => state.hoverCompletedTaskDropId)
