@@ -2,19 +2,19 @@ import {createReducerSlice} from 'redux-rewire'
 import {todoItemInitialState} from './todo-item.init'
 
 export const todoItemReducer = createReducerSlice(todoItemInitialState, {
-  mount: (actionData: string, {state}) => {
+  mount: (state, actionData: string) => {
     state.todoEditInput = actionData
     return state
   },
-  updateInput: (actionData: string, {state}) => {
+  updateInput: (state, actionData: string) => {
     state.todoEditInput = actionData
     return state
   },
-  resetInput: (actionData, {state}) => {
+  resetInput: (state, actionData) => {
     state.todoEditInput = ''
     return state
   },
-  setEditing: (actionData: boolean, {state}) => {
+  setEditing: (state, actionData: boolean) => {
     state.isEditing = actionData
     return state
   },

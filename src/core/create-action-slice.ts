@@ -79,7 +79,7 @@ export const createActionSlice: CreateActionSliceType = function (
             )
             // execute IO
             if (typeof ioRunner === 'function') {
-              ioRunner(ioActions ?? defaultActionReturnValue)
+              ioRunner?.(ioActions ?? defaultActionReturnValue)
             }
             return ioActions ?? defaultActionReturnValue
           }

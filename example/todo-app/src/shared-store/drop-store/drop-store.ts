@@ -9,7 +9,7 @@ const dropStoreInitialState = createInitialState<IDropState>('drop-store', {
 })
 
 const dropStoreReducer = createReducerSlice(dropStoreInitialState, {
-  setHoverCompletedTaskDropId: (dropIndex: number, {state}) => {
+  setHoverCompletedTaskDropId: (state, dropIndex: number) => {
     state.hoverCompletedTaskDropId = dropIndex
     return state
   }
