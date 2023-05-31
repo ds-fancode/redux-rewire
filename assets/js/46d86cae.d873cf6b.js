@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[4972],{7603:e=>{e.exports=JSON.parse('{"label":"hola","permalink":"/redux-rewire/blog/tags/hola","allTagsPath":"/redux-rewire/blog/tags","count":1}')}}]);
