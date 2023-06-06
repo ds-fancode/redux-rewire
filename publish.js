@@ -8,9 +8,10 @@ delete newPackageJson.scripts
 delete newPackageJson.devDependencies
 
 newPackageJson.dependencies = {
-  'react-redux': '*',
-  "immer": "*",
-  redux: '*',
+  'react-redux': '^8.0.5',
+  redux: '^4.2.0',
+  typescript: '^4.9.4',
+  "immer": "^9.0.12"
 }
 newPackageJson.peerDependencies = {
   ...newPackageJson.peerDependencies,
