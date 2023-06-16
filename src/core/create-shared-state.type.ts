@@ -1,25 +1,15 @@
-import {
-  ActionType,
-  ActionGetKeyType,
-  ActionInputMap,
-} from './create-action-slice-type'
-import {ReducerGetKeyType, ReducerInputMap} from './create-reducer-slice-type'
+import {CreateActionSliceType} from './create-action-slice-type'
 
 export type CreateSharedStateType = <
-  State,
-  T extends ReducerGetKeyType<State, ReducerInputMap<State>>,
-  U extends ActionInputMap<
-    ReturnType<T>['initialState'],
-    ReturnType<T>['reducerActions'] & ActionType<State, U>
-  >
+  ActionSlice extends ReturnType<CreateActionSliceType>,
+  State extends ReturnType<ActionSlice>['initialState'],
+  ReturnState
 >(
-  key: string,
-  actionSlice: ActionGetKeyType<State, T, U>,
+  partialKey: string,
+  actionSlice: ActionSlice,
   autoMount?: boolean
 ) => {
   partialKey: string
-  actionSlice: ActionGetKeyType<State, T, U>
+  actionSlice: ActionSlice
   autoMount: boolean
-  attachedComponentsCount: {[sharedKey: string]: number}
-  actionsRefsKeyMap: {[sharedKey: string]: any}
 }

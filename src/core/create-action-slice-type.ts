@@ -1,63 +1,62 @@
 import {AnyAction, Dispatch} from 'redux'
-import {ReducerGetKeyType, ReducerInputMap} from './create-reducer-slice-type'
+import {IReduxStore} from './create-global-state.type'
+import {CreateReducerSliceType} from './create-reducer-slice-type'
 
-type IoReturnAction = any[]
-
-export type ActionInputFunction<State, ActionType> = (
-  state: State,
-  actions: ActionType & {[key: string]: any},
-  actionData: any,
-  compKey: string,
-  globalState: {[key: string]: any},
-  prevState: State
-) => IoReturnAction
-
-export type ActionInputMap<State, ActionType> = {
-  [key: string]: ActionInputFunction<State, ActionType>
-}
-
-export type ActionType<State, U extends ActionInputMap<State, any>> = {
-  [key in keyof U]: (
-    actionData: Parameters<U[key]>[2],
-    newState?: State,
-    prevState?: State
-  ) => IoReturnAction
-}
-
-export type CreateActionSliceType = <
-  State,
-  T extends ReducerGetKeyType<State, ReducerInputMap<State>>,
-  U extends ActionInputMap<
-    ReturnType<T>['initialState'],
-    ReturnType<T>['reducerActions'] &
-      ReturnType<ActionGetKeyType<State, T, U>>['asyncActions']
-  >
+export type CreateActionSliceType<> = <
+  ReducerSlice extends ReturnType<CreateReducerSliceType> = any,
+  ActionReturnType extends ReturnType<ReducerSlice>['defaultActionReturnValue'] = void
 >(
-  reducerSlice: T,
-  actionMap: U
-) => ActionGetKeyType<State, T, U>
+  reducerSlice: ReducerSlice,
+  actionMap: Partial<{
+    [key in keyof ReturnType<ReducerSlice>['reducerActions']]: (
+      actionData: Parameters<
+        ReturnType<ReducerSlice>['reducerActions'][key]
+      >[0],
+      props: {
+        state: ReturnType<ReducerSlice>['initialState']
+        actions: {
+          [key in keyof ReturnType<ReducerSlice>['reducerActions']]: (
+            actionData: Parameters<
+              ReturnType<ReducerSlice>['reducerActions'][key]
+            >[0]
+          ) => ActionReturnType
+        }
+        reduxKey: string
+        reduxStore: {[key: string]: any}
+        prevState: Parameters<ReducerSlice>[0]
+      }
+    ) => Promise<ActionReturnType> | ActionReturnType
+  }>,
+  actionDefaultReturnValue?: ActionReturnType
+) => ActionGetKeyType<
+  ReducerSlice,
+  Promise<ActionReturnType> | ActionReturnType
+>
 
 // intermediate separate function needed for type to work consistently
 export type ActionGetKeyType<
-  State,
-  T extends ReducerGetKeyType<State, ReducerInputMap<State>>,
-  U extends ActionInputMap<
-    ReturnType<T>['initialState'],
-    ReturnType<T>['reducerActions'] & ActionType<State, U>
-  >
+  ReducerSlice extends ReturnType<CreateReducerSliceType>,
+  ActionReturnType
 > = (
   key: string,
   dispatch?: Dispatch<AnyAction>,
-  getState?: () => any,
+  getState?: () => IReduxStore,
   actionsRef?: any,
-  ioRunner?: Function,
-  overrideInitialState?: any
+  ioRunner?: (arg: ActionReturnType) => any,
+  overrideInitialState?: Parameters<ReducerSlice>[3]
 ) => {
   key: string
-  initialState: ReturnType<T>['initialState']
-  reducers: ReturnType<T>['reducers']
-  reducerActions: ReturnType<T>['reducerActions']
-  asyncActions: ActionType<ReturnType<T>['initialState'], U>
-  actions: ReturnType<T>['reducerActions'] &
-    ActionType<ReturnType<T>['initialState'], U>
+  initialState: ReturnType<ReducerSlice>['initialState']
+  reducers: ReturnType<ReducerSlice>['reducers']
+  reducerActions: ReturnType<ReducerSlice>['reducerActions']
+  asyncActions: {
+    [key in keyof ReturnType<ReducerSlice>['reducerActions']]: (
+      actionData: Parameters<ReturnType<ReducerSlice>['reducerActions'][key]>[0]
+    ) => ActionReturnType
+  }
+  actions: {
+    [key in keyof ReturnType<ReducerSlice>['reducerActions']]: (
+      actionData: Parameters<ReturnType<ReducerSlice>['reducerActions'][key]>[0]
+    ) => ActionReturnType
+  }
 }

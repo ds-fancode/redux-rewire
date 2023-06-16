@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2015",
+    "module": "ES2020",
     "lib": [
       "dom",
       "dom.iterable",
@@ -13,14 +14,22 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "redux-rewire": ["../../lib/esm"]
+    }
   },
   "include": [
-    "src"
+    "src",
+    "../../lib/esm"
+  ],
+  "exclude": [
+    "**/__tests__/*",
+    "node_modules",
+    "dist"
   ]
 }

@@ -5,7 +5,7 @@ import {createReducers} from './create-reducer'
 import {CreateReducerSliceType} from './create-reducer-slice-type'
 
 export const createReducerSlice: CreateReducerSliceType = function (
-  initialState,
+  {state: initialState, defaultActionReturnValue},
   reducers
 ) {
   return (key, dispatch, getState, overrideInitialState) => {
@@ -26,27 +26,27 @@ export const createReducerSlice: CreateReducerSliceType = function (
     const updatedReducerMap = Object.keys(reducers).reduce<{
       [key: string]: any
     }>((acc, reducerKey) => {
-      const combinedKey = `${key}/${reducerKey}`
-      acc[combinedKey] = produce(
-        (draftState: typeof initialState, action: AnyAction) => {
-          try {
-            return reducers[reducerKey](
-              draftState,
-              action.payload,
-              key,
-              action.globalState
-            )
-          } catch (e) {
-            dispatch?.({
-              type: RESERVED_ACTIONS.REDUCER_ACTION,
-              componentKey: key,
-              asyncActionName: combinedKey,
-              error: e,
-            })
+      if (reducers[reducerKey]) {
+        const combinedKey = `${key}/${reducerKey}`
+        acc[combinedKey] = produce(
+          (draftState: typeof initialState, action: AnyAction) => {
+            try {
+              return reducers[reducerKey](draftState, action.payload, {
+                reduxKey: key,
+                reduxStore: action.globalState,
+              })
+            } catch (e) {
+              dispatch?.({
+                type: RESERVED_ACTIONS.REDUCER_ACTION,
+                componentKey: key,
+                asyncActionName: combinedKey,
+                error: e,
+              })
+            }
+            return draftState
           }
-          return draftState
-        }
-      )
+        )
+      }
       return acc
     }, {})
 
@@ -56,22 +56,24 @@ export const createReducerSlice: CreateReducerSliceType = function (
 
     const reducerActions: any = <{[key: string]: (data: any) => any}>(
       reducerKeys.reduce<any>((acc, reducerKey) => {
-        acc[reducerKey] = (
-          data: any,
-          globalState: any = getState?.() ?? {}
-        ) => {
-          // directly dispatch the action
-          return dispatch
-            ? dispatch({
+        if (reducers[reducerKey]) {
+          acc[reducerKey] = (
+            data: any,
+            globalState: any = getState?.() ?? {}
+          ) => {
+            // directly dispatch the action
+            return dispatch
+              ? dispatch({
                 type: `${key}/${reducerKey}`,
                 payload: data,
                 globalState,
               })
-            : {
+              : {
                 type: `${key}/${reducerKey}`,
                 payload: data,
                 globalState,
               }
+          }
         }
         return acc
       }, {})
@@ -82,6 +84,7 @@ export const createReducerSlice: CreateReducerSliceType = function (
       initialState: finalInitialState,
       reducerActions,
       reducers: updatedReducers,
+      defaultActionReturnValue,
     }
   }
 }

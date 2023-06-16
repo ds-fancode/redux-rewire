@@ -16,12 +16,8 @@ export const createActionSlice: CreateActionSliceType = function (
     overrideInitialState
   ) {
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
-    const {initialState, reducerActions, reducers} = reducerSlice(
-      key,
-      dispatch,
-      getState,
-      overrideInitialState
-    )
+    const {initialState, reducerActions, reducers, defaultActionReturnValue} =
+      reducerSlice(key, dispatch, getState, overrideInitialState)
 
     //#region create empty action
     const allAvailableActionKeys = [
@@ -59,7 +55,8 @@ export const createActionSlice: CreateActionSliceType = function (
     //#endregion
 
     //#region map action to execute reducerSlice and ioAction
-    if (actionsRef) {
+    if (!actionsRef) {
+      // we already have mapped actionRef, we do not need to map action to execute reducerSlice and ioAction
       allAvailableActionKeys.forEach((actionKey) => {
         actions[actionKey] = (
           data: any,
@@ -75,21 +72,18 @@ export const createActionSlice: CreateActionSliceType = function (
           // first make async called to make sure we have current state to be used in async action
 
           if (asyncActions[actionKey]) {
-            const ioActions: any[] = asyncActions[actionKey](
+            const ioActions: any = asyncActions[actionKey](
               data,
               inputNewState,
               prevState
             )
             // execute IO
             if (typeof ioRunner === 'function') {
-              try {
-                ioRunner(ioActions)
-              } catch (err) {
-                console.error('error running ioRunner', err)
-              }
+              ioRunner?.(ioActions ?? defaultActionReturnValue)
             }
+            return ioActions ?? defaultActionReturnValue
           }
-          return true
+          return defaultActionReturnValue
         }
       })
     }
@@ -116,31 +110,28 @@ function createAsyncFunction(
 ) {
   return Object.keys(actionMap).reduce<any>((acc, mapKey) => {
     acc[mapKey] = (data: any = {}, newState?: any, prevState?: any) => {
-      const globalState = (getState && getState()) ?? {}
-      const currentState = globalState[key] ?? newState ?? initialState
+      const reduxStore = (getState && getState()) ?? {}
+      const currentState = reduxStore[key] ?? newState ?? initialState
 
-      let ioActions: any[] = []
+      let ioActions: any = undefined
       try {
-        ioActions = actionMap[mapKey](
-          currentState,
+        ioActions = actionMap[mapKey](data, {
+          state: currentState,
           actions,
-          data,
-          key,
-          globalState,
-          prevState ?? initialState
-        )
+          reduxKey: key,
+          reduxStore,
+          prevState: prevState ?? initialState,
+        })
         /**
-         * Dispatching here only so that we can c apture logs in the bugsnag middleware
+         * Dispatching here only so that we can c apture logs in the crash middleware
          * This will not cause any performance aas we are not forwarding it ahead to redux
          */
-        if (ioActions?.length) {
-          dispatch?.({
-            type: `RESERVED_ACTIONS.ASYNC_ACTION/${key}/${mapKey}`,
-            componentKey: key,
-            asyncActionName: mapKey,
-            ioActions,
-          })
-        }
+        dispatch?.({
+          type: `${RESERVED_ACTIONS.ASYNC_ACTION}/${key}/${mapKey}`,
+          componentKey: key,
+          asyncActionName: mapKey,
+          ioActions,
+        })
       } catch (e) {
         dispatch?.({
           type: RESERVED_ACTIONS.ASYNC_ACTION,

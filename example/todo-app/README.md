@@ -1,3 +1,25 @@
+# Todo App - Arch
+
+- Index.tsx [wrapped with `RewireProvider`]
+  - App.tsx [`useRewireState` without 'parentKey'] [`useGlobalState` - 'todo']
+  - TodoListWrapper.tsx [`useSharedState` of 'DropStore' with 'sharedKey' = `dropState`] [`useGlobalState` - 'todo']
+    - TodoList.tsx [`useGlobalState` - 'todo']
+        - Task.tsx [`useRewireState` with 'parentKey' = `app`] [`useGlobalState` - 'todo'] [`useSharedState` of 'DropStore' with 'sharedKey' = `dropState`]
+    - TodoStore [`createGlobalStore` with 'key' = `todo`]
+    - DropStore [`createSharedStore` with 'partialKey' = `drop`]
+
+# Suggestions for Hooks usage
+
+- Component state management
+  - `useSharedState` with 'key' = `component`
+- Parent to child communication
+  - `useParentState`
+- Child to parent communication
+  - `useGlobalStore`
+- Sibling to sibling communication
+  - `useSharedState` with 'sharedKey' = `siblings`
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
