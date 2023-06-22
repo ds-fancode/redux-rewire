@@ -4,12 +4,12 @@ sidebar_position: 1
 
 # Redux-Rewire
 
-**State management in large-scale react projects**.
+### State management in large-scale react projects.
 
 ## What is Redux-Rewire?
 
 Redux-Rewire is a state management library for React applications.
-It is a toolkit built around Redux that provides a simple and clean API to manage state in large-scale React applications.
+It is a toolkit built around few underlying library that provides a simple and clean API to manage state in large-scale applications.
 
 ## Why Redux-Rewire?
 

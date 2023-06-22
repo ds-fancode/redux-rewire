@@ -4,13 +4,14 @@ sidebar_position: 1
 
 # Installation
 
-quick install **through npm or yarn**:
+Redux Rewire can be installed either through **npm** or **yarn**:
 
 ```bash
 # using npm 
-npm install redux-rewire
+npm install redux-rewire --save
+```
 
+```bash
 # using Yarn
 yarn add redux-rewire -S
-
 ```

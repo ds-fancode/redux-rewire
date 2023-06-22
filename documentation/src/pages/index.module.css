@@ -8,12 +8,18 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  /*background-color: white;*/
 }
 
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2rem;
   }
+}
+.logo{
+  width: 20rem;
+  height: 20rem;
+  object-fit: contain;
 }
 
 .buttons {

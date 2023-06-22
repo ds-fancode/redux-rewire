@@ -7,3 +7,5 @@ src/**/*.js.map
 .idea
 lib
 .DS_Store
+build
+.docusaurus
