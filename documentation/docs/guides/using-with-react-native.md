@@ -1,8 +1,8 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
-# Usage Guide
+# React Native
 
 The Usage Guides section provides practical guidance on how to correctly use Redux in real-world applications, React or React-Native.
 
