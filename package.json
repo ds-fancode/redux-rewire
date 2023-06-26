@@ -1,6 +1,6 @@
 {
   "name": "redux-rewire",
-  "version": "0.0.7",
+  "version": "0.0.10",
   "description": "State management library for react based applications",
   "main": "src/index.ts",
   "scripts": {

@@ -83,7 +83,7 @@ const config = {
             position: 'left',
             label: 'API',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          {to: 'https://engineering.fancode.com/enhancing-react-app-scalability-a-deep-dive-into-redux-rewire-ebf62ec93e31', label: 'Blog', position: 'left'},
           {
             href: 'https://github.com/ds-fancode/redux-rewire',
             label: 'GitHub',
