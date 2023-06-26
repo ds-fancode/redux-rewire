@@ -180,6 +180,9 @@ const HomeScreen = (props) => {
 ## Examples
 Please refer the [examples](https://github.com/ds-fancode/redux-rewire/tree/main/example) directory
 
+## Link to Docs
+Please refer the [docs](https://ds-fancode.github.io/redux-rewire) directory
+
 ## Advance Usage
 Coming Soon
 ## About
