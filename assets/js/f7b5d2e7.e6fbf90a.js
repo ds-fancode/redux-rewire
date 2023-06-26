@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[4583],{82:e=>{e.exports=JSON.parse('{"title":"Guides","slug":"/category/guides-1","permalink":"/docs/category/guides-1","navigation":{"previous":{"title":"Create Action Slice","permalink":"/docs/API/create-action-slice"},"next":{"title":"SSR","permalink":"/docs/guides/ssr"}}}')}}]);
