@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Redux-Rewire',
-  tagline: 'Scale your Redux application with ease',
+  tagline: 'Super scale your React application with ease',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -63,7 +63,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/rewire-logo.png',
       navbar: {
         title: 'Redux Rewire',
         logo: {
@@ -83,7 +83,11 @@ const config = {
             position: 'left',
             label: 'API',
           },
-          {to: 'https://engineering.fancode.com/enhancing-react-app-scalability-a-deep-dive-into-redux-rewire-ebf62ec93e31', label: 'Blog', position: 'left'},
+          {
+            to: 'https://engineering.fancode.com/enhancing-react-app-scalability-a-deep-dive-into-redux-rewire-ebf62ec93e31',
+            label: 'Blog',
+            position: 'left',
+          },
           {
             href: 'https://github.com/ds-fancode/redux-rewire',
             label: 'GitHub',
@@ -108,15 +112,7 @@ const config = {
             items: [
               {
                 label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
+                href: 'https://stackoverflow.com/questions/tagged/redux-rewire',
               },
             ],
           },
@@ -125,16 +121,16 @@ const config = {
             items: [
               {
                 label: 'Blog',
-                to: '/blog',
+                to: 'https://engineering.fancode.com/enhancing-react-app-scalability-a-deep-dive-into-redux-rewire-ebf62ec93e31',
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/ds-fancode/redux-rewire',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © 2022-${new Date().getFullYear()} Kamlesh & Bishal and all the Fancode authors`,
       },
       prism: {
         theme: lightCodeTheme,
