@@ -7,7 +7,7 @@ function findClosesParentState(
   targetKey: string,
   identityKey: string
 ): any | null {
-  if (globalState[targetKey]?.state?.[IdentityKey] === identityKey) {
+  if (globalState[targetKey]?.[IdentityKey] === identityKey) {
     return globalState[targetKey]
   } else {
     const immediateParentKey = keyHandler.getParentKey(targetKey, 1)
