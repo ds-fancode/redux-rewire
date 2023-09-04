@@ -7,7 +7,7 @@ function findClosesParentState(
   targetKey: string,
   identityKey: string
 ): any | null {
-  if (globalState[targetKey]?.[IdentityKey] === identityKey) {
+  if (globalState[targetKey]?.state?.[IdentityKey] === identityKey) {
     return globalState[targetKey]
   } else {
     const immediateParentKey = keyHandler.getParentKey(targetKey, 1)
@@ -28,18 +28,18 @@ type getParentStateType = <
 
 export const getParentState: getParentStateType = function (
   key: string,
-  parentInitialState: {[key: string]: any},
+  parentInitialState: ReturnType<CreateInitialStateType>,
   globalState
 ) {
   const foundParentState = findClosesParentState(
     globalState,
     key,
-    parentInitialState[IdentityKey]
+    parentInitialState.state[IdentityKey]
   )
   if (foundParentState === null) {
     // eslint-disable-next-line no-console
     console.error(
-      `[ParentNotFound]: make sure '${key}' is child of ${parentInitialState[IdentityKey]} and not a sibling!`
+      `[ParentNotFound]: make sure '${key}' is child of ${parentInitialState.state[IdentityKey]} and not a sibling!`
     )
   }
   return foundParentState
