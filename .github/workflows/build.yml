@@ -1,4 +1,4 @@
-name: release package
+name: build package
 on:
   pull_request:
     branches:
@@ -9,6 +9,9 @@ on:
       - opened
       - synchronize
       - reopened
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   release:
     runs-on: ubuntu-latest
