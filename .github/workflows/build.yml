@@ -1,0 +1,63 @@
+name: release package
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+      - 'release/**'
+    types:
+      - opened
+      - synchronize
+      - reopened
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure github
+        run: |
+          git config --global user.email "fc-bot@fancode.com"
+          git config --global user.name "fc-bot"
+
+      - run: echo "Running on branch | base branch - ${{github.base_ref}} | head branch - ${{github.head_ref}}"
+
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ACTION_GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.16.0
+          cache: yarn
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v38
+        with:
+          path: .
+          files: src/**/*.{ts,tsx}
+
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+
+      - name: Installing dependencies
+        run: yarn install --frozen-lockfile # for installing on CI
+
+      - name: Running lint
+        if: steps.changed-files.outputs.any_changed == 'true'
+        continue-on-error: true
+        run: |
+          yarn eslint ${{ steps.changed-files.outputs.all_changed_files }}
+
+      - name: Running prettier
+        if: steps.changed-files.outputs.any_changed == 'true'
+        continue-on-error: true
+        run: |
+          yarn prettier ${{ steps.changed-files.outputs.all_changed_files }}
+
+      - name: Running tests & coverage
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: yarn test --logHeapUsage --silent --runInBand --ci
