@@ -31,7 +31,7 @@ export const createReducerSlice: CreateReducerSliceType = function (
         acc[combinedKey] = produce(
           (draftState: typeof initialState, action: AnyAction) => {
             try {
-              return reducers[reducerKey](draftState, action.payload, {
+              return reducers[reducerKey]?.(draftState, action.payload, {
                 reduxKey: key,
                 reduxStore: action.globalState,
               })

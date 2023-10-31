@@ -31,7 +31,7 @@ export const createReducerSliceLegacy: CreateReducerSliceType = function (
         acc[combinedKey] = produce(
           (draftState: typeof initialState, action: AnyAction) => {
             try {
-              return reducers[reducerKey](
+              return reducers[reducerKey]?.(
                 draftState,
                 action.payload,
                 key,

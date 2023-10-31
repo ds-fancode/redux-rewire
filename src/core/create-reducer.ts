@@ -10,7 +10,7 @@ export const createReducers = <State>(
 ): Reducer<State, AnyAction> => {
   return (state: State = initialState, action: AnyAction) => {
     if (reducerMap[action.type]) {
-      return reducerMap[action.type](state, action)
+      return reducerMap[action.type]?.(state, action) ?? state
     }
     return state
   }

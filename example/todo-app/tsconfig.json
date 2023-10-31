@@ -20,7 +20,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "redux-rewire": ["../../lib/esm"]
+      "redux-rewire": [
+        "../../src"
+      ]
     }
   },
   "include": [

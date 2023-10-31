@@ -1,35 +1,38 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    //    "verbatimModuleSyntax": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "moduleResolution": "Bundler",
+    "module": "es2015",
+    "outDir": "lib/esm",
+    "sourceMap": true,
+    "lib": [
+      "es2022", "dom"
+    ],
+    "declaration": true,
     "incremental": true,
     "rootDir": "src",
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "allowJs": false,
     "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "newLine": "LF",
+    //
+    "jsx": "react",
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "sourceMap": true,
     "strictNullChecks": true,
-    "skipLibCheck": true, // Verify
-    "jsx": "react",
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "src",
-    "lib": ["es2020", "dom", "ScriptHost"],
-    "target": "ES2015",
-    "module": "ES2020",
-    "declaration": true,
-    "outDir": "lib/esm",
-    "strict": true,
-    "paths": {
-      "src/*": ["src/*"]
-    },
+    "baseUrl": "src"
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ],
   "exclude": [
     "**/__tests__/*",
     "node_modules",

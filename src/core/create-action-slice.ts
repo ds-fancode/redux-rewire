@@ -66,7 +66,7 @@ export const createActionSlice: CreateActionSliceType = function (
           const prevState =
             inputPrevState ?? (getState?.() as any)[key] ?? initialState
           // before runIO started run our reducers to reducerSlice states
-          if (reducerActions[actionKey]) reducerActions[actionKey](data)
+          if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
 
           // Async actions will get updated state after reducer work is done
           // first make async called to make sure we have current state to be used in async action
