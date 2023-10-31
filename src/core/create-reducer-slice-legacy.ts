@@ -2,9 +2,9 @@ import produce from 'immer'
 import {AnyAction} from 'redux'
 import {RESERVED_ACTIONS} from '../constant'
 import {createReducers} from './create-reducer'
-import {CreateReducerSliceType} from './create-reducer-slice-type'
+import {CreateReducerSliceType} from './create-reducer-slice-legacy-type'
 
-export const createReducerSlice: CreateReducerSliceType = function (
+export const createReducerSliceLegacy: CreateReducerSliceType = function (
   {state: initialState, defaultActionReturnValue},
   reducers
 ) {
@@ -31,10 +31,12 @@ export const createReducerSlice: CreateReducerSliceType = function (
         acc[combinedKey] = produce(
           (draftState: typeof initialState, action: AnyAction) => {
             try {
-              return reducers[reducerKey](draftState, action.payload, {
-                reduxKey: key,
-                reduxStore: action.globalState,
-              })
+              return reducers[reducerKey](
+                draftState,
+                action.payload,
+                key,
+                action.globalState
+              )
             } catch (e) {
               console.error('Error in updating reducer', key, combinedKey, e)
               /**

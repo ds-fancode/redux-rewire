@@ -1,5 +1,5 @@
 import {useMemo} from 'react'
-import {useDispatch, useSelector, useStore} from 'react-redux'
+import {shallowEqual, useDispatch, useSelector, useStore} from 'react-redux'
 import {FCStore} from '../core/create-store'
 import {UseRewireStateType} from './use-rewire-state.type'
 import {keyHandler} from '../helper/key-handler'
@@ -9,7 +9,7 @@ export const useRewireState: UseRewireStateType = function (
   actionSlice,
   stateSelector = (_: any) => _,
   parentKey,
-  equalityFn,
+  equalityFn = shallowEqual,
   actionsRef
 ) {
   const dispatch = useDispatch()
@@ -35,5 +35,7 @@ export const useRewireState: UseRewireStateType = function (
   )
   //#endregion
 
-  return [key, state, actions]
+  return useMemo(() => {
+    return [key, state, actions]
+  }, [key, state, actions])
 }

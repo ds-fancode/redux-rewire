@@ -51,5 +51,7 @@ export const useGlobalState: UseGlobalStateType = function (
       actions.mount?.(null)
     }
   }, [])
-  return [key, state, actions]
+  return useMemo(() => {
+    return [key, state, actions]
+  }, [key, state, actions])
 }

@@ -1,4 +1,6 @@
-export {useRewireState} from './hooks/use-rewire-state'
+import {useRewireState} from './hooks/use-rewire-state'
+// For backward compatibility
+export {useRewireState as useReduxState, useRewireState}
 export {createInitialState, IdentityKey} from './core/create-initital-state'
 export {createReducerSlice} from './core/create-reducer-slice'
 export {createActionSlice} from './core/create-action-slice'
@@ -11,6 +13,12 @@ export {noneSelector} from './helper/none-selector'
 export {keysSelector} from './helper/keys-selector'
 export {getParentState} from './helper/get-parent-state'
 export {RewireProvider, RewireContext} from './shared/provider'
+/**
+ * Below are the legacy apis and will be deprecated in the later versions
+ */
+export {createReducerSliceLegacy} from './core/create-reducer-slice-legacy'
+export {createActionSliceLegacy} from './core/create-action-slice-legacy'
+
 /**
  * Advance feature capabilities
  */

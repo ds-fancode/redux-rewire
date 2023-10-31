@@ -6,22 +6,27 @@ export const RewireContext = React.createContext<{
     [key: string]: any
   }
   setGlobalStoreInitMap: (key: string, value: any) => void
-}>({globalStoreInitMap: {}, setGlobalStoreInitMap: () => {}})
-export const RewireProvider = ({store, children, ...args}: ProviderProps) => {
-  const {current: globalStoreInitMap} = useRef<{[key: string]: any}>({})
-  const setGlobalStoreInitMap = useCallback((key: string, value: any) => {
-    globalStoreInitMap[key] = value
-  }, [])
-  return (
-    <RewireContext.Provider
-      value={{
-        globalStoreInitMap,
-        setGlobalStoreInitMap,
-      }}
-    >
-      <Provider store={store} {...args}>
-        {children}
-      </Provider>
-    </RewireContext.Provider>
-  )
-}
+}>({
+  globalStoreInitMap: {},
+  setGlobalStoreInitMap: () => {},
+})
+export const RewireProvider = React.memo(
+  ({store, children, ...args}: ProviderProps) => {
+    const {current: globalStoreInitMap} = useRef<{[key: string]: any}>({})
+    const setGlobalStoreInitMap = useCallback((key: string, value: any) => {
+      globalStoreInitMap[key] = value
+    }, [])
+    return (
+      <RewireContext.Provider
+        value={{
+          globalStoreInitMap,
+          setGlobalStoreInitMap,
+        }}
+      >
+        <Provider store={store} {...args}>
+          {children}
+        </Provider>
+      </RewireContext.Provider>
+    )
+  }
+)
