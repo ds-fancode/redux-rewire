@@ -13,7 +13,7 @@ export const RewireContext = React.createContext<{
 export const RewireProvider = React.memo(
   ({store, children, ...args}: ProviderProps) => {
     const {current: globalStoreInitMap} = useRef<{[key: string]: any}>({})
-    const setGlobalStoreInitMap = useCallback((key: string, value: any) => {
+    const setGlobalStoreInitMap = useCallback((key: string, value: boolean) => {
       globalStoreInitMap[key] = value
     }, [])
     return (
