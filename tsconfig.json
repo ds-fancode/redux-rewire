@@ -9,12 +9,13 @@
     "moduleDetection": "force",
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "moduleResolution": "Bundler",
-    "module": "es2015",
+    "moduleResolution": "bundler",
+    "module": "ES2022",
     "outDir": "lib/esm",
     "sourceMap": true,
     "lib": [
-      "es2022", "dom"
+      "es2022",
+      "dom"
     ],
     "declaration": true,
     "incremental": true,
