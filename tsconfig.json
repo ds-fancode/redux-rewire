@@ -4,7 +4,7 @@
     "skipLibCheck": true,
     "target": "es2022",
     //    "verbatimModuleSyntax": true,
-    "allowJs": true,
+    "allowJs": false,
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "strict": true,
@@ -37,6 +37,7 @@
   "exclude": [
     "**/__tests__/*",
     "node_modules",
-    "dist"
+    "dist",
+    "lib"
   ]
 }
