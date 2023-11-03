@@ -9,14 +9,15 @@ describe('createUpdateSlice', () => {
     })
     const {reducers, reducerActions} = createReducerSlice(state, {
       loadCollections: (state, action) => {
-        return {...state, collection: action.collection}
+        state.collection = action.collection
+        return state
       },
       setUserData: (state, action) => {
         return state
       },
     })('test')
     const updatedState = reducers(
-      undefined,
+      state,
       reducerActions.loadCollections({collection: 10})
     )
     expect(updatedState).toEqual({

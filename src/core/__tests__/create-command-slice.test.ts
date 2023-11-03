@@ -5,17 +5,22 @@ import {createReducerSlice} from '../create-reducer-slice'
 
 describe('createCommandSlice', () => {
   it('__tests__ single action', () => {
-    const state = createInitialState('test', {
-      collection: {loaded: false},
-      test2: null,
-    })
+    const state = createInitialState(
+      'test',
+      {
+        collection: {loaded: false},
+        test2: null,
+      },
+      [] as any[]
+    )
     const reducerSlice = createReducerSlice(state, {
+      mount: (state, action) => state,
       response: (state, action) => {
         return {...state, response: action.response}
       },
     })
     const {asyncActions, actions} = createActionSlice(reducerSlice, {
-      mount: (state, actions, actionData) => {
+      mount: (actionData, {state, actions, prevState}) => {
         return [
           {
             returnAction: actions.response,

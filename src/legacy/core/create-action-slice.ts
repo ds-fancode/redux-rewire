@@ -1,5 +1,5 @@
 import {Dispatch} from 'redux'
-import {RESERVED_ACTIONS} from '../constant'
+import {RESERVED_ACTIONS} from '../../constant'
 import {CreateActionSliceType} from './create-action-slice-type'
 import {createActionsReference} from './create-actions-reference'
 
@@ -16,8 +16,12 @@ export const createActionSlice: CreateActionSliceType = function (
     overrideInitialState
   ) {
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
-    const {initialState, reducerActions, reducers, defaultActionReturnValue} =
-      reducerSlice(key, dispatch, getState, overrideInitialState)
+    const {initialState, reducerActions, reducers} = reducerSlice(
+      key,
+      dispatch,
+      getState,
+      overrideInitialState
+    )
 
     //#region create empty action
     const allAvailableActionKeys = [
@@ -55,38 +59,38 @@ export const createActionSlice: CreateActionSliceType = function (
     //#endregion
 
     //#region map action to execute reducerSlice and ioAction
-    if (!actionsRef) {
-      // we already have mapped actionRef, we do not need to map action to execute reducerSlice and ioAction
-      allAvailableActionKeys.forEach((actionKey) => {
-        actions[actionKey] = (
-          data: any,
-          inputNewState?: any,
-          inputPrevState?: any
-        ) => {
-          const prevState =
-            inputPrevState ?? (getState?.() as any)[key] ?? initialState
-          // before runIO started run our reducers to reducerSlice states
-          if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
+    allAvailableActionKeys.forEach((actionKey) => {
+      actions[actionKey] = (
+        data: any,
+        inputNewState?: any,
+        inputPrevState?: any
+      ) => {
+        const prevState =
+          inputPrevState ?? (getState?.() as any)[key] ?? initialState
+        // before runIO started run our reducers to reducerSlice states
+        if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
 
-          // Async actions will get updated state after reducer work is done
-          // first make async called to make sure we have current state to be used in async action
+        // Async actions will get updated state after reducer work is done
+        // first make async called to make sure we have current state to be used in async action
 
-          if (asyncActions[actionKey]) {
-            const ioActions: any = asyncActions[actionKey](
-              data,
-              inputNewState,
-              prevState
-            )
-            // execute IO
-            if (typeof ioRunner === 'function') {
-              ioRunner?.(ioActions ?? defaultActionReturnValue)
+        if (asyncActions[actionKey]) {
+          const ioActions: any[] = asyncActions[actionKey](
+            data,
+            inputNewState,
+            prevState
+          )
+          // execute IO
+          if (typeof ioRunner === 'function') {
+            try {
+              ioRunner(ioActions)
+            } catch (err) {
+              console.error('error running ioRunner', err)
             }
-            return ioActions ?? defaultActionReturnValue
           }
-          return defaultActionReturnValue
         }
-      })
-    }
+        return true
+      }
+    })
     //#endregion
 
     return {
@@ -110,28 +114,31 @@ function createAsyncFunction(
 ) {
   return Object.keys(actionMap).reduce<any>((acc, mapKey) => {
     acc[mapKey] = (data: any = {}, newState?: any, prevState?: any) => {
-      const reduxStore = (getState && getState()) ?? {}
-      const currentState = reduxStore[key] ?? newState ?? initialState
+      const globalState = (getState && getState()) ?? {}
+      const currentState = globalState[key] ?? newState ?? initialState
 
-      let ioActions: any = undefined
+      let ioActions: any[] = []
       try {
-        ioActions = actionMap[mapKey](data, {
-          state: currentState,
+        ioActions = actionMap[mapKey](
+          currentState,
           actions,
-          reduxKey: key,
-          reduxStore,
-          prevState: prevState ?? initialState,
-        })
+          data,
+          key,
+          globalState,
+          prevState ?? initialState
+        )
         /**
-         * Dispatching here only so that we can c apture logs in the crash middleware
+         * Dispatching here only so that we can c apture logs in the bugsnag middleware
          * This will not cause any performance aas we are not forwarding it ahead to redux
          */
-        dispatch?.({
-          type: `${RESERVED_ACTIONS.ASYNC_ACTION}/${key}/${mapKey}`,
-          componentKey: key,
-          asyncActionName: mapKey,
-          ioActions,
-        })
+        if (ioActions?.length) {
+          dispatch?.({
+            type: `RESERVED_ACTIONS.ASYNC_ACTION/${key}/${mapKey}`,
+            componentKey: key,
+            asyncActionName: mapKey,
+            ioActions,
+          })
+        }
       } catch (e) {
         dispatch?.({
           type: RESERVED_ACTIONS.ASYNC_ACTION,

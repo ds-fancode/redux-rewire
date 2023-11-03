@@ -31,17 +31,23 @@ export const createReducerSlice: CreateReducerSliceType = function (
         acc[combinedKey] = produce(
           (draftState: typeof initialState, action: AnyAction) => {
             try {
-              return reducers[reducerKey](draftState, action.payload, {
+              return reducers[reducerKey]?.(draftState, action.payload, {
                 reduxKey: key,
                 reduxStore: action.globalState,
               })
             } catch (e) {
-              dispatch?.({
-                type: RESERVED_ACTIONS.REDUCER_ACTION,
-                componentKey: key,
-                asyncActionName: combinedKey,
-                error: e,
-              })
+              console.error('Error in updating reducer', key, combinedKey, e)
+              /**
+               * Dispatching here only so that we can capture logs in the crash middleware, Need to delay this
+               */
+              setTimeout(() => {
+                dispatch?.({
+                  type: RESERVED_ACTIONS.REDUCER_ACTION,
+                  componentKey: key,
+                  asyncActionName: combinedKey,
+                  error: e,
+                })
+              }, 0)
             }
             return draftState
           }
@@ -64,15 +70,15 @@ export const createReducerSlice: CreateReducerSliceType = function (
             // directly dispatch the action
             return dispatch
               ? dispatch({
-                type: `${key}/${reducerKey}`,
-                payload: data,
-                globalState,
-              })
+                  type: `${key}/${reducerKey}`,
+                  payload: data,
+                  globalState,
+                })
               : {
-                type: `${key}/${reducerKey}`,
-                payload: data,
-                globalState,
-              }
+                  type: `${key}/${reducerKey}`,
+                  payload: data,
+                  globalState,
+                }
           }
         }
         return acc

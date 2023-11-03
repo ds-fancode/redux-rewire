@@ -4,18 +4,20 @@ const newPackageJson = {...packageJson}
 newPackageJson.main = './cjs/index.js'
 newPackageJson.module = './esm/index.js'
 newPackageJson.types = './esm/index.d.ts'
-delete newPackageJson.scripts
-delete newPackageJson.devDependencies
-
-newPackageJson.dependencies = {
-  'react-redux': '^8.0.5',
-  redux: '^4.2.0',
-  typescript: '^4.9.4',
-  "immer": "^9.0.12"
+const dependencies = {
+  'react-redux': newPackageJson.dependencies['react-redux'],
+  redux: newPackageJson.dependencies['redux'],
+  immer: newPackageJson.dependencies['immer'],
 }
-newPackageJson.peerDependencies = {
+const peerDependencies = {
   ...newPackageJson.peerDependencies,
-  typescript: '^4.9.4'
+  typescript: newPackageJson.dependencies['typescript'],
 }
+const scripts = {}
+const devDependencies = {}
+newPackageJson.scripts = scripts
+newPackageJson.dependencies = dependencies
+newPackageJson.devDependencies = devDependencies
+newPackageJson.peerDependencies = peerDependencies
 fs.writeFileSync('./lib/package.json', JSON.stringify(newPackageJson))
 fs.copyFileSync('./README.md', './lib/README.md')

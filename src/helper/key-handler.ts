@@ -86,7 +86,7 @@ export const keyHandler = {
   ): T | null {
     for (const eachParentKey in parentsMap) {
       if (keyHandler.checkIfParent(compKey, eachParentKey)) {
-        return parentsMap[eachParentKey]
+        return parentsMap[eachParentKey] ?? null
       }
     }
     return null

@@ -71,5 +71,7 @@ export const useSharedState: UseSharedStateType = function (
       }
     }
   }, [])
-  return [key, state, actions]
+  return useMemo(() => {
+    return [key, state, actions]
+  }, [key, state, actions])
 }
