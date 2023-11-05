@@ -37,7 +37,9 @@ jobs:
         with:
           node-version: 16.16.0
           cache: yarn
-
+      - name: Installing dependencies
+        run: yarn install --frozen-lockfile # for installing on CI
+        
       - name: Bump release version
         if: startsWith(github.event.inputs.release-type, 'pre') != true
         run: |
