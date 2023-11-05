@@ -56,6 +56,9 @@ jobs:
         env:
           RELEASE_TYPE: ${{ github.event.inputs.release-type }}
 
+      - name: Building Package
+        run: yarn build
+
       # Commit changes
       - name: Commit CHANGELOG.md and package.json changes and create tag
         run: |
@@ -70,9 +73,6 @@ jobs:
           git push origin && git push --tags
 
       # Publish version to public repository
-      - name: Building Package
-        run: yarn build
-
       - name: Publish
         working-directory: ./lib
         run: yarn publish --verbose --access public --tag ${{ env.RELEASE_TAG }}
