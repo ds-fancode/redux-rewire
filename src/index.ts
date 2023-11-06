@@ -39,7 +39,7 @@ export {sharedStoreSelector} from './helper/shared-store-selector'
 export {createReducerSlice as createReducerSliceDeprecated} from './legacy/core/create-reducer-slice'
 export {createActionSlice as createActionSliceDeprecated} from './legacy/core/create-action-slice'
 export {createInitialState as createInitialStateDeprecated} from './legacy/core/create-initital-state'
-export {createGlobalState as createGlobalStateLegacy} from './legacy/core/create-global-state'
+export {createGlobalState as createGlobalStateDeprecated} from './legacy/core/create-global-state'
 
 export {useReduxState as useRewireStateDeprecated} from './legacy/hooks/use-redux-state'
 export {useGlobalState as useGlobalStateDeprecated} from './legacy/hooks/use-global-state'
