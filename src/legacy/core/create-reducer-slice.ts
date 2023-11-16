@@ -14,6 +14,7 @@ export const createReducerSlice: CreateReducerSliceType = function (
       : key && getState?.()?.[key]
       ? getState?.()?.[key]
       : initialState
+    const globalState = getState?.() ?? {}
     if (!key) {
       // return only references
       return {
@@ -41,12 +42,16 @@ export const createReducerSlice: CreateReducerSliceType = function (
             /**
              * Dispatching here only so that we can capture logs in the crash middleware, Need to delay this
              */
-            dispatch?.({
-              type: RESERVED_ACTIONS.REDUCER_ACTION,
-              componentKey: key,
-              asyncActionName: combinedKey,
-              error: e,
-            })
+            if (globalState?.debug) {
+              console.error(e)
+            } else {
+              dispatch?.({
+                type: RESERVED_ACTIONS.REDUCER_ACTION,
+                componentKey: key,
+                asyncActionName: combinedKey,
+                error: e,
+              })
+            }
           }
           return draftState
         }
