@@ -140,13 +140,17 @@ function createAsyncFunction(
           })
         }
       } catch (e) {
-        dispatch?.({
-          type: RESERVED_ACTIONS.ASYNC_ACTION,
-          componentKey: key,
-          asyncActionName: mapKey,
-          ioActions,
-          error: e,
-        })
+        if (globalState.debug) {
+          console.error(e)
+        } else {
+          dispatch?.({
+            type: RESERVED_ACTIONS.ASYNC_ACTION,
+            componentKey: key,
+            asyncActionName: mapKey,
+            ioActions,
+            error: e,
+          })
+        }
       }
       return ioActions
     }

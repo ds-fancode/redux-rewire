@@ -15,12 +15,16 @@ export interface FCStore extends Store {
   ioRunner: (actionReturn: any) => any
 }
 
-function createReducerManager(initialReducers: ReducersMapObject) {
+function createReducerManager(
+  initialReducers: ReducersMapObject,
+  options: IStoreOptions
+) {
   // Create an object which maps keys to reducers
   // Adding appInit reducer to skip redux store initialize with incorect reducer warning
   const reducers: ReducersMapObject = {
     ...initialReducers,
     appInit: (state = true, action: any) => state,
+    debug: (state = options.debug, action: any) => state,
   }
 
   // Create the initial combinedReducer
@@ -94,7 +98,7 @@ export function configureStore<S extends {[x: string]: any}>(
   options: IStoreOptions
 ) {
   const {middlewares, ioRunner, debug} = options
-  const reducerManager = createReducerManager(initialReducer)
+  const reducerManager = createReducerManager(initialReducer, options)
   let middlewareList: any = []
   /**
    * This order of middleware matters
