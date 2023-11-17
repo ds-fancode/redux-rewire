@@ -21,10 +21,7 @@ export type UseReduxStateType = <
   action: ActionGetKeyType<State, T, U>,
   stateSelector: (state: ReturnType<T>['initialState']) => ReturnState,
   equalityFn?: (left: ReturnState, right: ReturnState) => boolean,
-  actionsRef?: any,
-  options?: {
-    replace?: boolean
-  }
+  actionsRef?: any
 ) => [
   string,
   ReturnState,

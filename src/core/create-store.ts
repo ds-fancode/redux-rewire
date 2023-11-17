@@ -56,14 +56,14 @@ function createReducerManager(
     },
 
     // Adds a new reducer with the specified key
-    add: (key: string, reducer: Reducer, replace: boolean = false) => {
+    add: (key: string, reducer: Reducer) => {
       if (!key) {
         return
       }
       /**
        * Adding support so that we can replace the reducer when needed (Do it for SSR for web)
        */
-      if (!replace && reducers[key]) {
+      if (reducers[key] && reducer.toString() === reducers[key]?.toString()) {
         return
       }
 

@@ -13,7 +13,6 @@ export const useSharedState: UseReduxStateType = function (
 ) {
   const rootKey = keyHandler.getUniqueRoot(compKey)
   const finalKey = keyHandler.concat(rootKey, sharedStore.partialKey)
-  const init = sharedStore.actionsRefsKeyMap[finalKey] === undefined
   const actionsRef = useMemo(() => {
     // check if new actions Ref creation is required
     if (sharedStore.actionsRefsKeyMap[finalKey] === undefined) {
@@ -28,10 +27,7 @@ export const useSharedState: UseReduxStateType = function (
     sharedStore.actionSlice,
     stateSelector,
     equalityFn,
-    actionsRef,
-    {
-      replace: init,
-    }
+    actionsRef
   )
   useMemo(() => {
     if (sharedStore.attachedComponentsCount[key] === undefined)
