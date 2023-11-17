@@ -12,7 +12,7 @@
     "prettier": "prettier --check \"**/*.{ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{ts,tsx}\"",
     "build": "rm -rf ./lib && yarn tsc && yarn tsc --module CommonJS --moduleResolution node --outDir lib/cjs && node ./publish.js",
-    "postinstall2": "yarn build"
+    "postinstall": "yarn build"
   },
   "author": "FanCode",
   "license": "ISC",

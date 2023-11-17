@@ -26,7 +26,7 @@ export const useRewireState: UseRewireStateType = function (
       store.ioRunner
     )
     // adding reducer to the store with replace
-    store.reducerManager.add(key, reducers, true)
+    store.reducerManager.add(key, reducers)
     return {initialState, reducers, actions}
   }, [key])
   const state = useSelector(
