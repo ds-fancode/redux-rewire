@@ -10,7 +10,9 @@ export const useParentState: UseParentStateType = function (
 ) {
   return useSelector(
     (state: any) =>
-      stateSelector(getParentState(key, parentInitialState, state)),
+      stateSelector(
+        getParentState(key, parentInitialState, state) ?? parentInitialState
+      ),
     equalityFn
   )
 }
