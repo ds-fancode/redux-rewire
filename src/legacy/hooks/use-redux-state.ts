@@ -8,7 +8,10 @@ export const useReduxState: UseReduxStateType = function (
   actionSlice,
   stateSelector = (_: any) => _,
   equalityFn = shallowEqual,
-  actionsRef
+  actionsRef,
+  options = {
+    replace: false,
+  }
 ) {
   const dispatch = useDispatch()
   const store = <FCStore>useStore()
@@ -23,7 +26,7 @@ export const useReduxState: UseReduxStateType = function (
       store.ioRunner
     )
     // adding reducer to the store with replace
-    store.reducerManager.add(key, reducers, true)
+    store.reducerManager.add(key, reducers, !!options?.replace)
     return {initialState, reducers, actions}
   }, [key])
   const state = useSelector(

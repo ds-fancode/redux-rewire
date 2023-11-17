@@ -15,7 +15,10 @@ export const useGlobalState: UseReduxStateType = function (
     globalStore.actionSlice,
     stateSelector,
     equalityFn,
-    globalStore.actionsRef
+    globalStore.actionsRef,
+    {
+      replace: !!globalStoreInitMap[globalStore.key],
+    }
   )
   useMemo(() => {
     // global store mount action call

@@ -1,11 +1,11 @@
 import {
-  ActionType,
   ActionGetKeyType,
-  ActionInputMap
+  ActionInputMap,
+  ActionType,
 } from '../core/create-action-slice-type'
 import {
   ReducerGetKeyType,
-  ReducerInputMap
+  ReducerInputMap,
 } from '../core/create-reducer-slice-type'
 
 export type UseReduxStateType = <
@@ -21,7 +21,10 @@ export type UseReduxStateType = <
   action: ActionGetKeyType<State, T, U>,
   stateSelector: (state: ReturnType<T>['initialState']) => ReturnState,
   equalityFn?: (left: ReturnState, right: ReturnState) => boolean,
-  actionsRef?: any
+  actionsRef?: any,
+  options?: {
+    replace?: boolean
+  }
 ) => [
   string,
   ReturnState,
