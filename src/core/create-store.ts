@@ -21,10 +21,11 @@ function createReducerManager(
 ) {
   // Create an object which maps keys to reducers
   // Adding appInit reducer to skip redux store initialize with incorect reducer warning
+  const {debug = false} = options
   const reducers: ReducersMapObject = {
     ...initialReducers,
     appInit: (state = true, action: any) => state,
-    debug: (state = options.debug, action: any) => state,
+    debug: (state = debug ?? false, action: any) => state,
   }
 
   // Create the initial combinedReducer
