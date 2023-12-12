@@ -1,6 +1,5 @@
 import produce from 'immer'
 import {AnyAction} from 'redux'
-import {RESERVED_ACTIONS} from '../../constant'
 import {createReducers} from './create-reducer'
 import {CreateReducerSliceType} from './create-reducer-slice-type'
 
@@ -37,19 +36,15 @@ export const createReducerSlice: CreateReducerSliceType = function (
               key,
               action.globalState
             )
-          } catch (e) {
-            console.error('Error in updating reducer', key, combinedKey, e)
+          } catch (error) {
             /**
              * Dispatching here only so that we can capture logs in the crash middleware, Need to delay this
              */
             if (globalState?.debug) {
-              console.error(e)
-            } else {
-              dispatch?.({
-                type: RESERVED_ACTIONS.REDUCER_ACTION,
-                componentKey: key,
-                asyncActionName: combinedKey,
-                error: e,
+              console.error('Error in updating reducer', {
+                key,
+                combinedKey,
+                error,
               })
             }
           }
