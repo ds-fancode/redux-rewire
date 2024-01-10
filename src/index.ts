@@ -7,6 +7,7 @@ export {identitySelector} from './helper/idenity-selector'
 export {identityReducer} from './helper/idenity-reducer'
 export {noneSelector} from './helper/none-selector'
 export {keysSelector} from './helper/keys-selector'
+export {keysRemover} from './helper/keys-remover'
 export {keyHandler} from './helper/key-handler'
 /**
  * Every thing exported from redux and react-redux
