@@ -23,7 +23,7 @@ export type CreateActionSliceType<> = <
         }
         reduxKey: string
         reduxStore: {[key: string]: any}
-        prevState: Parameters<ReducerSlice>[0]
+        prevState: ReturnType<ReducerSlice>['initialState']
       }
     ) => Promise<ActionReturnType> | ActionReturnType
   }>,
