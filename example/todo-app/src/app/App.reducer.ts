@@ -1,14 +1,10 @@
 import {createReducerSlice} from 'redux-rewire'
 import {AppInit} from './App.init'
 
-
 export const AppReducer = createReducerSlice(AppInit, {
-  updateInput: (state, actionData: string) => {
-    state.inputTodo = actionData
-    return state
-  },
-  resetInput: (state) => {
-    state.inputTodo = ''
+  mount: (state, actionData: undefined) => state,
+  setLoaded: (state, actionData: string) => {
+    state.loaded = true
     return state
   },
 })

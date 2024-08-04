@@ -1,5 +1,5 @@
 import {Provider, ProviderProps} from 'react-redux'
-import React, {useCallback, useRef} from 'react'
+import React, {useCallback, useMemo, useRef} from 'react'
 
 export const RewireContext = React.createContext<{
   globalStoreInitMap: {
@@ -10,23 +10,25 @@ export const RewireContext = React.createContext<{
   globalStoreInitMap: {},
   setGlobalStoreInitMap: () => {},
 })
-export const RewireProvider = React.memo(
-  ({store, children, ...args}: ProviderProps) => {
-    const {current: globalStoreInitMap} = useRef<{[key: string]: any}>({})
-    const setGlobalStoreInitMap = useCallback((key: string, value: boolean) => {
-      globalStoreInitMap[key] = value
-    }, [])
-    return (
-      <RewireContext.Provider
-        value={{
-          globalStoreInitMap,
-          setGlobalStoreInitMap,
-        }}
-      >
-        <Provider store={store} {...args}>
-          {children}
-        </Provider>
-      </RewireContext.Provider>
-    )
-  }
-)
+const RewireProviderView = (props: ProviderProps) => {
+  const {store, children, ...args} = props
+  const {current: globalStoreInitMap} = useRef<{[key: string]: any}>({})
+  const setGlobalStoreInitMap = useCallback((key: string, value: boolean) => {
+    globalStoreInitMap[key] = value
+  }, [])
+  const value = useMemo(() => {
+    return {
+      globalStoreInitMap,
+      setGlobalStoreInitMap,
+    }
+  }, [globalStoreInitMap, setGlobalStoreInitMap])
+  return (
+    <RewireContext.Provider value={value}>
+      <Provider store={store} {...args}>
+        {children}
+      </Provider>
+    </RewireContext.Provider>
+  )
+}
+
+export const RewireProvider = React.memo(RewireProviderView)

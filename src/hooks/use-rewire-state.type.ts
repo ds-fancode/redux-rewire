@@ -8,7 +8,5 @@ export type UseRewireStateType = <
   key: string,
   actionSlice: ActionSlice,
   stateSelector: (state: State) => ReturnState,
-  parentKey?: string,
-  equalityFn?: (left: ReturnState, right: ReturnState) => boolean,
-  actionsRef?: any
+  equalityFn?: (left: ReturnState, right: ReturnState) => boolean
 ) => [string, ReturnState, ReturnType<ActionSlice>['actions']]

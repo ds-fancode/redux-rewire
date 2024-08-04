@@ -1,27 +1,40 @@
 import produce from 'immer'
-import {AnyAction} from 'redux'
 import {RESERVED_ACTIONS} from '../constant'
-import {createReducers} from './create-reducer'
 import {CreateReducerSliceType} from './create-reducer-slice-type'
+import {FCStore} from './create-store'
+
+import {AnyAction, Reducer} from 'redux'
+
+type UpdateInputType<State> = {
+  [key: string]: (state: State, actionData: any) => State
+}
+
+export const createReducers = <State>(
+  reducerMap: UpdateInputType<State>,
+  initialState: State
+): Reducer<State, AnyAction> => {
+  return (state: State = initialState, action: AnyAction) => {
+    const func = reducerMap[action.type]
+    if (func && typeof func === 'function') {
+      return func(state, action)
+    }
+    return state
+  }
+}
 
 export const createReducerSlice: CreateReducerSliceType = function (
   {state: initialState, defaultActionReturnValue},
   reducers
 ) {
-  return (key, dispatch, getState, overrideInitialState) => {
+  return (key, store: FCStore, overrideInitialState) => {
+    const {dispatch, getState} = store
     const finalInitialState: typeof initialState = overrideInitialState
       ? JSON.parse(JSON.stringify(overrideInitialState)) // overrideInitialState is used in __tests__ cases
       : key && getState?.()?.[key]
       ? getState?.()?.[key]
       : initialState
     if (!key) {
-      // return only references
-      return {
-        key,
-        reducers,
-        reducerActions: reducers,
-        initialState: finalInitialState,
-      } as any
+      throw new Error('Key is required to create a reducer slice')
     }
     const updatedReducerMap = Object.keys(reducers).reduce<{
       [key: string]: any
@@ -68,14 +81,15 @@ export const createReducerSlice: CreateReducerSliceType = function (
             globalState: any = getState?.() ?? {}
           ) => {
             // directly dispatch the action
+            const combinedKey = `${key}/${reducerKey}`
             return dispatch
               ? dispatch({
-                  type: `${key}/${reducerKey}`,
+                  type: combinedKey,
                   payload: data,
                   globalState,
                 })
               : {
-                  type: `${key}/${reducerKey}`,
+                  type: combinedKey,
                   payload: data,
                   globalState,
                 }

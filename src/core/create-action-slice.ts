@@ -1,56 +1,52 @@
-import {Dispatch} from 'redux'
 import {RESERVED_ACTIONS} from '../constant'
-import {CreateActionSliceType} from './create-action-slice-type'
+import {
+  ActionGetKeyType,
+  CreateActionSliceType,
+} from './create-action-slice-type'
+import {FCStore} from './create-store'
 import {createActionsReference} from './create-actions-reference'
 
 export const createActionSlice: CreateActionSliceType = function (
   reducerSlice,
   actionMap
 ) {
+  let result: ReturnType<ActionGetKeyType<typeof reducerSlice, any>> | null =
+    null
   return function (
     key,
-    dispatch,
-    getState,
+    store: FCStore,
     actionsRef,
     ioRunner,
     overrideInitialState
   ) {
+    const {getState} = store
+
+    if (store.getState()[key] !== undefined && result) {
+      return result
+    }
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
     const {initialState, reducerActions, reducers, defaultActionReturnValue} =
-      reducerSlice(key, dispatch, getState, overrideInitialState)
+      reducerSlice(key, store, overrideInitialState)
+
+    store.reducerManager.add(key, reducers)
 
     //#region create empty action
-    const allAvailableActionKeys = [
-      ...Object.keys(reducerActions),
-      ...Object.keys(actionMap),
-    ]
-
-    const freshActionsRef = createActionsReference(allAvailableActionKeys)
-    //#endregion
-
-    const actions = actionsRef ?? freshActionsRef
-
+    const allAvailableActionKeys = Object.keys({
+      ...actionMap,
+      ...reducerActions,
+    })
     if (!key) {
       // return only reference
-      return {
-        key,
-        initialState,
-        reducerActions,
-        reducers,
-        asyncActions: actions,
-        actions,
-      }
+      throw new Error('Key is required to create action slice')
     }
 
-    //#region create asyncAction, passing empty actions
-    // const runIoAdditionalProp = {componentId: keyHandler.getRoot(key) ?? ''} // TODO: should not do this manually, need to reducerSlice IO to avoid it accepting this argument
+    const actions = createActionsReference(allAvailableActionKeys)
     const asyncActions = createAsyncFunction(
       key,
+      store,
       initialState,
       actionMap,
-      actions,
-      getState,
-      dispatch
+      actions
     )
     //#endregion
 
@@ -88,8 +84,7 @@ export const createActionSlice: CreateActionSliceType = function (
       })
     }
     //#endregion
-
-    return {
+    result = {
       key,
       initialState,
       reducers,
@@ -97,30 +92,31 @@ export const createActionSlice: CreateActionSliceType = function (
       asyncActions,
       actions,
     }
+    return result
   }
 }
 
 function createAsyncFunction(
   key: string,
+  store: FCStore,
   initialState: any,
   actionMap: any,
-  actions: any,
-  getState?: () => {[key: string]: any},
-  dispatch?: Dispatch
+  actions: any
 ) {
   return Object.keys(actionMap).reduce<any>((acc, mapKey) => {
     acc[mapKey] = (data: any = {}, newState?: any, prevState?: any) => {
-      const reduxStore = (getState && getState()) ?? {}
-      const currentState = reduxStore[key] ?? newState ?? initialState
+      const globalState = store.getState() ?? {}
+      const dispatch = store.getState() ?? {}
+      const currentState = globalState[key] ?? newState ?? initialState
 
       let ioActions: any = undefined
       try {
         ioActions = actionMap[mapKey](data, {
           state: currentState,
           actions,
-          reduxKey: key,
-          reduxStore,
-          prevState: prevState ?? initialState,
+          key,
+          globalState,
+          prevState: prevState,
         })
         /**
          * Dispatching here only so that we can c apture logs in the crash middleware

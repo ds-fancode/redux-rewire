@@ -12,6 +12,5 @@ export type UseSharedStateType = <
     autoMount: boolean
   },
   stateSelector: (state: State) => ReturnState,
-  commonKey?: string,
   equalityFn?: (left: ReturnState, right: ReturnState) => boolean
 ) => [string, ReturnState, ReturnType<ActionSlice>['actions']]

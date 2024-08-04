@@ -8,7 +8,6 @@ export type UseGlobalStateType = <
   actionSlice: {
     key: string
     actionSlice: ActionSlice
-    autoMount: boolean
   },
   stateSelector: (state: State) => ReturnState,
   equalityFn?: (left: ReturnState, right: ReturnState) => boolean

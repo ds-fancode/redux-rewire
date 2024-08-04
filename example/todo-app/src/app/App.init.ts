@@ -1,9 +1,11 @@
 import {createInitialState} from 'redux-rewire'
 
 export interface IAppInitType {
-  inputTodo: string,
+  inputTodo: string
+  loaded: boolean
 }
 
 export const AppInit = createInitialState<IAppInitType, boolean>('app', {
-  inputTodo: ''
+  inputTodo: '',
+  loaded: false,
 })

@@ -1,6 +1,5 @@
-import {AnyAction, Dispatch} from 'redux'
-import {IReduxStore} from './create-global-state.type'
 import {CreateReducerSliceType} from './create-reducer-slice-type'
+import {FCStore} from './create-store'
 
 export type CreateActionSliceType<> = <
   ReducerSlice extends ReturnType<CreateReducerSliceType> = any,
@@ -39,8 +38,7 @@ export type ActionGetKeyType<
   ActionReturnType
 > = (
   key: string,
-  dispatch?: Dispatch<AnyAction>,
-  getState?: () => IReduxStore,
+  store: FCStore,
   actionsRef?: any,
   ioRunner?: (arg: ActionReturnType) => any,
   overrideInitialState?: Parameters<ReducerSlice>[3]

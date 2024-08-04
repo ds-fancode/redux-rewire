@@ -1,5 +1,5 @@
 {
-  "name": "todo-app",
+  "name": "example-todo-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -17,7 +17,6 @@
     "react-icons": "^4.8.0",
     "react-scripts": "5.0.1",
     "redux-logger": "^3.0.6",
-    "redux-rewire": "../../lib/esm",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
