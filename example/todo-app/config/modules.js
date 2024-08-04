@@ -66,7 +66,6 @@ function getWebpackAliases(options = {}) {
   if (path.relative(paths.appPath, baseUrlResolved) === '') {
     return {
       src: paths.appSrc,
-      // 'redux-rewire': paths.rewire,
     }
   }
 }

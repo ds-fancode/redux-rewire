@@ -1,8 +1,8 @@
 export * from 'redux'
 export * from 'react-redux'
 
-// export type {FCStore} from './core/create-store'
-export {configureStore, FCStore} from './core/create-store'
+export type {FCStore} from './core/create-store'
+export {configureStore} from './core/create-store'
 export {RewireProvider, RewireContext} from './shared/provider'
 /**
  * Helpers

@@ -1,9 +1,3 @@
-import {
-  DragDropContext,
-  DragUpdate,
-  Droppable,
-  DropResult,
-} from 'react-beautiful-dnd'
 import React from 'react'
 import {
   identitySelector,
@@ -30,7 +24,7 @@ const TodoListWrapper = (props: any) => {
   //   noneSelector
   // )
 
-  const onDragUpdate = (result: DragUpdate) => {
+  const onDragUpdate = (result: any) => {
     const {destination, source} = result
     if (
       destination &&
@@ -43,7 +37,7 @@ const TodoListWrapper = (props: any) => {
     }
   }
 
-  const onDragEnd = (result: DropResult) => {
+  const onDragEnd = (result: any) => {
     const {destination, source} = result
     // dropStoreAction.setHoverCompletedTaskDropId(-1)
 
@@ -70,7 +64,7 @@ const TodoListWrapper = (props: any) => {
     // }
   }
   return (
-    <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
+    <div>
       <span className="heading">Task Todo</span>
       <InputField
         value={'kamlesh'}
@@ -79,42 +73,21 @@ const TodoListWrapper = (props: any) => {
         onInputSubmit={handleAdd}
       />
       <div className="container">
-        <Droppable droppableId="ActiveTodos">
-          {(provided, snapshot) => (
-            <div
-              className={`todos ${snapshot.isDraggingOver ? 'dragactive' : ''}`}
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-              <span className="todos__heading">Active Tasks</span>
-              {todoState.todoList?.map((todoItem) => (
-                <TodoItem {...todoItem} key={todoItem.id} />
-              ))}
-              {/*<TodoListView isDone={false} />*/}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-        <Droppable droppableId="CompletedTodos">
-          {(provided, snapshot) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className={`todos  ${
-                snapshot.isDraggingOver ? 'dragcomplete' : 'remove'
-              }`}
-            >
-              <span className="todos__heading">Completed Tasks</span>
-              {todoState.todoList?.map((todoItem) => (
-                <TodoItem {...todoItem} key={todoItem.id} />
-              ))}
-              {/*<TodoListView isDone={true} />*/}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+        <div>
+          <span className="todos__heading">Active Tasks</span>
+          {todoState.todoList?.map((todoItem) => (
+            <TodoItem {...todoItem} key={todoItem.id} />
+          ))}
+        </div>
+
+        <div className={`todos  `}>
+          <span className="todos__heading">Completed Tasks</span>
+          {todoState.todoList?.map((todoItem) => (
+            <TodoItem {...todoItem} key={todoItem.id} />
+          ))}
+        </div>
       </div>
-    </DragDropContext>
+    </div>
   )
 }
 
