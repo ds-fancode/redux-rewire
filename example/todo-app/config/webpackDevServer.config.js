@@ -126,7 +126,7 @@ module.exports = function (proxy, allowedHost) {
     },
     resolve: {
       alias: {
-        'redux-rewire': path.resolve(__dirname, '../../../src'),
+        'redux-rewire': path.resolve(process.cwd(), '../../src'),
       },
     },
   }
