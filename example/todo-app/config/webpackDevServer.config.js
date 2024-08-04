@@ -124,10 +124,5 @@ module.exports = function (proxy, allowedHost) {
       // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
       devServer.app.use(noopServiceWorkerMiddleware(paths.publicUrlOrPath))
     },
-    resolve: {
-      alias: {
-        'redux-rewire': path.resolve(process.cwd(), '../../src'),
-      },
-    },
   }
 }
