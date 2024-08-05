@@ -3,5 +3,6 @@ import {TodoListState} from './todo-list.type'
 
 export const initialState = createInitialState<TodoListState, any>('app', {
   loaded: false,
+  inputValue: '',
   todoList: [],
 })

@@ -1,9 +1,14 @@
 import React from 'react'
 import './App.css'
 import {configureStore, RewireProvider} from 'redux-rewire'
-import TodoListWrapper from '../components-slice/todo-list'
-import reduxLogger from 'redux-logger'
-
+import TodoList from '../components-slice/todo-list'
+import {createLogger} from 'redux-logger'
+const reduxLogger = createLogger({
+  collapsed: true,
+  duration: true,
+  diff: true,
+  timestamp: false,
+})
 const store = configureStore(
   {},
   {},
@@ -16,7 +21,7 @@ const AppView = (props: any) => {
   return (
     <React.StrictMode>
       <RewireProvider store={store}>
-        <TodoListWrapper />
+        <TodoList />
       </RewireProvider>
     </React.StrictMode>
   )

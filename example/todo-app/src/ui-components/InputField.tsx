@@ -3,8 +3,8 @@ import './styles.css'
 
 interface props {
   value: string
-  onInputChange: React.Dispatch<string>
-  onInputSubmit: (e: React.FormEvent) => void
+  onInputChange: (value: string) => void
+  onInputSubmit: () => void
 }
 
 const InputField: React.FC<props> = ({value, onInputChange, onInputSubmit}) => {
@@ -14,8 +14,8 @@ const InputField: React.FC<props> = ({value, onInputChange, onInputSubmit}) => {
     <form
       className="input"
       onSubmit={(e) => {
-        onInputSubmit(e)
-        inputRef.current?.blur()
+        e.preventDefault()
+        onInputSubmit()
       }}
     >
       <input
@@ -23,7 +23,10 @@ const InputField: React.FC<props> = ({value, onInputChange, onInputSubmit}) => {
         placeholder="Enter a Task"
         value={value}
         ref={inputRef}
-        onChange={(e) => onInputChange(e.target.value)}
+        onChange={(e) => {
+          e.preventDefault()
+          onInputChange(e.target.value)
+        }}
         className="input__box"
       />
       <button type="submit" className="input_submit">

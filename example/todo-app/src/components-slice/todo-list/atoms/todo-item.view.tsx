@@ -17,9 +17,13 @@ const TodoItem = (props: ITodoItemProps) => {
     e.preventDefault()
   }
 
-  const handleDelete = useCallback((id: number) => {}, [])
+  const handleDelete = useCallback(() => {
+    actions.handleDelete(props)
+  }, [])
 
-  const handleDone = useCallback((id: number) => {}, [])
+  const handleDone = useCallback(() => {
+    actions.handleDone(props)
+  }, [])
 
   return todoItem ? (
     <form
@@ -31,10 +35,10 @@ const TodoItem = (props: ITodoItemProps) => {
         <span className="icon" onClick={() => {}}>
           <AiFillEdit />
         </span>
-        <span className="icon" onClick={() => handleDelete(props.id)}>
+        <span className="icon" onClick={handleDelete}>
           <AiFillDelete />
         </span>
-        <span className="icon" onClick={() => handleDone(props.id)}>
+        <span className="icon" onClick={handleDone}>
           <MdDone />
         </span>
       </div>

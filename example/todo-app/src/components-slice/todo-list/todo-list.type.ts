@@ -6,5 +6,6 @@ export interface Todo {
 
 export interface TodoListState {
   loaded: boolean
+  inputValue: string
   todoList: Todo[]
 }
