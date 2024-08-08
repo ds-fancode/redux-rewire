@@ -10,7 +10,7 @@ export type CreateReducerSliceType = <
     [reducerKey: string]: ReducerInputFunction<InitialStateReturnType['state']>
   }
 >(
-  initialState: InitialStateReturnType | State,
+  initialState: InitialStateReturnType,
   reducerMap: ReducerObjType
 ) => (
   key: string,
@@ -26,7 +26,6 @@ export type CreateReducerSliceType = <
       globalState?: IReduxStore
     ) => AnyAction
   }
-  defaultActionReturnValue: InitialStateReturnType['defaultActionReturnValue']
 }
 
 export type ReducerInputFunction<State> = (

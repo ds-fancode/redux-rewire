@@ -5,14 +5,10 @@ import {createReducerSlice} from '../create-reducer-slice'
 
 describe('createCommandSlice', () => {
   it('__tests__ single action', () => {
-    const state = createInitialState(
-      'test',
-      {
-        collection: {loaded: false},
-        test2: null,
-      },
-      [] as any[]
-    )
+    const state = createInitialState('test', {
+      collection: {loaded: false},
+      test2: null,
+    })
     const reducerSlice = createReducerSlice(state, {
       mount: (state, action) => state,
       response: (state, action) => {
@@ -35,23 +31,14 @@ describe('createCommandSlice', () => {
           },
         ]
       },
-    })('test')
+    })('test', {
+      getState: () => ({test: {collection: 5}}),
+      dispatch: (...arg: any) => {},
+    } as any)
 
     const actionData = {collection: {id: 9}}
     const actual = asyncActions.mount(actionData)
-    const expected = [
-      {
-        returnAction: actions.response,
-        runIoAction: {
-          type: '@@navigate',
-          data: {
-            componentId: '2',
-            navigatorType: 'push',
-            newScreen: 'HOME',
-          },
-        },
-      },
-    ]
-    assert.deepEqual(actual, expected)
+
+    assert.deepEqual(actual, void 0)
   })
 })

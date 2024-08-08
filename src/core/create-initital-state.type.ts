@@ -1,11 +1,6 @@
-export type CreateInitialStateType = <
-  State extends {[key: string]: any},
-  ActionReturnType extends any | void = void
->(
+export type CreateInitialStateType = <State extends {[key: string]: any}>(
   identityKey: string,
-  initialState: State,
-  defaultActionReturnValue?: ActionReturnType
+  initialState: State
 ) => {
   state: State
-  defaultActionReturnValue?: ActionReturnType
 }

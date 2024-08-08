@@ -1,9 +1,9 @@
 import {CreateReducerSliceType} from './create-reducer-slice-type'
 import {FCStore} from './create-store'
 
-export type CreateActionSliceType<> = <
-  ReducerSlice extends ReturnType<CreateReducerSliceType> = any,
-  ActionReturnType extends ReturnType<ReducerSlice>['defaultActionReturnValue'] = void
+export type CreateActionSliceType = <
+  ActionReturnType = void,
+  ReducerSlice extends ReturnType<CreateReducerSliceType> = any
 >(
   reducerSlice: ReducerSlice,
   actionMap: Partial<{
@@ -24,13 +24,10 @@ export type CreateActionSliceType<> = <
         reduxStore: {[key: string]: any}
         prevState: ReturnType<ReducerSlice>['initialState']
       }
-    ) => Promise<ActionReturnType> | ActionReturnType
+    ) => ActionReturnType
   }>,
   actionDefaultReturnValue?: ActionReturnType
-) => ActionGetKeyType<
-  ReducerSlice,
-  Promise<ActionReturnType> | ActionReturnType
->
+) => ActionGetKeyType<ReducerSlice, ActionReturnType>
 
 // intermediate separate function needed for type to work consistently
 export type ActionGetKeyType<

@@ -4,8 +4,7 @@ export const IdentityKey = '__IDENTITY__'
 
 export const createInitialState: CreateInitialStateType = function (
   identityKey,
-  initialState,
-  defaultActionReturnValue
+  initialState
 ) {
   if (typeof initialState === 'object') {
     return {
@@ -13,12 +12,11 @@ export const createInitialState: CreateInitialStateType = function (
         ...initialState,
         [IdentityKey]: identityKey,
       },
-      defaultActionReturnValue,
     }
   } else {
     return {
       state: initialState,
-      defaultActionReturnValue,
+      [IdentityKey]: identityKey,
     }
   }
 }

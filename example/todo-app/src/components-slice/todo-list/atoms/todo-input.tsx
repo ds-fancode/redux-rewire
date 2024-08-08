@@ -1,13 +1,14 @@
+// copilot:ignore
 import InputField from '../../../ui-components/InputField'
 import React, {useCallback} from 'react'
-import {identitySelector, useRewireState} from 'redux-rewire'
+import {keysSelector, useRewireState} from 'redux-rewire'
 import {todoAction} from '../todo-list.actions'
 
 const TodoInputView = (props: any) => {
   const [, todoState, actions] = useRewireState(
     'to-do',
     todoAction,
-    identitySelector
+    keysSelector(['inputValue'])
   )
   const handleAdd = useCallback(() => {
     actions.addTodo(undefined)

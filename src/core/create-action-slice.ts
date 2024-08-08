@@ -25,8 +25,11 @@ export const createActionSlice: CreateActionSliceType = function (
       return result
     }
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
-    const {initialState, reducerActions, reducers, defaultActionReturnValue} =
-      reducerSlice(key, store, overrideInitialState)
+    const {initialState, reducerActions, reducers} = reducerSlice(
+      key,
+      store,
+      overrideInitialState
+    )
 
     store.reducerManager.add(key, reducers)
 
@@ -75,11 +78,10 @@ export const createActionSlice: CreateActionSliceType = function (
             )
             // execute IO
             if (typeof ioRunner === 'function') {
-              ioRunner?.(ioActions ?? defaultActionReturnValue)
+              ioRunner?.(ioActions)
             }
-            return ioActions ?? defaultActionReturnValue
+            return ioActions
           }
-          return defaultActionReturnValue
         }
       })
     }

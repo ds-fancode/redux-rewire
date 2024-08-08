@@ -23,12 +23,12 @@ export const createReducers = <State>(
 }
 
 export const createReducerSlice: CreateReducerSliceType = function (
-  {state: initialState, defaultActionReturnValue},
+  {state: initialState},
   reducers
 ) {
   return (key, store: FCStore, overrideInitialState) => {
     const {dispatch, getState} = store
-    const finalInitialState: typeof initialState = overrideInitialState
+    const finalInitialState: any = overrideInitialState
       ? JSON.parse(JSON.stringify(overrideInitialState)) // overrideInitialState is used in __tests__ cases
       : key && getState?.()?.[key]
       ? getState?.()?.[key]
@@ -104,7 +104,6 @@ export const createReducerSlice: CreateReducerSliceType = function (
       initialState: finalInitialState,
       reducerActions,
       reducers: updatedReducers,
-      defaultActionReturnValue,
     }
   }
 }
