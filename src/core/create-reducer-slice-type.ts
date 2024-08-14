@@ -31,5 +31,5 @@ export type CreateReducerSliceType = <
 export type ReducerInputFunction<State> = (
   state: State,
   actionData: any,
-  props: {reduxKey: string; reduxStore: IReduxStore}
+  props: {reduxKey: string; globalState: IReduxStore}
 ) => State

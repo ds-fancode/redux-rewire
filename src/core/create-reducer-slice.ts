@@ -46,7 +46,7 @@ export const createReducerSlice: CreateReducerSliceType = function (
             try {
               return reducers[reducerKey]?.(draftState, action.payload, {
                 reduxKey: key,
-                reduxStore: action.globalState,
+                globalState: action.globalState,
               })
             } catch (e) {
               console.error('Error in updating reducer', key, combinedKey, e)
