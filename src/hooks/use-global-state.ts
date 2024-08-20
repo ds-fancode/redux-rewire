@@ -1,7 +1,6 @@
 import {useMemo} from 'react'
-import {shallowEqual} from 'react-redux'
+import {shallowEqual, useSelector} from 'react-redux'
 import {UseGlobalStateType} from './use-global-state.type'
-import {useRewireState} from './use-rewire-state'
 
 export const useGlobalState: UseGlobalStateType = function (
   globalStore,
@@ -9,13 +8,13 @@ export const useGlobalState: UseGlobalStateType = function (
   equalityFn = shallowEqual
 ) {
   // actionsRef undefined for first time, so that we get new actions from useRewireState
-  const [key, state, actions] = useRewireState(
-    globalStore.key,
-    globalStore.actionSlice,
-    stateSelector,
+  const state = useSelector(
+    (state: any) =>
+      stateSelector(state[globalStore.key] ?? globalStore.initialState),
     equalityFn
   )
+
   return useMemo(() => {
-    return [key, state, actions]
-  }, [key, state, actions])
+    return [globalStore.key, state, globalStore.actions]
+  }, [globalStore.key, state, globalStore.actions])
 }

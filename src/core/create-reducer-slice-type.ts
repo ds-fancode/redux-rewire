@@ -1,5 +1,4 @@
 import {AnyAction, Reducer} from 'redux'
-import {IReduxStore} from './create-global-state.type'
 import {CreateInitialStateType} from './create-initital-state.type'
 import {FCStore} from './create-store'
 
@@ -23,7 +22,7 @@ export type CreateReducerSliceType = <
   reducerActions: {
     [key in keyof ReducerObjType]: (
       actionData: Parameters<ReducerObjType[key]>[1],
-      globalState?: IReduxStore
+      globalState?: Record<string, object>
     ) => AnyAction
   }
 }
@@ -31,5 +30,5 @@ export type CreateReducerSliceType = <
 export type ReducerInputFunction<State> = (
   state: State,
   actionData: any,
-  props: {reduxKey: string; globalState: IReduxStore}
+  props: {reduxKey: string; globalState: Record<string, object>}
 ) => State

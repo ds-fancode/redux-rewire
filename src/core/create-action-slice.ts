@@ -85,14 +85,14 @@ export const createActionSlice: CreateActionSliceType = function (
         }
       })
     }
+    const getSliceState = () =>
+      getState ? getState()[key] ?? initialState : initialState
     //#endregion
     result = {
       key,
       initialState,
-      reducers,
-      reducerActions,
-      asyncActions,
       actions,
+      getState: getSliceState,
     }
     return result
   }

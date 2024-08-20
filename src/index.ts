@@ -19,7 +19,6 @@ export {RESERVED_ACTIONS} from './constant'
  * New APIs
  */
 export {createInitialState, IdentityKey} from './core/create-initital-state'
-export {createGlobalState} from './core/create-global-state'
 export {createReducerSlice} from './core/create-reducer-slice'
 export {createActionSlice} from './core/create-action-slice'
 

@@ -13,9 +13,9 @@ export const useRewireState: UseRewireStateType = function (
 
   const {initialState, actions} = useMemo(() => {
     // create once to make sure ref og actions do not change
-    const {initialState, reducers, actions} = actionSlice(key, store)
+    const {initialState, actions} = actionSlice(key, store)
     // adding reducer to the store with replace
-    return {initialState, reducers, actions}
+    return {initialState, actions}
   }, [key])
 
   const state = useSelector(

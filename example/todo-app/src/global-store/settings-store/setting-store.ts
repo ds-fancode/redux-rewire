@@ -1,9 +1,6 @@
-import {createGlobalState} from 'redux-rewire'
 import {settingStoreAction} from './setting-store.action'
+import {appStore} from '../../store'
 
 const todoStoreKey = '*todo-store'
-export const settingStore = createGlobalState(
-  todoStoreKey,
-  settingStoreAction,
-  true
-)
+
+export const settingStore = settingStoreAction(todoStoreKey, appStore)

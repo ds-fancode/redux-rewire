@@ -42,13 +42,7 @@ export type ActionGetKeyType<
 ) => {
   key: string
   initialState: ReturnType<ReducerSlice>['initialState']
-  reducers: ReturnType<ReducerSlice>['reducers']
-  reducerActions: ReturnType<ReducerSlice>['reducerActions']
-  asyncActions: {
-    [key in keyof ReturnType<ReducerSlice>['reducerActions']]: (
-      actionData: Parameters<ReturnType<ReducerSlice>['reducerActions'][key]>[0]
-    ) => ActionReturnType
-  }
+  getState: () => ReturnType<ReducerSlice>['initialState']
   actions: {
     [key in keyof ReturnType<ReducerSlice>['reducerActions']]: (
       actionData: Parameters<ReturnType<ReducerSlice>['reducerActions'][key]>[0]
