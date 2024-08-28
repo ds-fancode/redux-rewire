@@ -21,7 +21,7 @@ export const createActionSlice: CreateActionSliceType = function (
   ) {
     const {getState} = store
 
-    if (store.getState()[key] !== undefined && result) {
+    if (result) {
       return result
     }
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
