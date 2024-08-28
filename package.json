@@ -11,8 +11,7 @@
     "prettier": "prettier --check \"**/*.{ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{ts,tsx}\"",
     "build": "rm -rf ./lib && yarn tsc && yarn tsc --module CommonJS --moduleResolution node --outDir lib/cjs && node ./publish.js",
-    "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +",
-    "postinstall": "yarn build"
+    "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +"
   },
   "author": "FanCode",
   "license": "ISC",
