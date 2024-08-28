@@ -1,4 +1,4 @@
-import {createReducers} from '../create-reducer-slice'
+import {createReducers} from '../create-reducer'
 
 describe('createReducer', () => {
   describe('sync reducers', () => {

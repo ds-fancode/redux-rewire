@@ -1,40 +1,27 @@
 import produce from 'immer'
+import {AnyAction} from 'redux'
 import {RESERVED_ACTIONS} from '../constant'
+import {createReducers} from './create-reducer'
 import {CreateReducerSliceType} from './create-reducer-slice-type'
-import {FCStore} from './create-store'
-
-import {AnyAction, Reducer} from 'redux'
-
-type UpdateInputType<State> = {
-  [key: string]: (state: State, actionData: any) => State
-}
-
-export const createReducers = <State>(
-  reducerMap: UpdateInputType<State>,
-  initialState: State
-): Reducer<State, AnyAction> => {
-  return (state: State = initialState, action: AnyAction) => {
-    const func = reducerMap[action.type]
-    if (func && typeof func === 'function') {
-      return func(state, action)
-    }
-    return state
-  }
-}
 
 export const createReducerSlice: CreateReducerSliceType = function (
-  {state: initialState},
+  {state: initialState, defaultActionReturnValue},
   reducers
 ) {
-  return (key, store: FCStore, overrideInitialState) => {
-    const {dispatch, getState} = store
-    const finalInitialState: any = overrideInitialState
+  return (key, dispatch, getState, overrideInitialState) => {
+    const finalInitialState: typeof initialState = overrideInitialState
       ? JSON.parse(JSON.stringify(overrideInitialState)) // overrideInitialState is used in __tests__ cases
       : key && getState?.()?.[key]
       ? getState?.()?.[key]
       : initialState
     if (!key) {
-      throw new Error('Key is required to create a reducer slice')
+      // return only references
+      return {
+        key,
+        reducers,
+        reducerActions: reducers,
+        initialState: finalInitialState,
+      } as any
     }
     const updatedReducerMap = Object.keys(reducers).reduce<{
       [key: string]: any
@@ -46,7 +33,7 @@ export const createReducerSlice: CreateReducerSliceType = function (
             try {
               return reducers[reducerKey]?.(draftState, action.payload, {
                 reduxKey: key,
-                globalState: action.globalState,
+                reduxStore: action.globalState,
               })
             } catch (e) {
               console.error('Error in updating reducer', key, combinedKey, e)
@@ -81,15 +68,14 @@ export const createReducerSlice: CreateReducerSliceType = function (
             globalState: any = getState?.() ?? {}
           ) => {
             // directly dispatch the action
-            const combinedKey = `${key}/${reducerKey}`
             return dispatch
               ? dispatch({
-                  type: combinedKey,
+                  type: `${key}/${reducerKey}`,
                   payload: data,
                   globalState,
                 })
               : {
-                  type: combinedKey,
+                  type: `${key}/${reducerKey}`,
                   payload: data,
                   globalState,
                 }
@@ -104,6 +90,7 @@ export const createReducerSlice: CreateReducerSliceType = function (
       initialState: finalInitialState,
       reducerActions,
       reducers: updatedReducers,
+      defaultActionReturnValue,
     }
   }
 }

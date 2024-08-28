@@ -15,10 +15,7 @@ describe('createUpdateSlice', () => {
       setUserData: (state, action) => {
         return state
       },
-    })('test', {
-      getState: () => ({test: {collection: 5}}),
-      dispatch: (...arg: any) => {},
-    } as any)
+    })('test')
     const updatedState = reducers(
       state,
       reducerActions.loadCollections({collection: 10})

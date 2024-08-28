@@ -1,24 +1,24 @@
-export * from 'redux'
-export * from 'react-redux'
-
-export type {FCStore} from './core/create-store'
-export {configureStore} from './core/create-store'
+export {configureStore, FCStore} from './core/create-store'
 export {RewireProvider, RewireContext} from './shared/provider'
 /**
  * Helpers
  */
 export {identitySelector} from './helper/idenity-selector'
+export {identityReducer} from './helper/idenity-reducer'
 export {noneSelector} from './helper/none-selector'
 export {keysSelector} from './helper/keys-selector'
 export {keyHandler} from './helper/key-handler'
 /**
  * Every thing exported from redux and react-redux
  */
-export {RESERVED_ACTIONS} from './constant'
+export * from './constant'
+export * from 'redux'
+export * from 'react-redux'
 /**
  * New APIs
  */
 export {createInitialState, IdentityKey} from './core/create-initital-state'
+export {createGlobalState} from './core/create-global-state'
 export {createReducerSlice} from './core/create-reducer-slice'
 export {createActionSlice} from './core/create-action-slice'
 

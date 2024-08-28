@@ -1,9 +1,10 @@
+import {AnyAction, Dispatch} from 'redux'
+import {IReduxStore} from './create-global-state.type'
 import {CreateReducerSliceType} from './create-reducer-slice-type'
-import {FCStore} from './create-store'
 
-export type CreateActionSliceType = <
+export type CreateActionSliceType<> = <
   ReducerSlice extends ReturnType<CreateReducerSliceType> = any,
-  ActionReturnType = void
+  ActionReturnType extends ReturnType<ReducerSlice>['defaultActionReturnValue'] = void
 >(
   reducerSlice: ReducerSlice,
   actionMap: Partial<{
@@ -20,14 +21,17 @@ export type CreateActionSliceType = <
             >[0]
           ) => ActionReturnType
         }
-        rewireKey: string
-        globalState: {[key: string]: any}
+        reduxKey: string
+        reduxStore: {[key: string]: any}
         prevState: ReturnType<ReducerSlice>['initialState']
       }
-    ) => ActionReturnType
+    ) => Promise<ActionReturnType> | ActionReturnType
   }>,
   actionDefaultReturnValue?: ActionReturnType
-) => ActionGetKeyType<ReducerSlice, ActionReturnType>
+) => ActionGetKeyType<
+  ReducerSlice,
+  Promise<ActionReturnType> | ActionReturnType
+>
 
 // intermediate separate function needed for type to work consistently
 export type ActionGetKeyType<
@@ -35,14 +39,21 @@ export type ActionGetKeyType<
   ActionReturnType
 > = (
   key: string,
-  store: FCStore,
+  dispatch?: Dispatch<AnyAction>,
+  getState?: () => IReduxStore,
   actionsRef?: any,
   ioRunner?: (arg: ActionReturnType) => any,
   overrideInitialState?: Parameters<ReducerSlice>[3]
 ) => {
   key: string
   initialState: ReturnType<ReducerSlice>['initialState']
-  getState: () => ReturnType<ReducerSlice>['initialState']
+  reducers: ReturnType<ReducerSlice>['reducers']
+  reducerActions: ReturnType<ReducerSlice>['reducerActions']
+  asyncActions: {
+    [key in keyof ReturnType<ReducerSlice>['reducerActions']]: (
+      actionData: Parameters<ReturnType<ReducerSlice>['reducerActions'][key]>[0]
+    ) => ActionReturnType
+  }
   actions: {
     [key in keyof ReturnType<ReducerSlice>['reducerActions']]: (
       actionData: Parameters<ReturnType<ReducerSlice>['reducerActions'][key]>[0]

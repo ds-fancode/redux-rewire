@@ -8,14 +8,14 @@ export function createActionsReference(allKeys: string[]) {
 }
 
 export function createActionsReferenceFromActionSlice(
-  actionSlice: ActionGetKeyType<any, any>
+  actionSlice: ActionGetKeyType<any, any, any>
 ) {
   // @ts-ignore
   const {reducers: reducerMap, asyncActions: actionMap} = actionSlice(undefined)
 
   const allAvailableActionKeys = [
     ...Object.keys(reducerMap),
-    ...Object.keys(actionMap),
+    ...Object.keys(actionMap)
   ]
   return createActionsReference(allAvailableActionKeys)
 }

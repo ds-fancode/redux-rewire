@@ -1,9 +1,9 @@
 type IKeysSelector = <
-  State extends {[key in string]: any},
-  InputKeys extends keyof State
+  InputKeys extends keyof Obj,
+  Obj extends {[key in string]: any}
 >(
   keys: InputKeys[]
-) => (state: State) => {[Key in InputKeys]: State[Key]}
+) => (state: Obj) => {[Key in InputKeys]: Obj[Key]}
 
 export const keysSelector: IKeysSelector = function (keys) {
   return (state) =>

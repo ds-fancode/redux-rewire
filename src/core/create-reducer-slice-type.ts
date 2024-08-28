@@ -1,6 +1,6 @@
-import {AnyAction, Reducer} from 'redux'
+import {AnyAction, Dispatch, Reducer} from 'redux'
+import {IReduxStore} from './create-global-state.type'
 import {CreateInitialStateType} from './create-initital-state.type'
-import {FCStore} from './create-store'
 
 export type CreateReducerSliceType = <
   InitialStateReturnType extends ReturnType<CreateInitialStateType>,
@@ -13,7 +13,8 @@ export type CreateReducerSliceType = <
   reducerMap: ReducerObjType
 ) => (
   key: string,
-  store: FCStore,
+  dispatch?: Dispatch<AnyAction>,
+  getState?: () => IReduxStore,
   overrideInitialState?: ReturnType<CreateInitialStateType>
 ) => {
   key: string
@@ -22,13 +23,14 @@ export type CreateReducerSliceType = <
   reducerActions: {
     [key in keyof ReducerObjType]: (
       actionData: Parameters<ReducerObjType[key]>[1],
-      globalState?: Record<string, object>
+      globalState?: IReduxStore
     ) => AnyAction
   }
+  defaultActionReturnValue: InitialStateReturnType['defaultActionReturnValue']
 }
 
 export type ReducerInputFunction<State> = (
   state: State,
   actionData: any,
-  props: {reduxKey: string; globalState: Record<string, object>}
+  props: {reduxKey: string; reduxStore: IReduxStore}
 ) => State
