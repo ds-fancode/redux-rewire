@@ -2,7 +2,7 @@ import {useContext, useMemo} from 'react'
 import {shallowEqual} from 'react-redux'
 import {UseReduxStateType} from './use-global-state.type'
 import {useReduxState} from './use-redux-state'
-import {RewireContext} from '../../shared/provider'
+import {RewireContext} from '../shared/provider'
 
 export const useGlobalState: UseReduxStateType = function (
   globalStore,

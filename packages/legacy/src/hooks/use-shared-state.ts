@@ -1,7 +1,7 @@
 import {useEffect, useMemo} from 'react'
 import {shallowEqual} from 'react-redux'
 import {createActionsReferenceFromActionSlice} from '../core/create-actions-reference'
-import {keyHandler} from '../../helper/key-handler'
+import {keyHandler} from '../helper/key-handler'
 import {useReduxState} from './use-redux-state'
 import {UseReduxStateType} from './use-shared-state.type'
 

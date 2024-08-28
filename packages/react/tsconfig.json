@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "es2022",
+    "moduleResolution": "bundler",
+    "module": "ES2022",
+    "outDir": "lib/esm",
+    "sourceMap": true,
+    "lib": [
+      "es2022",
+      "dom"
+    ],
+    "rootDir": "src",
+    "jsx": "react",
+    "baseUrl": "src"
+  },
+  "references": [{
+    "path": "../core"
+  }],
+  "include": [
+    "src"
+  ]
+}

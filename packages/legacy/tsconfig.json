@@ -1,34 +1,37 @@
 {
   "compilerOptions": {
-    "moduleResolution": "bundler",
-    "module": "ES2022",
-    "outDir": "lib/esm",
-    "lib": [
-      "es2022"
-    ],
-    "baseUrl": "src",
-    "rootDir": "src",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "es2022",
-    "verbatimModuleSyntax": true,
+    //    "verbatimModuleSyntax": true,
     "allowJs": false,
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "strict": true,
     "noUncheckedIndexedAccess": true,
+    "moduleResolution": "bundler",
+    "module": "ES2022",
+    "outDir": "lib/esm",
     "sourceMap": true,
+    "lib": [
+      "es2022",
+      "dom"
+    ],
     "declaration": true,
     "incremental": true,
+    "rootDir": "src",
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
+    //
+    "jsx": "react",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "strictNullChecks": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "src"
   },
   "include": [
     "src"
-  ]
+  ],
 }

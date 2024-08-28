@@ -1,4 +1,4 @@
-import {createReducerSlice} from 'redux-rewire'
+import {createReducerSlice} from '@redux-rewire/core'
 import {todoStoreInitialState} from './setting-store.init'
 import {Theme} from './setting.type'
 

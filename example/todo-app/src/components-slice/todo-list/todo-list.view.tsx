@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-  identitySelector,
-  keysSelector,
-  useGlobalState,
-  useRewireState,
-} from 'redux-rewire'
+import {useGlobalState, useRewireState} from '@redux-rewire/react'
 import TodoItem from './atoms/todo-item.view'
 import {todoAction} from './todo-list.actions'
 import {TodoInput} from './atoms/todo-input'
@@ -14,7 +9,7 @@ const TodoListWrapper = (props: any) => {
   const [, todoState, actions] = useRewireState(
     'to-do',
     todoAction,
-    identitySelector
+    (state) => state
   )
 
   const [, settingState] = useGlobalState(settingStore, (state) => {

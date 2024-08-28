@@ -1,6 +1,6 @@
 import {IdentityKey} from '../core/create-initital-state'
 import {CreateInitialStateType} from '../core/create-initital-state.type'
-import {keyHandler} from '../../helper/key-handler'
+import {keyHandler} from '../helper/key-handler'
 
 function findClosesParentState(
   globalState: {[key: string]: any},

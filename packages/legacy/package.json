@@ -1,15 +1,16 @@
 {
-  "name": "redux-rewire",
+  "name": "@redux-rewire/legacy",
   "version": "0.0.16",
   "description": "State management library for react based applications",
+  "main": "src/index.ts",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest -- --watch",
-    "test:ci": "jest --coverage && coveralls < coverage/lcov.info",
+    "test-watch": "jest -- --watch",
+    "test-ci": "jest --coverage && coveralls < coverage/lcov.info",
     "lint": "eslint . --ext .ts,.tsx",
-    "lint:fix": "eslint --ext .ts,.tsx --fix",
+    "lint-fix": "eslint --ext .ts,.tsx --fix",
     "prettier": "prettier --check \"**/*.{ts,tsx}\"",
-    "prettier:fix": "prettier --write \"**/*.{ts,tsx}\"",
+    "prettier-fix": "prettier --write \"**/*.{ts,tsx}\"",
     "build": "rm -rf ./lib && yarn tsc && yarn tsc --module CommonJS --moduleResolution node --outDir lib/cjs && node ./publish.js",
     "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +",
     "postinstall": "yarn build"
@@ -38,14 +39,8 @@
   "peerDependencies": {
     "react": "18.x"
   },
-  "workspaces": [
-    "example/*",
-    "packages/*",
-    "documentation"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ds-fancode/redux-rewire"
-  },
-  "packageManager": "yarn@4.3.1"
+  }
 }

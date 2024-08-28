@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "es2022",
+    "moduleResolution": "bundler",
+    "module": "ES2022",
+    "lib": [
+      "es2022"
+    ],
+    "declaration": true,
+    "incremental": true,
+    "rootDir": "src",
+    "baseUrl": "src"
+  },
+  "include": [
+    "src"
+  ]
+}

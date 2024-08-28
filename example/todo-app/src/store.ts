@@ -1,4 +1,4 @@
-import {configureStore} from 'redux-rewire'
+import {configureStore} from '@redux-rewire/core'
 import {createLogger} from 'redux-logger'
 const reduxLogger = createLogger({
   collapsed: true,

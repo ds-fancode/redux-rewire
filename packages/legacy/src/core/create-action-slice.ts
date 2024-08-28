@@ -1,5 +1,5 @@
 import {Dispatch} from 'redux'
-import {RESERVED_ACTIONS} from '../../constant'
+import {RESERVED_ACTIONS} from '../constant'
 import {CreateActionSliceType} from './create-action-slice-type'
 import {createActionsReference} from './create-actions-reference'
 

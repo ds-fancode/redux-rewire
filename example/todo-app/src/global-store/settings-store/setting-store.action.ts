@@ -1,4 +1,4 @@
-import {createActionSlice} from 'redux-rewire'
+import {createActionSlice} from '@redux-rewire/core'
 import {settingStoreReducer} from './setting-store.reducer'
 
 export const settingStoreAction = createActionSlice(settingStoreReducer, {

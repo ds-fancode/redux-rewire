@@ -1,0 +1,12 @@
+import type {CreateActionSliceType} from '@redux-rewire/core'
+
+export type UseRewireStateType = <
+  ActionSlice extends ReturnType<CreateActionSliceType>,
+  State extends ReturnType<ActionSlice>['initialState'],
+  ReturnState
+>(
+  key: string,
+  actionSlice: ActionSlice,
+  stateSelector: (state: State) => ReturnState,
+  equalityFn?: (left: ReturnState, right: ReturnState) => boolean
+) => [string, ReturnState, ReturnType<ActionSlice>['actions']]

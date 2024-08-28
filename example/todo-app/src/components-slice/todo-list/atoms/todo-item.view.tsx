@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react'
 import {AiFillDelete, AiFillEdit} from 'react-icons/ai'
 import {MdDone} from 'react-icons/md'
-import {useRewireState} from 'redux-rewire'
+import {useRewireState} from '@redux-rewire/core'
 import {todoAction} from '../todo-list.actions'
 import {Todo} from '../todo-list.type'
 

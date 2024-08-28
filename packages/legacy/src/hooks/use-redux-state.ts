@@ -1,6 +1,6 @@
 import {useMemo} from 'react'
 import {shallowEqual, useDispatch, useSelector, useStore} from 'react-redux'
-import {FCStore} from '../../core/create-store'
+import {FCStore} from '../core/create-store'
 import {UseReduxStateType} from './use-redux-state.type'
 
 export const useReduxState: UseReduxStateType = function (

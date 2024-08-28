@@ -3476,6 +3476,72 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@redux-rewire/core@workspace:*, @redux-rewire/core@workspace:packages/core":
+  version: 0.0.0-use.local
+  resolution: "@redux-rewire/core@workspace:packages/core"
+  dependencies:
+    "@babel/preset-env": "npm:^7.23.2"
+    "@babel/preset-typescript": "npm:^7.23.2"
+    "@types/chai": "npm:^4.3.4"
+    "@types/jest": "npm:^29.2.4"
+    chai: "npm:^4.3.7"
+    immer: "npm:^9.0.12"
+    jest: "npm:26.6.3"
+    jsdoc: "npm:^4.0.0"
+    prettier: "npm:^2.8.8"
+    typescript: "npm:5.4.2"
+  languageName: unknown
+  linkType: soft
+
+"@redux-rewire/legacy@workspace:packages/legacy":
+  version: 0.0.0-use.local
+  resolution: "@redux-rewire/legacy@workspace:packages/legacy"
+  dependencies:
+    "@babel/preset-env": "npm:^7.23.2"
+    "@babel/preset-react": "npm:^7.22.15"
+    "@babel/preset-typescript": "npm:^7.23.2"
+    "@types/chai": "npm:^4.3.4"
+    "@types/jest": "npm:^29.2.4"
+    "@types/react": "npm:^18.2.6"
+    chai: "npm:^4.3.7"
+    immer: "npm:^9.0.12"
+    jest: "npm:26.6.3"
+    jsdoc: "npm:^4.0.0"
+    prettier: "npm:^2.8.8"
+    react: "npm:^18.2.0"
+    react-redux: "npm:^8.0.5"
+    redux: "npm:^4.2.0"
+    typescript: "npm:5.4.2"
+  peerDependencies:
+    react: 18.x
+  languageName: unknown
+  linkType: soft
+
+"@redux-rewire/react@workspace:packages/react":
+  version: 0.0.0-use.local
+  resolution: "@redux-rewire/react@workspace:packages/react"
+  dependencies:
+    "@babel/preset-env": "npm:^7.23.2"
+    "@babel/preset-react": "npm:^7.22.15"
+    "@babel/preset-typescript": "npm:^7.23.2"
+    "@redux-rewire/core": "workspace:*"
+    "@types/chai": "npm:^4.3.4"
+    "@types/jest": "npm:^29.2.4"
+    "@types/react": "npm:^18.2.6"
+    chai: "npm:^4.3.7"
+    immer: "npm:^9.0.12"
+    jest: "npm:26.6.3"
+    jsdoc: "npm:^4.0.0"
+    prettier: "npm:^2.8.8"
+    react: "npm:^18.2.0"
+    react-redux: "npm:^8.0.5"
+    redux: "npm:^4.2.0"
+    typescript: "npm:5.4.2"
+  peerDependencies:
+    react: 18.x
+  languageName: unknown
+  linkType: soft
+
 "@rollup/plugin-babel@npm:^5.2.0":
   version: 5.3.1
   resolution: "@rollup/plugin-babel@npm:5.3.1"

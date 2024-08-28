@@ -16,9 +16,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "redux-rewire": ["../../src"]
+      "@redux-rewire/core": ["../../packages/core/src"],
+      "@redux-rewire/react": ["../../packages/react/src"]
     }
   },
-  "include": ["src", "../../src"],
-  "exclude": ["**/__tests__/*", "node_modules", "dist"]
+  "include": ["src", "../../src"]
 }
