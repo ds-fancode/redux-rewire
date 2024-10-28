@@ -11,8 +11,8 @@ export const createReducerSlice: CreateReducerSliceType = function (
     const finalInitialState: typeof initialState = overrideInitialState
       ? JSON.parse(JSON.stringify(overrideInitialState)) // overrideInitialState is used in __tests__ cases
       : key && getState?.()?.[key]
-      ? getState?.()?.[key]
-      : initialState
+        ? getState?.()?.[key]
+        : initialState
     const globalState = getState?.() ?? {}
     if (!key) {
       // return only references
@@ -20,7 +20,7 @@ export const createReducerSlice: CreateReducerSliceType = function (
         key,
         reducers,
         reducerActions: reducers,
-        initialState: finalInitialState,
+        initialState: finalInitialState
       } as any
     }
     const updatedReducerMap = Object.keys(reducers).reduce<{
@@ -44,7 +44,7 @@ export const createReducerSlice: CreateReducerSliceType = function (
               console.error('Error in updating reducer', {
                 key,
                 combinedKey,
-                error,
+                error
               })
             }
           }
@@ -69,12 +69,12 @@ export const createReducerSlice: CreateReducerSliceType = function (
             ? dispatch({
                 type: `${key}/${reducerKey}`,
                 payload: data,
-                globalState,
+                globalState
               })
             : {
                 type: `${key}/${reducerKey}`,
                 payload: data,
-                globalState,
+                globalState
               }
         }
         return acc
@@ -85,7 +85,7 @@ export const createReducerSlice: CreateReducerSliceType = function (
       key,
       initialState: finalInitialState,
       reducerActions,
-      reducers: updatedReducers,
+      reducers: updatedReducers
     }
   }
 }

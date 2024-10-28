@@ -27,8 +27,5 @@
     "noUnusedLocals": true,
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true
-  },
-  "include": [
-    "src"
-  ]
+  }
 }

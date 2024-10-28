@@ -8,7 +8,7 @@ export const RewireContext = React.createContext<{
   setGlobalStoreInitMap: (key: string, value: any) => void
 }>({
   globalStoreInitMap: {},
-  setGlobalStoreInitMap: () => {},
+  setGlobalStoreInitMap: () => {}
 })
 const RewireProviderView = (props: ProviderProps) => {
   const {store, children, ...args} = props
@@ -19,7 +19,7 @@ const RewireProviderView = (props: ProviderProps) => {
   const value = useMemo(() => {
     return {
       globalStoreInitMap,
-      setGlobalStoreInitMap,
+      setGlobalStoreInitMap
     }
   }, [globalStoreInitMap, setGlobalStoreInitMap])
   return (

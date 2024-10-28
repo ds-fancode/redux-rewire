@@ -1,10 +1,11 @@
-import {createReducers} from '../create-reducer'
+import {createReducers} from '../create-reducer-slice'
 
 describe('createReducer', () => {
   describe('sync reducers', () => {
     it('__tests__ single reducer', () => {
       const state = {count: 0}
-      const reducers = createReducers<typeof state>(
+      const reducers = createReducers(
+        'test',
         {
           loadData: (state, action) => {
             return {...state, count: state.count + action.count}

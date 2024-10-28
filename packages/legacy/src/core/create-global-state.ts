@@ -6,13 +6,13 @@ export const createGlobalState: CreateGlobalStateType = function (
   actionSlice,
   autoMount = true
 ) {
-  let isMounted = !autoMount // for global store(share by multiple molecules) we need way for auto mount
-  let actionsRef = createActionsReferenceFromActionSlice(actionSlice)
+  const isMounted = !autoMount // for global store(share by multiple molecules) we need way for auto mount
+  const actionsRef = createActionsReferenceFromActionSlice(actionSlice)
   return {
     key,
     actionSlice,
     autoMount,
     isMounted,
-    actionsRef,
+    actionsRef
   }
 }

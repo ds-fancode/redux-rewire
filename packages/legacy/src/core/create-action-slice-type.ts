@@ -50,7 +50,7 @@ export type ActionGetKeyType<
   dispatch?: Dispatch<AnyAction>,
   getState?: () => any,
   actionsRef?: any,
-  ioRunner?: Function,
+  ioRunner?: () => void,
   overrideInitialState?: any
 ) => {
   key: string

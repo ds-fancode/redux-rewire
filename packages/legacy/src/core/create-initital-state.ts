@@ -2,7 +2,7 @@ import {CreateInitialStateType} from './create-initital-state.type'
 
 export const IdentityKey = '__IDENTITY__'
 
-export const createInitialState: CreateInitialStateType = function(
+export const createInitialState: CreateInitialStateType = function (
   identityKey,
   initialState
 ) {

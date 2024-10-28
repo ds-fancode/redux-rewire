@@ -1,14 +1,6 @@
-import {
-  Action,
-  applyMiddleware,
-  combineReducers,
-  compose,
-  createStore,
-  Reducer,
-  ReducersMapObject,
-  Store
-} from 'redux'
-import {IStoreOptions} from './create-store.type'
+import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
+import type {Action, Reducer, ReducersMapObject, Store} from 'redux'
+import type {IStoreOptions} from './create-store.type'
 
 export interface FCStore extends Store {
   reducerManager: ReturnType<typeof createReducerManager>

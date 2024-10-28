@@ -26,7 +26,7 @@ export const createActionSlice: CreateActionSliceType = function (
     //#region create empty action
     const allAvailableActionKeys = [
       ...Object.keys(reducerActions),
-      ...Object.keys(actionMap),
+      ...Object.keys(actionMap)
     ]
 
     const freshActionsRef = createActionsReference(allAvailableActionKeys)
@@ -42,7 +42,7 @@ export const createActionSlice: CreateActionSliceType = function (
         reducerActions,
         reducers,
         asyncActions: actions,
-        actions,
+        actions
       }
     }
 
@@ -59,7 +59,7 @@ export const createActionSlice: CreateActionSliceType = function (
     //#endregion
 
     //#region map action to execute reducerSlice and ioAction
-    allAvailableActionKeys.forEach((actionKey) => {
+    allAvailableActionKeys.forEach(actionKey => {
       actions[actionKey] = (
         data: any,
         inputNewState?: any,
@@ -99,7 +99,7 @@ export const createActionSlice: CreateActionSliceType = function (
       reducers,
       reducerActions,
       asyncActions,
-      actions,
+      actions
     }
   }
 }
@@ -136,7 +136,7 @@ function createAsyncFunction(
             type: `RESERVED_ACTIONS.ASYNC_ACTION/${key}/${mapKey}`,
             componentKey: key,
             asyncActionName: mapKey,
-            ioActions,
+            ioActions
           })
         }
       } catch (e) {
@@ -148,7 +148,7 @@ function createAsyncFunction(
             componentKey: key,
             asyncActionName: mapKey,
             ioActions,
-            error: e,
+            error: e
           })
         }
       }

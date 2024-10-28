@@ -32,6 +32,7 @@
     "baseUrl": "src"
   },
   "include": [
-    "src"
+    "src",
+    "jest.mock.ts"
   ],
 }
