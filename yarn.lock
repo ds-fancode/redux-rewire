@@ -3518,9 +3518,7 @@ __metadata:
   dependencies:
     "@babel/preset-env": "npm:^7.23.2"
     "@babel/preset-typescript": "npm:^7.23.2"
-    "@types/chai": "npm:^4.3.4"
     "@types/jest": "npm:^29.2.4"
-    chai: "npm:^4.3.7"
     immer: "npm:^9.0.12"
     jsdoc: "npm:^4.0.0"
     redux: "npm:^4.2.0"
@@ -3559,10 +3557,8 @@ __metadata:
     "@babel/preset-react": "npm:^7.22.15"
     "@babel/preset-typescript": "npm:^7.23.2"
     "@redux-rewire/core": "workspace:*"
-    "@types/chai": "npm:^4.3.4"
     "@types/jest": "npm:^29.2.4"
     "@types/react": "npm:^18.2.6"
-    chai: "npm:^4.3.7"
     jest: "npm:26.6.3"
     jsdoc: "npm:^4.0.0"
     react: "npm:^18.2.0"
@@ -16418,12 +16414,10 @@ __metadata:
     "@babel/preset-react": "npm:^7.22.15"
     "@babel/preset-typescript": "npm:^7.23.2"
     "@eslint/js": "npm:^8.57.0"
-    "@types/chai": "npm:^4.3.4"
     "@types/jest": "npm:^29.2.4"
     "@types/react": "npm:^18.2.6"
     "@typescript-eslint/eslint-plugin": "npm:^7.3.1"
     "@typescript-eslint/parser": "npm:^7.3.1"
-    chai: "npm:^4.3.7"
     eslint: "npm:^8.57.0"
     eslint-plugin-import: "npm:^2.29.1"
     eslint-plugin-jsx-a11y: "npm:^6.8.0"
@@ -19386,6 +19380,12 @@ __metadata:
   checksum: 10c0/79068098355483ef29f4d3753999ad880875b87625d7e9055cad9346ea4b7662aad3a66f87976801b0dd7a6f828ba973d28b1669ebcd37eaf88cc5f687c1a691
   languageName: node
   linkType: hard
+
+"vanila-todo-app-1a58b9@workspace:example/vanila-todo-app":
+  version: 0.0.0-use.local
+  resolution: "vanila-todo-app-1a58b9@workspace:example/vanila-todo-app"
+  languageName: unknown
+  linkType: soft
 
 "vary@npm:~1.1.2":
   version: 1.1.2

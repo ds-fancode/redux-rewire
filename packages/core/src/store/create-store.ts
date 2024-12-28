@@ -1,5 +1,5 @@
-import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
 import type {Action, Reducer, ReducersMapObject, Store} from 'redux'
+import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
 import type {IStoreOptions} from './create-store.type'
 
 export interface FCStore extends Store {
@@ -88,9 +88,9 @@ function createReducerManager(
 export function configureStore<S extends {[x: string]: any}>(
   initialReducer: ReducersMapObject,
   initialState: S,
-  options: IStoreOptions
+  options: IStoreOptions = {}
 ) {
-  const {middlewares, ioRunner, debug} = options
+  const {middlewares, ioRunner, debug} = options || {}
   const reducerManager = createReducerManager(initialReducer, options)
   let middlewareList: any = []
   /**

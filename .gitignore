@@ -1,7 +1,11 @@
 node_modules
-src/**/*.js
-src/**/*.js.map
+**/*.js
+**/*.d.ts
+**/*.d.ts.map
+**/*.js.map
 !jest.config.js
+!.eslint.config.js
+!.babel.config.js
 !.eslintrc.json
 !publish.js
 .idea

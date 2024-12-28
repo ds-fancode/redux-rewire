@@ -1,8 +1,13 @@
 import produce from 'immer'
-import type {CreateReducerSliceType} from './create-reducer-slice-type'
 import type {FCStore} from '../store/create-store'
 
 import type {AnyAction, Reducer} from 'redux'
+
+export type ReducerInputFunction<State> = (
+  state: State,
+  actionData: any,
+  props: {reduxKey: string; globalState: Record<string, object>}
+) => State
 
 type UpdateInputType<State> = {
   [key: string]: (state: State, actionData: any) => State
@@ -19,87 +24,84 @@ export const createReducers = <State>(
       return func(state, action)
     } else {
       console.warn(
-        `Reducers map should always return a function, check reducer map for ${reducerKey} with key ${action.type}`
+        `Reducers map should always return a function, check reducer map for ${reducerKey}`
       )
     }
     return state
   }
 }
 
-export const createReducerSlice: CreateReducerSliceType = function (
-  {state: initialState},
-  reducers
-) {
-  return (key, store: FCStore, overrideInitialState) => {
-    const {dispatch, getState} = store
-    const finalInitialState: any = overrideInitialState
-      ? JSON.parse(JSON.stringify(overrideInitialState)) // overrideInitialState is used in __tests__ cases
-      : key && getState?.()?.[key]
-        ? getState?.()?.[key]
-        : initialState
+export const createReducerSlice = <
+  State,
+  ReducerObjType extends {
+    [reducerKey: string]: ReducerInputFunction<State>
+  }
+>(
+  initialState: State,
+  reducers: ReducerObjType
+) => {
+  return (
+    key: string,
+    store: FCStore
+  ): {
+    key: string
+    initialState: State
+    reducerActions: {
+      [key in keyof ReducerObjType]: (
+        actionData: Parameters<ReducerObjType[key]>[1]
+      ) => AnyAction
+    }
+    reducers: Reducer<any, AnyAction>
+  } => {
     if (!key) {
       throw new Error('Key is required to create a reducer slice')
     }
-    const updatedReducerMap = Object.keys(reducers).reduce<{
-      [key: string]: any
-    }>((acc, reducerKey) => {
-      if (reducers[reducerKey]) {
-        const combinedKey = `${key}/${reducerKey}`
-        acc[combinedKey] = produce(
-          (draftState: typeof initialState, action: AnyAction) => {
-            try {
-              return reducers[reducerKey]?.(draftState, action.payload, {
-                reduxKey: key,
-                globalState: action.globalState
-              })
-            } catch (e) {
-              console.error('Error in updating reducer', key, combinedKey, e)
-            }
-            return draftState
-          }
-        )
-      }
-      return acc
-    }, {})
-
-    const updatedReducers = createReducers(
-      key,
-      updatedReducerMap,
-      finalInitialState
-    )
-
+    if (!store?.dispatch || !store?.getState) {
+      throw new Error(
+        `store is not passed to createReducerSlice for slice ${key}`
+      )
+    }
+    const {dispatch, getState} = store
     const reducerKeys = Object.keys(reducers)
-
-    const reducerActions: any = <{[key: string]: (data: any) => any}>(
-      reducerKeys.reduce<any>((acc, reducerKey) => {
+    const {updatedReducerMap, updatedReducerActionMap} = reducerKeys.reduce<{
+      updatedReducerMap: {[key: string]: any}
+      updatedReducerActionMap: {[key: string]: any}
+    }>(
+      (acc, reducerKey) => {
         if (reducers[reducerKey]) {
-          acc[reducerKey] = (
-            data: any,
-            globalState: any = getState?.() ?? {}
-          ) => {
-            // directly dispatch the action
-            const combinedKey = `${key}/${reducerKey}`
-            return dispatch
-              ? dispatch({
-                  type: combinedKey,
-                  payload: data,
-                  globalState
+          const combinedKey = `${key}/${reducerKey}`
+          const {updatedReducerMap, updatedReducerActionMap} = acc
+          updatedReducerMap[combinedKey] = produce(
+            (draftState: typeof initialState, action: AnyAction) => {
+              try {
+                return reducers[reducerKey]?.(draftState, action.payload, {
+                  reduxKey: key,
+                  globalState: action.globalState
                 })
-              : {
-                  type: combinedKey,
-                  payload: data,
-                  globalState
-                }
+              } catch (e) {
+                console.error(`Error in updating reducer ${combinedKey}`, e)
+              }
+              return draftState
+            }
+          )
+          updatedReducerActionMap[reducerKey] = (data: any) => {
+            return dispatch({
+              type: combinedKey,
+              payload: data,
+              globalState: getState?.() ?? {}
+            })
           }
         }
         return acc
-      }, {})
+      },
+      {updatedReducerMap: {}, updatedReducerActionMap: {}}
     )
 
+    const updatedReducers = createReducers(key, updatedReducerMap, initialState)
     return {
       key,
-      initialState: finalInitialState,
-      reducerActions,
+      initialState,
+      reducerActions: updatedReducerActionMap as any,
       reducers: updatedReducers
     }
   }
