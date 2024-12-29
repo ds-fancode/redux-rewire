@@ -71,19 +71,14 @@ export const createReducerSlice = <
         if (reducers[reducerKey]) {
           const combinedKey = `${key}/${reducerKey}`
           const {updatedReducerMap, updatedReducerActionMap} = acc
-          updatedReducerMap[combinedKey] = produce(
-            (draftState: typeof initialState, action: AnyAction) => {
-              try {
+          updatedReducerMap[combinedKey] = store.isImmerDisabled()
+            ? reducers[reducerKey]
+            : produce((draftState: typeof initialState, action: AnyAction) => {
                 return reducers[reducerKey]?.(draftState, action.payload, {
                   reduxKey: key,
                   globalState: action.globalState
                 })
-              } catch (e) {
-                console.error(`Error in updating reducer ${combinedKey}`, e)
-              }
-              return draftState
-            }
-          )
+              })
           updatedReducerActionMap[reducerKey] = (data: any) => {
             return dispatch({
               type: combinedKey,

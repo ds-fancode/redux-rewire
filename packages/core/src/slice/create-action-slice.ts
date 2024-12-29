@@ -2,6 +2,12 @@ import type {FCStore} from '../store/create-store'
 import {createActionsReference} from './create-actions-reference'
 import {createReducerSlice} from './create-reducer-slice'
 
+type ActionProps<State, AllActions> = {
+  state: State
+  actions: AllActions
+  rewireKey: string
+  prevState: State
+}
 export const createActionSlice = <
   ReducerSlice extends ReturnType<typeof createReducerSlice>,
   ReducerActions extends ReturnType<ReducerSlice>['reducerActions'],
@@ -11,34 +17,32 @@ export const createActionSlice = <
       actionData: key extends keyof ReducerActions
         ? Parameters<ReducerActions[key]>[0]
         : any,
-      props: {
-        state: State
-        actions: AllActions
-        rewireKey: string
-        prevState: State
-      }
+      props: ActionProps<State, AllActions>
     ) => void
   } & {
     [key: string]: (
       actionData: any,
-      props: {
-        state: State
-        actions: AllActions
-        rewireKey: string
-        prevState: State
-      }
+      props: ActionProps<State, AllActions>
     ) => void
   },
   AllActions extends {
-    [key in keyof ReducerActions | keyof ActionMap]: (
-      data: key extends keyof ReducerActions
-        ? Parameters<ReducerActions[key]>[0]
-        : key extends keyof ActionMap
-          ? ActionMap[key] extends (...args: any) => any
-            ? Parameters<ActionMap[key]>[0]
-            : any
-          : never
-    ) => void
+    [key in
+      | keyof ReducerActions
+      | keyof ActionMap]: key extends keyof ReducerActions
+      ? Parameters<ReducerActions[key]> extends [infer First, ...any[]]
+        ? First extends undefined
+          ? () => void
+          : (data: First) => void
+        : never
+      : key extends keyof ActionMap
+        ? ActionMap[key] extends (...args: any) => any
+          ? Parameters<ActionMap[key]> extends [infer First, ...any[]]
+            ? First extends undefined
+              ? () => void
+              : (data: First) => void
+            : () => void
+          : any
+        : never
   }
 >(
   reducerSlice: ReducerSlice,

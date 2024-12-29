@@ -16,7 +16,8 @@ describe('createCommandSlice', () => {
     })
     const reducerSlice = createReducerSlice(initialState, {
       mount: (state, action: number) => state,
-      response: (state, action: string) => {
+      emptyMount: state => state,
+      response: (state, action: {a: number}) => {
         return state
       }
     })
@@ -24,15 +25,18 @@ describe('createCommandSlice', () => {
       mount: (actionData, {state, actions, prevState}) => {
         console.log(state)
       },
-      // response: (actionData, {state, actions, prevState}) => {
-      //   console.log(state)
-      // },
+      response: (actionData, {state, actions, prevState}) => {
+        console.log(state)
+      },
       response2: (actionData: number, {state, actions, prevState}) => {
         console.log(state)
-      }
+      },
+      emptyActions: (a: number) => {}
     })('test', store)
     actionSlice.actions.mount(1)
-    actionSlice.actions.response('test')
+    actionSlice.actions.emptyMount()
+    actionSlice.actions.emptyActions(2)
+    actionSlice.actions.response({a: 1})
     actionSlice.actions.response2(3)
 
     // assert.deepEqual(actual, void 0)

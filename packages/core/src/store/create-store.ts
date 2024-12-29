@@ -5,6 +5,7 @@ import type {IStoreOptions} from './create-store.type'
 export interface FCStore extends Store {
   reducerManager: ReturnType<typeof createReducerManager>
   ioRunner: (actionReturn: any) => any
+  isImmerDisabled: () => boolean
 }
 
 function createReducerManager(
@@ -124,6 +125,7 @@ export function configureStore<S extends {[x: string]: any}>(
 
   // Optional: Put the reducer manager on the store so it is easily accessible
   store.reducerManager = reducerManager
+  store.isImmerDisabled = () => options?.disableImmer ?? false
   if (typeof ioRunner === 'function') {
     store.ioRunner = ioRunner
   } else {
