@@ -18,14 +18,23 @@ describe('checking slice', () => {
       state.count = action
       return state
     },
-    decrementCount: (state, action: string) => {
+    autoIncrementCount: state => {
+      state.count = state.count + 1
+      return state
+    },
+    decrementCount: (state, actionData: string) => {
+      return state
+    },
+    response: (state, actionData: number) => {
       return state
     }
   })
 
   const actionSlice = createActionSlice(reducerSlice, {
-    incrementCount: (actionData, {state, actions}) => {
+    incrementCount: async (actionData, {state, actions}) => {
       console.log(state)
+      const res = 2
+      actions.response(res)
     },
     decrementCount: (actionData, {state, actions}) => {
       console.log(state)
@@ -36,21 +45,26 @@ describe('checking slice', () => {
     const slice = createSlice(sliceKey, actionSlice, store)
     slice.actions.incrementCount(1)
     expect(slice.getState().count).toEqual(initialState.count + 1)
+    slice.actions.autoIncrementCount()
+    expect(slice.getState().count).toEqual(initialState.count + 2)
   })
   it('check subscriptions', () => {
     const slice = createSlice(sliceKey, actionSlice, store)
-    const unsubscribe = slice.subscribe(state => {
-      console.log(state.count)
-    })
-    unsubscribe()
-    expect(true).toBeTruthy()
+    const mockCallback = jest.fn()
+    slice.subscribe(mockCallback)
+    slice.actions.autoIncrementCount()
+    const sliceState = slice.getState()
+    expect(sliceState.count).toBe(1)
+    expect(mockCallback).toHaveBeenCalledWith({...initialState, count: 1})
   })
   it('check un-subscriptions', () => {
     const slice = createSlice(sliceKey, actionSlice, store)
-    const unsubscribe = slice.subscribe(state => {
-      console.log(state.count)
-    })
-    unsubscribe()
-    expect(true).toBeTruthy()
+    const mockCallback = jest.fn()
+    const unsub = slice.subscribe(mockCallback)
+    unsub()
+    slice.actions.autoIncrementCount()
+    const sliceState = slice.getState()
+    expect(mockCallback).not.toHaveBeenCalled()
+    expect(sliceState.count).toBe(1)
   })
 })
