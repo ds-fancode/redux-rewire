@@ -8,7 +8,7 @@ const reduxLogger = createLogger({
   timestamp: false
 })
 export const store = configureStore(
-  {},
+  [],
   {},
   {
     middlewares: [reduxLogger] as any

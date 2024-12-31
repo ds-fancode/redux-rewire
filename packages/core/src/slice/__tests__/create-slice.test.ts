@@ -1,11 +1,10 @@
 import {createReducerSlice} from '../create-reducer-slice'
 import {configureStore, type FCStore} from '../../store/create-store'
 import {createActionSlice} from '../create-action-slice'
-import {createSlice} from '../create-slice'
 
 let store: FCStore = null as any
 beforeEach(() => {
-  store = configureStore({}, {})
+  store = configureStore([], {})
 })
 describe('checking slice', () => {
   const initialState = {
@@ -42,14 +41,14 @@ describe('checking slice', () => {
   })
 
   it('check state update', () => {
-    const slice = createSlice(sliceKey, actionSlice, store)
+    const slice = actionSlice(sliceKey, store)
     slice.actions.incrementCount(1)
     expect(slice.getState().count).toEqual(initialState.count + 1)
     slice.actions.autoIncrementCount()
     expect(slice.getState().count).toEqual(initialState.count + 2)
   })
   it('check subscriptions', () => {
-    const slice = createSlice(sliceKey, actionSlice, store)
+    const slice = actionSlice(sliceKey, store)
     const mockCallback = jest.fn()
     slice.subscribe(mockCallback)
     slice.actions.autoIncrementCount()
@@ -58,7 +57,7 @@ describe('checking slice', () => {
     expect(mockCallback).toHaveBeenCalledWith({...initialState, count: 1})
   })
   it('check un-subscriptions', () => {
-    const slice = createSlice(sliceKey, actionSlice, store)
+    const slice = actionSlice(sliceKey, store)
     const mockCallback = jest.fn()
     const unsub = slice.subscribe(mockCallback)
     unsub()

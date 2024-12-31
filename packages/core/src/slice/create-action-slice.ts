@@ -48,6 +48,7 @@ export const createActionSlice = <
   reducerSlice: ReducerSlice,
   actionMap: ActionMap
 ) => {
+  // THIS LINE RUN ONLY ONCE
   return (
     key: string,
     store: FCStore
@@ -55,7 +56,10 @@ export const createActionSlice = <
     key: string
     initialState: State
     actions: AllActions
+    subscribe: (cb: (state: State) => void) => () => void
+    getState: () => State
   } => {
+    // THIS LINE RUN MULTIPLE TIMES
     if (!key) {
       throw new Error('Key is required to create a action slice')
     }
@@ -64,7 +68,6 @@ export const createActionSlice = <
         `store is not passed to createActionSlice for slice ${key}`
       )
     }
-    const {getState} = store
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
     const {initialState, reducerActions, reducers} = reducerSlice(key, store)
 
@@ -79,12 +82,12 @@ export const createActionSlice = <
     // we already have mapped actionRef, we do not need to map action to execute reducerSlice and ioAction
     allAvailableActionKeys.forEach(actionKey => {
       actions[actionKey] = (data: any) => {
-        const prevState = (getState?.() as any)[key] ?? initialState
+        const prevState = (store.getState?.() as any)[key] ?? initialState
         // before runIO started run our reducers to reducerSlice states
         if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
         // Async actions will get updated state after reducer work is done
         // first make async called to make sure we have current state to be used in async action
-        const currentState = (getState?.() as any)[key] ?? initialState
+        const currentState = (store.getState?.() as any)[key] ?? initialState
         if (
           actionMap &&
           actionMap[actionKey] &&
@@ -103,7 +106,15 @@ export const createActionSlice = <
     return {
       key,
       initialState: initialState as State,
-      actions: actions
+      actions: actions,
+      subscribe: cb => {
+        return store.subscribe(() => {
+          cb(store.getState()?.[key] ?? initialState)
+        })
+      },
+      getState: () => {
+        return store.getState()?.[key] ?? initialState
+      }
     }
   }
 }

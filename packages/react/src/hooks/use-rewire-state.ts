@@ -1,7 +1,7 @@
 import {useMemo, useRef} from 'react'
 import {shallowEqual, useSelector, useStore} from 'react-redux'
 import type {FCStore} from '@redux-rewire/core'
-import {createActionSlice, createSlice} from '@redux-rewire/core'
+import {createActionSlice} from '@redux-rewire/core'
 
 export const useRewireState = <
   ActionSlice extends ReturnType<typeof createActionSlice>,
@@ -16,9 +16,7 @@ export const useRewireState = <
   equalityFn = shallowEqual
 ): [string, SelectedState, SliceActions] => {
   const store = <FCStore>useStore()
-  const {initialState, actions} = useRef(
-    createSlice(key, actionSlice, store)
-  ).current
+  const {initialState, actions} = useRef(actionSlice(key, store)).current
   const state = useSelector(
     (state: any) => stateSelector(state[key] ?? initialState),
     equalityFn

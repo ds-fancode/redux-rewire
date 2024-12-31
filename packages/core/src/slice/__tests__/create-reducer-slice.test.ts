@@ -4,7 +4,7 @@ import {configureStore, type FCStore} from '../../store/create-store'
 let store: FCStore = null as any
 
 beforeEach(() => {
-  store = configureStore({}, {})
+  store = configureStore([], {})
 })
 
 describe('createUpdateSlice', () => {

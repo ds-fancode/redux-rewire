@@ -6,7 +6,7 @@ import type {AnyAction, Reducer} from 'redux'
 export type ReducerInputFunction<State> = (
   state: State,
   actionData: any,
-  props: {reduxKey: string; globalState: Record<string, object>}
+  props: {reduxKey: string}
 ) => State
 
 type UpdateInputType<State> = {
@@ -61,29 +61,33 @@ export const createReducerSlice = <
         `store is not passed to createReducerSlice for slice ${key}`
       )
     }
-    const {dispatch, getState} = store
+    const {dispatch} = store
     const reducerKeys = Object.keys(reducers)
     const {updatedReducerMap, updatedReducerActionMap} = reducerKeys.reduce<{
       updatedReducerMap: {[key: string]: any}
       updatedReducerActionMap: {[key: string]: any}
     }>(
       (acc, reducerKey) => {
-        if (reducers[reducerKey]) {
+        if (
+          reducers[reducerKey] &&
+          typeof reducers[reducerKey] === 'function'
+        ) {
           const combinedKey = `${key}/${reducerKey}`
           const {updatedReducerMap, updatedReducerActionMap} = acc
           updatedReducerMap[combinedKey] = store.isImmerDisabled()
-            ? reducers[reducerKey]
+            ? (draftState: typeof initialState, action: AnyAction) =>
+                reducers[reducerKey]!(draftState, action.payload, {
+                  reduxKey: key
+                })
             : produce((draftState: typeof initialState, action: AnyAction) => {
                 return reducers[reducerKey]?.(draftState, action.payload, {
-                  reduxKey: key,
-                  globalState: action.globalState
+                  reduxKey: key
                 })
               })
           updatedReducerActionMap[reducerKey] = (data: any) => {
             return dispatch({
               type: combinedKey,
-              payload: data,
-              globalState: getState?.() ?? {}
+              payload: data
             })
           }
         }

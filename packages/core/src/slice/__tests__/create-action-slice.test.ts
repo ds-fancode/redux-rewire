@@ -7,7 +7,7 @@ describe('createCommandSlice', () => {
   let store: FCStore = null as any
 
   beforeEach(() => {
-    store = configureStore({}, {})
+    store = configureStore([], {})
   })
   it('__tests__ single action', () => {
     const initialState = createInitialState({

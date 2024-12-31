@@ -1,6 +1,7 @@
 import type {Action, Reducer, ReducersMapObject, Store} from 'redux'
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
 import type {IStoreOptions} from './create-store.type'
+import {createGlobalSlice} from '../slice/create-global-slice'
 
 export interface FCStore extends Store {
   reducerManager: ReturnType<typeof createReducerManager>
@@ -8,15 +9,11 @@ export interface FCStore extends Store {
   isImmerDisabled: () => boolean
 }
 
-function createReducerManager(
-  initialReducers: ReducersMapObject,
-  options: IStoreOptions
-) {
+function createReducerManager(options: IStoreOptions) {
   // Create an object which maps keys to reducers
   // Adding appInit reducer to skip redux store initialize with incorect reducer warning
   const {debug = false} = options
   const reducers: ReducersMapObject = {
-    ...initialReducers,
     appInit: (state = true, action: any) => state,
     debug: (state = debug ?? false, action: any) => state
   }
@@ -87,19 +84,13 @@ function createReducerManager(
 }
 
 export function configureStore<S extends {[x: string]: any}>(
-  initialReducer: ReducersMapObject,
+  slices: Array<ReturnType<typeof createGlobalSlice>>,
   initialState: S,
   options: IStoreOptions = {}
 ) {
   const {middlewares, ioRunner, debug} = options || {}
-  const reducerManager = createReducerManager(initialReducer, options)
-  let middlewareList: any = []
-  /**
-   * This order of middleware matters
-   */
-  if (middlewares?.length) {
-    middlewareList = middlewareList.concat(middlewares)
-  }
+  const reducerManager = createReducerManager(options)
+  let middlewareList = middlewares ?? []
   /**
    * Add dev to support for debugging in dev mode only
    */
@@ -126,6 +117,9 @@ export function configureStore<S extends {[x: string]: any}>(
   // Optional: Put the reducer manager on the store so it is easily accessible
   store.reducerManager = reducerManager
   store.isImmerDisabled = () => options?.disableImmer ?? false
+  slices.forEach(slice => {
+    slice(store)
+  })
   if (typeof ioRunner === 'function') {
     store.ioRunner = ioRunner
   } else {
