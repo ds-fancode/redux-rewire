@@ -3549,7 +3549,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redux-rewire/react@workspace:packages/react":
+"@redux-rewire/react@workspace:*, @redux-rewire/react@workspace:packages/react":
   version: 0.0.0-use.local
   resolution: "@redux-rewire/react@workspace:packages/react"
   dependencies:
@@ -9130,6 +9130,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "example-todo-app@workspace:example/todo-app"
   dependencies:
+    "@redux-rewire/core": "workspace:*"
+    "@redux-rewire/react": "workspace:*"
     "@testing-library/jest-dom": "npm:^5.16.5"
     "@testing-library/react": "npm:^13.4.0"
     "@testing-library/user-event": "npm:^13.5.0"

@@ -5,12 +5,14 @@ import {useRewireState} from '@redux-rewire/react'
 import {todoAction} from '../todo-list.actions'
 import {Todo} from '../todo-list.type'
 
-interface ITodoItemProps extends Todo {}
+interface ITodoItemProps extends Todo {
+  source: string
+}
 
 const TodoItem = (props: ITodoItemProps) => {
-  const {id} = props
-  const [, todoItem, actions] = useRewireState('to-do', todoAction, (state) =>
-    state.todoList.find((item) => item.id === id)
+  const {id, source} = props
+  const [, todoItem, actions] = useRewireState(source, todoAction, state =>
+    state.todoList.find(item => item.id === id)
   )
 
   const handleEdit = (e: React.FormEvent, id: number) => {
@@ -26,10 +28,7 @@ const TodoItem = (props: ITodoItemProps) => {
   }, [])
 
   return todoItem ? (
-    <form
-      onSubmit={(e) => handleEdit(e, props.id)}
-      className={`todos__single `}
-    >
+    <form onSubmit={e => handleEdit(e, props.id)} className={`todos__single `}>
       <span className="todos__single--text">{todoItem.todo}</span>
       <div>
         <span className="icon" onClick={() => {}}>

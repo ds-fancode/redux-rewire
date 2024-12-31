@@ -56,8 +56,6 @@ export const createActionSlice = <
     initialState: State
     actions: AllActions
   } => {
-    const {getState} = store
-
     if (!key) {
       throw new Error('Key is required to create a action slice')
     }
@@ -66,6 +64,7 @@ export const createActionSlice = <
         `store is not passed to createActionSlice for slice ${key}`
       )
     }
+    const {getState} = store
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
     const {initialState, reducerActions, reducers} = reducerSlice(key, store)
 

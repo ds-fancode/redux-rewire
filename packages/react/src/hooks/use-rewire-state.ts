@@ -1,29 +1,29 @@
-import {useMemo} from 'react'
+import {useMemo, useRef} from 'react'
 import {shallowEqual, useSelector, useStore} from 'react-redux'
 import type {FCStore} from '@redux-rewire/core'
-import type {UseRewireStateType} from './use-rewire-state.type'
+import {createActionSlice, createSlice} from '@redux-rewire/core'
 
-export const useRewireState: UseRewireStateType = function (
-  key,
-  actionSlice,
-  stateSelector = (_: any) => _,
+export const useRewireState = <
+  ActionSlice extends ReturnType<typeof createActionSlice>,
+  SliceActions extends ReturnType<ActionSlice>['actions'],
+  SliceState extends ReturnType<ActionSlice>['initialState'],
+  SelectedState
+>(
+  key: string,
+  actionSlice: ActionSlice,
+  stateSelector: (state: SliceState) => SelectedState = (state: SliceState) =>
+    state as any,
   equalityFn = shallowEqual
-) {
+): [string, SelectedState, SliceActions] => {
   const store = <FCStore>useStore()
-
-  const {initialState, actions} = useMemo(() => {
-    // create once to make sure ref og actions do not change
-    const {initialState, actions} = actionSlice(key, store)
-    // adding reducer to the store with replace
-    return {initialState, actions}
-  }, [key])
-
+  const {initialState, actions} = useRef(
+    createSlice(key, actionSlice, store)
+  ).current
   const state = useSelector(
     (state: any) => stateSelector(state[key] ?? initialState),
     equalityFn
   )
-
   return useMemo(() => {
-    return [key, state, actions]
+    return [key, state, actions as any]
   }, [key, state, actions])
 }

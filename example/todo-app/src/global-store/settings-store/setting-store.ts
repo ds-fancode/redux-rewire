@@ -1,6 +1,6 @@
 import {settingStoreAction} from './setting-store.action'
-import {appStore} from '../../store'
+import {store} from '../../store'
 
 const todoStoreKey = '*todo-store'
 
-export const settingStore = settingStoreAction(todoStoreKey, appStore)
+export const settingStore = settingStoreAction(todoStoreKey, store)

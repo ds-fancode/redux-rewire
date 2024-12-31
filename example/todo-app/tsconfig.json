@@ -15,10 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "paths": {
-      "@redux-rewire/core": ["../../packages/core/src"],
-      "@redux-rewire/react": ["../../packages/react/src"]
-    }
+    "paths": {}
   },
   "include": ["src", "../../src"]
 }

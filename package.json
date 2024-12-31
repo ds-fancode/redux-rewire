@@ -43,5 +43,5 @@
     "type": "git",
     "url": "https://github.com/ds-fancode/redux-rewire"
   },
-  "packageManager": "yarn@4.3.1"
+  "packageManager": "yarn@4.6.0"
 }

@@ -12,6 +12,8 @@ export const createSlice = <
   subscribe: (cb: (state: SliceState) => void) => () => void
   getState: () => SliceState
   actions: ReturnType<ActionSliceReturnType>['actions']
+  initialState: SliceState
+  key: string
 } => {
   const {actions, initialState} = actionSlice(key, store)
   return {
@@ -23,6 +25,8 @@ export const createSlice = <
     getState: () => {
       return store.getState()?.[key] ?? initialState
     },
-    actions
+    initialState: initialState as SliceState,
+    actions,
+    key
   }
 }

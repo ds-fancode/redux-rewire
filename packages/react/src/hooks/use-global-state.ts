@@ -1,20 +1,27 @@
-import {useMemo} from 'react'
-import {shallowEqual, useSelector} from 'react-redux'
-import type {UseGlobalStateType} from './use-global-state.type'
+import {useMemo, useRef} from 'react'
+import {shallowEqual, useSelector, useStore} from 'react-redux'
+import {createActionSlice, createSlice, type FCStore} from '@redux-rewire/core'
 
-export const useGlobalState: UseGlobalStateType = function (
-  globalStore,
-  stateSelector = (_: any) => _,
+export const useGlobalState = <
+  ActionSlice extends ReturnType<typeof createActionSlice>,
+  SliceActions extends ReturnType<ActionSlice>['actions'],
+  SliceState extends ReturnType<ActionSlice>['initialState'],
+  SelectedState
+>(
+  globalSlice: ActionSlice,
+  stateSelector: (state: SliceState) => SelectedState = (state: SliceState) =>
+    state as any,
   equalityFn = shallowEqual
-) {
-  // actionsRef undefined for first time, so that we get new actions from useRewireState
+): [SelectedState, SliceActions] => {
+  const store = <FCStore>useStore()
+  const {initialState, actions, key} = useRef(
+    createSlice('key', globalSlice, store)
+  ).current
   const state = useSelector(
-    (state: any) =>
-      stateSelector(state[globalStore.key] ?? globalStore.initialState),
+    (state: any) => stateSelector(state[key] ?? initialState),
     equalityFn
   )
-
   return useMemo(() => {
-    return [globalStore.key, state, globalStore.actions]
-  }, [globalStore.key, state, globalStore.actions])
+    return [state, actions as any]
+  }, [state, actions])
 }

@@ -2,7 +2,9 @@
   "name": "@redux-rewire/core",
   "version": "0.0.16",
   "description": "State management library for react based applications",
-  "main": "src/index.ts",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/esm/index.d.ts",
   "scripts": {
     "test": "yarn run -T jest",
     "test-watch": "yarn test -- --watch",

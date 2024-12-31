@@ -15,7 +15,6 @@
     "path": "../core"
   }],
   "include": [
-    "src",
-    "jest.mock.ts"
+    "src"
   ]
 }
