@@ -7,6 +7,7 @@ type ActionProps<State, AllActions> = {
   actions: AllActions
   rewireKey: string
   prevState: State
+  store: FCStore
 }
 export const createActionSlice = <
   ReducerSlice extends ReturnType<typeof createReducerSlice>,
@@ -97,7 +98,8 @@ export const createActionSlice = <
             state: currentState,
             actions,
             rewireKey: key,
-            prevState: prevState
+            prevState: prevState,
+            store
           })
         }
       }

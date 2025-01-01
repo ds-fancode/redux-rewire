@@ -1,12 +1,17 @@
-import React from 'react'
-import {useRewireState} from '@redux-rewire/react'
+import React, {useEffect} from 'react'
+import {useGlobalState, useRewireState} from '@redux-rewire/react'
 import TodoItem from './atoms/todo-item.view'
 import {todoAction} from './todo-list.actions'
 import {TodoInput} from './atoms/todo-input'
 import styles from './todo-styles.module.css'
+import {settingStore} from '../../global-store/settings-store'
 
 const TodoListWrapper = (props: any) => {
   const [key, todoState] = useRewireState('to-do', todoAction, state => state)
+  const [, actions] = useGlobalState(settingStore)
+  useEffect(() => {
+    actions.mount()
+  }, [])
   return (
     <div className={styles.container}>
       <div className={styles.todoHeaderContainer}>
