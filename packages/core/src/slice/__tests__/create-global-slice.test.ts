@@ -1,14 +1,18 @@
 import {createReducerSlice} from '../create-reducer-slice'
 import {createActionSlice} from '../create-action-slice'
-import {configureStore} from '../../store/create-store'
+import {configureStore, type FCStore} from '../../store/create-store'
 import {createGlobalSlice} from '../create-global-slice'
 
+let store: FCStore = null as any
+
+beforeEach(() => {
+  store = configureStore([], {})
+})
 describe('createGlobalStore', () => {
   const initialState = {
     count: 0
   }
   const globalSliceKey1 = 'sliceKey1'
-  const globalSliceKey2 = 'sliceKey2'
 
   const globalReducerSlice = createReducerSlice(initialState, {
     incrementCount: (state, action: number) => {
@@ -40,7 +44,12 @@ describe('createGlobalStore', () => {
 
   it('creating global store', () => {
     const globalSlice1 = createGlobalSlice(globalSliceKey1, globalActionSlice)
-    const globalSlice2 = createGlobalSlice(globalSliceKey2, globalActionSlice)
-    configureStore([globalSlice1, globalSlice2], {})
+    expect(globalSlice1(store).getState()).toEqual(
+      globalSlice1(store).initialState
+    )
+    globalSlice1(store).actions.incrementCount(1)
+    expect(globalSlice1(store).getState().count).toEqual(
+      globalSlice1(store).initialState.count + 1
+    )
   })
 })
