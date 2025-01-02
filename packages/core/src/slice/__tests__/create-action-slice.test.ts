@@ -39,6 +39,7 @@ describe('createCommandSlice', () => {
     })('test', store)
     actionSlice.actions.mount(TEST.A)
     actionSlice.actions.emptyMount()
+    actionSlice.actions.emptyActions(1)
     actionSlice.actions.emptyActions(2)
     actionSlice.actions.response({a: 1})
     actionSlice.actions.response2(TEST.A)

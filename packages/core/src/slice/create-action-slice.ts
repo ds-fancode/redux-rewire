@@ -2,29 +2,38 @@ import type {FCStore} from '../store/create-store'
 import {createActionsReference} from './create-actions-reference'
 import {createReducerSlice} from './create-reducer-slice'
 
-type ActionProps<State, AllActions> = {
-  state: State
-  actions: AllActions
-  rewireKey: string
-  prevState: State
-  store: FCStore
-}
+type ActionArguments<
+  Key,
+  ReducerActions extends {[key: string]: any},
+  State,
+  AllActions
+> = (
+  actionData: Key extends keyof ReducerActions
+    ? Parameters<ReducerActions[Key]>[0]
+    : any,
+  props: {
+    state: State
+    actions: AllActions
+    rewireKey: string
+    prevState: State
+    store: FCStore
+  }
+) => void
+
 export const createActionSlice = <
   ReducerSlice extends ReturnType<typeof createReducerSlice>,
   ReducerActions extends ReturnType<ReducerSlice>['reducerActions'],
   State extends ReturnType<ReducerSlice>['initialState'],
+  OldArch extends boolean,
   ActionMap extends {
-    [key in keyof ReducerActions]?: (
-      actionData: key extends keyof ReducerActions
-        ? Parameters<ReducerActions[key]>[0]
-        : any,
-      props: ActionProps<State, AllActions>
-    ) => void
+    [key in keyof ReducerActions]?: ActionArguments<
+      key,
+      ReducerActions,
+      State,
+      AllActions
+    >
   } & {
-    [key: string]: (
-      actionData: any,
-      props: ActionProps<State, AllActions>
-    ) => void
+    [key: string]: ActionArguments<any, ReducerActions, State, AllActions>
   },
   AllActions extends {
     [key in
@@ -45,7 +54,8 @@ export const createActionSlice = <
   }
 >(
   reducerSlice: ReducerSlice,
-  actionMap: ActionMap
+  actionMap: ActionMap,
+  old: OldArch = false as any
 ) => {
   // THIS LINE RUN ONLY ONCE
   return (
@@ -92,13 +102,15 @@ export const createActionSlice = <
           actionMap[actionKey] &&
           typeof actionMap[actionKey] === 'function'
         ) {
-          actionMap[actionKey]!(data, {
-            state: currentState,
-            actions,
-            rewireKey: key,
-            prevState: prevState,
-            store
-          })
+          if (!old) {
+            actionMap[actionKey]!(data, {
+              state: currentState,
+              actions,
+              rewireKey: key,
+              prevState: prevState,
+              store
+            })
+          }
         }
       }
     })
