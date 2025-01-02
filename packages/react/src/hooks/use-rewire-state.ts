@@ -7,20 +7,26 @@ export const useRewireState = <
   ActionSlice extends ReturnType<typeof createActionSlice>,
   SliceActions extends ReturnType<ActionSlice>['actions'],
   SliceState extends ReturnType<ActionSlice>['initialState'],
-  SelectedState
+  ReturnState,
+  Key extends string
 >(
-  key: string,
+  key: Key,
   actionSlice: ActionSlice,
-  stateSelector: (state: SliceState) => SelectedState = (state: SliceState) =>
-    state as any,
+  stateSelector: (_: SliceState) => ReturnState = (_: any) => _,
   equalityFn = shallowEqual
-): [string, SelectedState, SliceActions] => {
+): [
+  Key,
+  typeof stateSelector extends (...args: any[]) => void
+    ? ReturnType<typeof stateSelector>
+    : SliceState,
+  SliceActions
+] => {
   const store = <FCStore>useStore()
   const {initialState, actions} = useRef(actionSlice(key, store)).current
-  const state = useSelector(
-    (state: any) => stateSelector(state[key] ?? initialState),
-    equalityFn
-  )
+  const state = useSelector((state: any) => {
+    const sliceState = state[key] ?? initialState
+    return stateSelector ? stateSelector(sliceState) : sliceState
+  }, equalityFn)
   return useMemo(() => {
     return [key, state, actions as any]
   }, [key, state, actions])

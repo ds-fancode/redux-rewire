@@ -17,5 +17,5 @@
     "jsx": "react-jsx",
     "paths": {}
   },
-  "include": ["src", "../../src"]
+  "include": ["src"]
 }

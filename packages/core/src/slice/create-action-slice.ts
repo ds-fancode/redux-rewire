@@ -30,19 +30,17 @@ export const createActionSlice = <
     [key in
       | keyof ReducerActions
       | keyof ActionMap]: key extends keyof ReducerActions
-      ? Parameters<ReducerActions[key]> extends [infer First, ...any[]]
-        ? First extends undefined
+      ? ReducerActions[key] extends (...args: any[]) => any
+        ? Parameters<ReducerActions[key]>[0] extends undefined
           ? () => void
-          : (data: First) => void
+          : (data: Parameters<ReducerActions[key]>[0]) => void
         : never
       : key extends keyof ActionMap
-        ? ActionMap[key] extends (...args: any) => any
-          ? Parameters<ActionMap[key]> extends [infer First, ...any[]]
-            ? First extends undefined
-              ? () => void
-              : (data: First) => void
-            : () => void
-          : any
+        ? ActionMap[key] extends (...args: any[]) => any
+          ? Parameters<ActionMap[key]>[0] extends undefined
+            ? () => void
+            : (data: Parameters<ActionMap[key]>[0]) => void
+          : never
         : never
   }
 >(

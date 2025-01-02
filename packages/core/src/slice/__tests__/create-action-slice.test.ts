@@ -14,8 +14,12 @@ describe('createCommandSlice', () => {
       collection: {loaded: false},
       test2: null
     })
+    enum TEST {
+      A,
+      B
+    }
     const reducerSlice = createReducerSlice(initialState, {
-      mount: (state, action: number) => state,
+      mount: (state, action: TEST) => state,
       emptyMount: state => state,
       response: (state, action: {a: number}) => {
         return state
@@ -28,16 +32,16 @@ describe('createCommandSlice', () => {
       response: (actionData, {state, actions, prevState}) => {
         console.log(state)
       },
-      response2: (actionData: number, {state, actions, prevState}) => {
+      response2: (actionData: TEST, {state, actions, prevState}) => {
         console.log(state)
       },
       emptyActions: (a: number) => {}
     })('test', store)
-    actionSlice.actions.mount(1)
+    actionSlice.actions.mount(TEST.A)
     actionSlice.actions.emptyMount()
     actionSlice.actions.emptyActions(2)
     actionSlice.actions.response({a: 1})
-    actionSlice.actions.response2(3)
+    actionSlice.actions.response2(TEST.A)
 
     // assert.deepEqual(actual, void 0)
   })

@@ -7,8 +7,8 @@ import styles from './todo-styles.module.css'
 import {settingStore} from '../../global-store/settings-store'
 
 const TodoListWrapper = (props: any) => {
-  const [key, todoState] = useRewireState('to-do', todoAction, state => state)
-  const [, actions] = useGlobalState(settingStore)
+  const [key, todoState, actions] = useRewireState('to-do', todoAction, _ => _)
+  const [settingState, settingActions] = useGlobalState(settingStore)
   useEffect(() => {
     actions.mount()
   }, [])

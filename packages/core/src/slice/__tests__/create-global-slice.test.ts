@@ -13,9 +13,12 @@ describe('createGlobalStore', () => {
     count: 0
   }
   const globalSliceKey1 = 'sliceKey1'
-
+  enum TEST {
+    A,
+    B
+  }
   const globalReducerSlice = createReducerSlice(initialState, {
-    incrementCount: (state, action: number) => {
+    incrementCount: (state, action: TEST) => {
       state.count = action
       return state
     },
@@ -47,7 +50,7 @@ describe('createGlobalStore', () => {
     expect(globalSlice1(store).getState()).toEqual(
       globalSlice1(store).initialState
     )
-    globalSlice1(store).actions.incrementCount(1)
+    globalSlice1(store).actions.incrementCount(TEST.A)
     expect(globalSlice1(store).getState().count).toEqual(
       globalSlice1(store).initialState.count + 1
     )

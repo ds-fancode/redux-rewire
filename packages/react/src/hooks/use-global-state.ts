@@ -6,13 +6,17 @@ export const useGlobalState = <
   GlobalSlice extends ReturnType<typeof createGlobalSlice>,
   SliceActions extends ReturnType<GlobalSlice>['actions'],
   SliceState extends ReturnType<GlobalSlice>['initialState'],
-  SelectedState
+  ReturnState
 >(
   globalSlice: GlobalSlice,
-  stateSelector: (state: SliceState) => SelectedState = (state: SliceState) =>
-    state as any,
+  stateSelector: (_: SliceState) => ReturnState = (_: any) => _,
   equalityFn = shallowEqual
-): [SelectedState, SliceActions] => {
+): [
+  typeof stateSelector extends (...args: any[]) => void
+    ? ReturnType<typeof stateSelector>
+    : SliceState,
+  SliceActions
+] => {
   const store = <FCStore>useStore()
   const {initialState, actions, key} = useRef(globalSlice(store)).current
   const state = useSelector(
