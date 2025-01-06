@@ -24,7 +24,6 @@ export const createActionSlice = <
   ReducerSlice extends ReturnType<typeof createReducerSlice>,
   ReducerActions extends ReturnType<ReducerSlice>['reducerActions'],
   State extends ReturnType<ReducerSlice>['initialState'],
-  OldArch extends boolean,
   ActionMap extends {
     [key in keyof ReducerActions]?: ActionArguments<
       key,
@@ -54,8 +53,7 @@ export const createActionSlice = <
   }
 >(
   reducerSlice: ReducerSlice,
-  actionMap: ActionMap,
-  old: OldArch = false as any
+  actionMap: ActionMap
 ) => {
   // THIS LINE RUN ONLY ONCE
   return (
@@ -102,15 +100,13 @@ export const createActionSlice = <
           actionMap[actionKey] &&
           typeof actionMap[actionKey] === 'function'
         ) {
-          if (!old) {
-            actionMap[actionKey]!(data, {
-              state: currentState,
-              actions,
-              rewireKey: key,
-              prevState: prevState,
-              store
-            })
-          }
+          actionMap[actionKey]!(data, {
+            state: currentState,
+            actions,
+            rewireKey: key,
+            prevState: prevState,
+            store
+          })
         }
       }
     })
