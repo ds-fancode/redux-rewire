@@ -12,7 +12,7 @@ export const useRewireState = <
 >(
   key: Key,
   actionSlice: ActionSlice,
-  stateSelector: (_: SliceState) => ReturnState = (_: any) => _,
+  stateSelector?: (_: SliceState) => ReturnState,
   equalityFn = shallowEqual
 ): [
   Key,

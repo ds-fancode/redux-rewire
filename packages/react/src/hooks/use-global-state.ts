@@ -9,7 +9,7 @@ export const useGlobalState = <
   ReturnState
 >(
   globalSlice: GlobalSlice,
-  stateSelector: (_: SliceState) => ReturnState = (_: any) => _,
+  stateSelector?: (_: SliceState) => ReturnState,
   equalityFn = shallowEqual
 ): [
   typeof stateSelector extends (...args: any[]) => void
@@ -19,10 +19,10 @@ export const useGlobalState = <
 ] => {
   const store = <FCStore>useStore()
   const {initialState, actions, key} = useRef(globalSlice(store)).current
-  const state = useSelector(
-    (state: any) => stateSelector(state[key] ?? initialState),
-    equalityFn
-  )
+  const state = useSelector((state: any) => {
+    const sliceState = state[key] ?? initialState
+    return stateSelector ? stateSelector(sliceState) : sliceState
+  }, equalityFn)
   return useMemo(() => {
     return [state, actions as any]
   }, [state, actions])
