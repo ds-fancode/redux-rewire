@@ -1,6 +1,7 @@
 import {
   configureStore,
   createActionSlice,
+  createInitialState,
   createReducerSlice,
   type FCStore
 } from '@redux-rewire/core'
@@ -14,9 +15,18 @@ beforeEach(() => {
   store = configureStore([], {})
 })
 describe('useRewireState', () => {
-  const initialState = {
-    count: 0
+  enum THEME {
+    light,
+    dark
   }
+  type IState = {
+    theme: THEME
+    count: number
+  }
+  const initialState: IState = createInitialState<IState>({
+    theme: THEME.dark,
+    count: 0
+  })
   const sliceKey = 'sliceKey'
 
   const reducerSlice = createReducerSlice(initialState, {
@@ -48,16 +58,10 @@ describe('useRewireState', () => {
   })
 
   const TestComponent: React.FC = () => {
-    const [key, state, actions] = useRewireState(
-      sliceKey,
-      actionSlice,
-      state => {
-        return state
-      }
-    )
+    const [key, state, actions] = useRewireState(sliceKey, actionSlice)
     return (
       <div key={key}>
-        <span>{state.count}</span>
+        <span>{state.theme}</span>
         <button onClick={() => actions.autoIncrementCount()}>
           Change to Dark
         </button>
