@@ -58,7 +58,16 @@ describe('useRewireState', () => {
   })
 
   const TestComponent: React.FC = () => {
-    const [key, state, actions] = useRewireState(sliceKey, actionSlice)
+    const [key, state, actions] = useRewireState(
+      sliceKey,
+      actionSlice,
+      state => {
+        return {theme: state.theme}
+      },
+      (a, b) => {
+        return a.theme === b.theme
+      }
+    )
     return (
       <div key={key}>
         <span>{state.theme}</span>
