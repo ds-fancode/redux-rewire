@@ -1,8 +1,9 @@
 export enum Theme {
   LIGHT = 'light',
-  DARK = 'dark',
+  DARK = 'dark'
 }
 
 export type SettingState = {
   theme: Theme
+  count: number
 }

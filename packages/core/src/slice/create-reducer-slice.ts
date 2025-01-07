@@ -22,10 +22,6 @@ export const createReducers = <State>(
     const func = reducerMap[action.type]
     if (func && typeof func === 'function') {
       return func(state, action)
-    } else {
-      console.warn(
-        `Reducers map should always return a function, check reducer map for ${reducerKey}`
-      )
     }
     return state
   }

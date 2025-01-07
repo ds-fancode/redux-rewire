@@ -1,5 +1,6 @@
 import {configureStore} from '@redux-rewire/core'
 import {createLogger} from 'redux-logger'
+import {settingStore} from './global-store/settings-store'
 
 const reduxLogger = createLogger({
   collapsed: true,
@@ -8,7 +9,7 @@ const reduxLogger = createLogger({
   timestamp: false
 })
 export const store = configureStore(
-  [],
+  [settingStore],
   {},
   {
     middlewares: [reduxLogger] as any

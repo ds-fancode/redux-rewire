@@ -1,9 +1,10 @@
 import React, {useCallback} from 'react'
 import {AiFillDelete, AiFillEdit} from 'react-icons/ai'
 import {MdDone} from 'react-icons/md'
-import {useRewireState} from '@redux-rewire/react'
+import {useGlobalState, useRewireState} from '@redux-rewire/react'
 import {todoAction} from '../todo-list.actions'
 import {Todo} from '../todo-list.type'
+import {settingStore} from '../../../global-store/settings-store'
 
 interface ITodoItemProps extends Todo {
   source: string
@@ -11,6 +12,7 @@ interface ITodoItemProps extends Todo {
 
 const TodoItem = (props: ITodoItemProps) => {
   const {id, source} = props
+  const [, settingAction] = useGlobalState(settingStore)
   const [, todoItem, actions] = useRewireState(source, todoAction, state =>
     state.todoList.find(item => item.id === id)
   )
@@ -24,6 +26,7 @@ const TodoItem = (props: ITodoItemProps) => {
   }, [])
 
   const handleDone = useCallback(() => {
+    settingAction.incrementCount()
     actions.handleDone(props)
   }, [])
 

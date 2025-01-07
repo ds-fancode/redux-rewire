@@ -8,7 +8,8 @@ import {settingStore} from '../../global-store/settings-store'
 
 const TodoListWrapper = (props: any) => {
   const [key, todoState, actions] = useRewireState('to-do', todoAction)
-  const [settingState, settingActions] = useGlobalState(settingStore)
+  const [settingState] = useGlobalState(settingStore)
+
   useEffect(() => {
     actions.mount()
   }, [])

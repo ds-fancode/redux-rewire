@@ -14,8 +14,12 @@ function createReducerManager(options: IStoreOptions) {
   // Adding appInit reducer to skip redux store initialize with incorect reducer warning
   const {debug = false} = options
   const reducers: ReducersMapObject = {
-    appInit: (state = true, action: any) => state,
-    debug: (state = debug ?? false, action: any) => state
+    appInit: (state = true, action: any) => {
+      return state
+    },
+    debug: (state = debug ?? false, action: any) => {
+      return state
+    }
   }
 
   // Create the initial combinedReducer
