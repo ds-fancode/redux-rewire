@@ -7,6 +7,7 @@ export interface FCStore extends Store {
   reducerManager: ReturnType<typeof createReducerManager>
   ioRunner: (actionReturn: any) => any
   isImmerDisabled: () => boolean
+  nameSpace: string
 }
 
 function createReducerManager(options: IStoreOptions) {
@@ -120,6 +121,7 @@ export function configureStore<S extends {[x: string]: any}>(
 
   // Optional: Put the reducer manager on the store so it is easily accessible
   store.reducerManager = reducerManager
+  store.nameSpace = options.nameSpace ?? ''
   store.isImmerDisabled = () => options?.disableImmer ?? false
   slices.forEach(slice => {
     slice(store)

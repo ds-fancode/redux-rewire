@@ -36,9 +36,10 @@ export const createReducerSlice = <
   initialState: State,
   reducers: ReducerObjType
 ) => {
-  return (
+  return <OverrideState extends State>(
     key: string,
-    store: FCStore
+    store: FCStore,
+    overrideInitialState?: Partial<OverrideState>
   ): {
     key: string
     initialState: State
@@ -93,11 +94,12 @@ export const createReducerSlice = <
       },
       {updatedReducerMap: {}, updatedReducerActionMap: {}}
     )
+    const finalState: State = {...initialState, ...overrideInitialState}
 
-    const updatedReducers = createReducers(key, updatedReducerMap, initialState)
+    const updatedReducers = createReducers(key, updatedReducerMap, finalState)
     return {
       key,
-      initialState,
+      initialState: finalState,
       reducerActions: updatedReducerActionMap as any,
       reducers: updatedReducers
     }

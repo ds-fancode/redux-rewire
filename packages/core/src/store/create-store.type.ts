@@ -5,4 +5,5 @@ export type IStoreOptions = {
   debug?: boolean
   middlewares?: Middleware[]
   ioRunner?: (actionReturn: any) => any
+  nameSpace?: string
 }

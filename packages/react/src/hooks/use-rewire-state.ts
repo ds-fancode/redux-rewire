@@ -4,6 +4,7 @@ import type {FCStore} from '@redux-rewire/core'
 import {createActionSlice} from '@redux-rewire/core'
 
 export const useRewireState: {
+  // overload 1
   <
     ActionSlice extends ReturnType<typeof createActionSlice>,
     SliceActions extends ReturnType<ActionSlice>['actions'],
@@ -14,6 +15,7 @@ export const useRewireState: {
     key: Key,
     actionSlice: ActionSlice
   ): [Key, SliceState, SliceActions]
+  // overload 2
   <
     ActionSlice extends ReturnType<typeof createActionSlice>,
     SliceActions extends ReturnType<ActionSlice>['actions'],
@@ -26,6 +28,7 @@ export const useRewireState: {
     stateSelector?: (_: SliceState) => ReturnState,
     equalityFunction?: (a: ReturnState, b: ReturnState) => boolean
   ): [Key, ReturnState, SliceActions]
+  // final
 } = <
   ActionSlice extends ReturnType<typeof createActionSlice>,
   SliceActions extends ReturnType<ActionSlice>['actions'],

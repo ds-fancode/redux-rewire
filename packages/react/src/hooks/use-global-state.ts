@@ -3,6 +3,7 @@ import {shallowEqual, useSelector, useStore} from 'react-redux'
 import {createGlobalSlice, type FCStore} from '@redux-rewire/core'
 
 export const useGlobalState: {
+  // overload 1
   <
     GlobalSlice extends ReturnType<typeof createGlobalSlice>,
     SliceActions extends ReturnType<GlobalSlice>['actions'],
@@ -11,6 +12,7 @@ export const useGlobalState: {
   >(
     actionSlice: GlobalSlice
   ): [SliceState, SliceActions]
+  // overload 2
   <
     GlobalSlice extends ReturnType<typeof createGlobalSlice>,
     SliceActions extends ReturnType<GlobalSlice>['actions'],

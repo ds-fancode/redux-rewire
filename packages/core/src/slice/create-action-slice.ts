@@ -58,7 +58,8 @@ export const createActionSlice = <
   // THIS LINE RUN ONLY ONCE
   return (
     key: string,
-    store: FCStore
+    store: FCStore,
+    overrideInitialState?: Partial<State>
   ): {
     key: string
     initialState: State
@@ -75,10 +76,15 @@ export const createActionSlice = <
         `store is not passed to createActionSlice for slice ${key}`
       )
     }
+    const nameSpacedKey = store.nameSpace ? `${store.nameSpace}/${key}` : key
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
-    const {initialState, reducerActions, reducers} = reducerSlice(key, store)
+    const {initialState, reducerActions, reducers} = reducerSlice(
+      nameSpacedKey,
+      store,
+      overrideInitialState
+    )
 
-    store.reducerManager.add(key, reducers)
+    store.reducerManager.add(nameSpacedKey, reducers)
 
     //#region create empty action
     const allAvailableActionKeys = Object.keys(actionMap).concat(
@@ -89,12 +95,14 @@ export const createActionSlice = <
     // we already have mapped actionRef, we do not need to map action to execute reducerSlice and ioAction
     allAvailableActionKeys.forEach(actionKey => {
       actions[actionKey] = (data: any) => {
-        const prevState = (store.getState?.() as any)[key] ?? initialState
+        const prevState =
+          (store.getState?.() as any)[nameSpacedKey] ?? initialState
         // before runIO started run our reducers to reducerSlice states
         if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
         // Async actions will get updated state after reducer work is done
         // first make async called to make sure we have current state to be used in async action
-        const currentState = (store.getState?.() as any)[key] ?? initialState
+        const currentState =
+          (store.getState?.() as any)[nameSpacedKey] ?? initialState
         if (
           actionMap &&
           actionMap[actionKey] &&
@@ -103,7 +111,7 @@ export const createActionSlice = <
           actionMap[actionKey]!(data, {
             state: currentState,
             actions,
-            rewireKey: key,
+            rewireKey: nameSpacedKey,
             prevState: prevState,
             store
           })
@@ -112,16 +120,16 @@ export const createActionSlice = <
     })
 
     return {
-      key,
+      key: nameSpacedKey,
       initialState: initialState as State,
       actions: actions,
       subscribe: cb => {
         return store.subscribe(() => {
-          cb(store.getState()?.[key] ?? initialState)
+          cb(store.getState()?.[nameSpacedKey] ?? initialState)
         })
       },
       getState: () => {
-        return store.getState()?.[key] ?? initialState
+        return store.getState()?.[nameSpacedKey] ?? initialState
       }
     }
   }
