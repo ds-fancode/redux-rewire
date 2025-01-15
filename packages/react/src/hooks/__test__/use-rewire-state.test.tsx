@@ -6,7 +6,7 @@ import {
   type FCStore
 } from '@redux-rewire/core'
 import {useRewireState} from '../use-rewire-state'
-import {RewireProvider} from '../../Provider'
+import {RewireProvider} from '../../core/Provider'
 import {render} from '@testing-library/react'
 import React from 'react'
 
