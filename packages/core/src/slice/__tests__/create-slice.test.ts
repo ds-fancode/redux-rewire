@@ -32,16 +32,18 @@ describe('checking slice', () => {
     })
 
     const actionSlice = createActionSlice(reducerSlice, {
-      incrementCount: async (actionData, {state, store, actions}) => {
+      incrementCount: (actionData, {state, store, actions}) => {
         console.log(state)
         const res = 2
         actions.response(res)
+        return 1
       },
       decrementCount: (actionData, {state, actions}) => {
         console.log(state)
+        return Promise.resolve(null)
       },
       response2: (actionData: string) => {
-        return null
+        return {}
       }
     })
 

@@ -1,6 +1,7 @@
 import type {FCStore} from '../store/create-store'
 import {createActionsReference} from './create-actions-reference'
 import {createReducerSlice} from './create-reducer-slice'
+import type {ActionFunction} from '../types/base'
 
 type ActionArguments<
   Key,
@@ -18,7 +19,7 @@ type ActionArguments<
     prevState: State
     store: FCStore
   }
-) => void
+) => ActionFunction['returnType']
 
 export const createActionSlice = <
   ReducerSlice extends ReturnType<typeof createReducerSlice>,

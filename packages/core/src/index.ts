@@ -1,4 +1,5 @@
 export type {FCStore} from './store/create-store'
+export type {ActionFunction} from './types/base'
 
 export {configureStore} from './store/create-store'
 export {createActionSlice} from './slice/create-action-slice'
