@@ -94,7 +94,9 @@ export const createReducerSlice = <
       },
       {updatedReducerMap: {}, updatedReducerActionMap: {}}
     )
-    const finalState: State = {...initialState, ...overrideInitialState}
+    const finalState: State = overrideInitialState
+      ? {...initialState, ...overrideInitialState}
+      : initialState
 
     const updatedReducers = createReducers(key, updatedReducerMap, finalState)
     return {

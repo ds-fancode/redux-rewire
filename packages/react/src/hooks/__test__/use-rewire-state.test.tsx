@@ -57,37 +57,81 @@ describe('useRewireState', () => {
     }
   })
 
-  const TestComponent: React.FC = () => {
-    const [key, state, actions] = useRewireState(
-      sliceKey,
-      actionSlice,
-      state => {
-        return {theme: state.theme}
-      },
-      (a, b) => {
-        return a.theme === b.theme
-      }
-    )
-    return (
-      <div key={key}>
-        <span>{state.theme}</span>
-        <button onClick={() => actions.autoIncrementCount()}>
-          Change to Dark
-        </button>
-      </div>
-    )
-  }
-  it('check state update', () => {
-    render(
-      <RewireProvider store={store}>
-        <TestComponent />
-      </RewireProvider>
-    )
+  describe('test without initial state', () => {
+    const TestComponent: React.FC = () => {
+      const [key, state, actions] = useRewireState(
+        sliceKey,
+        actionSlice,
+        state => {
+          return {theme: state.theme}
+        },
+        {
+          equalityFunction: (a, b) => {
+            return a.theme === b.theme
+          }
+        }
+      )
+      return (
+        <div key={key}>
+          <span>{state.theme}</span>
+          <button onClick={() => actions.autoIncrementCount()}>
+            Change to Dark
+          </button>
+        </div>
+      )
+    }
+    it('check state update', () => {
+      render(
+        <RewireProvider store={store}>
+          <TestComponent />
+        </RewireProvider>
+      )
+    })
+
+    it('should throw an error if used outside of Provider', () => {
+      expect(() => render(<TestComponent />)).toThrow(
+        'useTheme must be used within a Provider'
+      )
+    })
+
+    it('check state update', () => {
+      render(
+        <RewireProvider store={store}>
+          <TestComponent />
+        </RewireProvider>
+      )
+    })
   })
 
-  it('should throw an error if used outside of Provider', () => {
-    expect(() => render(<TestComponent />)).toThrow(
-      'useTheme must be used within a Provider'
-    )
+  describe('test without initial state', () => {
+    const TestComponent: React.FC = () => {
+      const [key, state, actions] = useRewireState(
+        sliceKey,
+        actionSlice,
+        state => {
+          return {theme: state.theme}
+        },
+        {
+          equalityFunction: (a, b) => {
+            return a.theme === b.theme
+          }
+        }
+      )
+      return (
+        <div key={key}>
+          <span>{state.theme}</span>
+          <button onClick={() => actions.autoIncrementCount()}>
+            Change to Dark
+          </button>
+        </div>
+      )
+    }
+    it('check state update', () => {
+      render(
+        <RewireProvider store={store}>
+          <TestComponent />
+        </RewireProvider>
+      )
+    })
   })
 })

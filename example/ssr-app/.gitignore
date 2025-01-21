@@ -22,4 +22,6 @@ dist
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
+!src/globals.d.ts
+!webpack.config.js
+!babel.config.js

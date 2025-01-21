@@ -26,7 +26,13 @@ export const useRewireState: {
     key: Key,
     actionSlice: ActionSlice,
     stateSelector?: (_: SliceState) => ReturnState,
-    equalityFunction?: (a: ReturnState, b: ReturnState) => boolean
+    options?: {
+      overrideInitialState?: Partial<SliceState>
+      equalityFunction?: (
+        a: ReturnState | SliceState,
+        b: ReturnState | SliceState
+      ) => boolean
+    }
   ): [Key, ReturnState, SliceActions]
   // final
 } = <
@@ -39,17 +45,22 @@ export const useRewireState: {
   key: Key,
   actionSlice: ActionSlice,
   stateSelector: (_: SliceState) => ReturnState = _ => _ as any,
-  equalityFunction: (
-    a: ReturnState | SliceState,
-    b: ReturnState | SliceState
-  ) => boolean = shallowEqual
+  options?: {
+    overrideInitialState?: Partial<SliceState>
+    equalityFunction?: (
+      a: ReturnState | SliceState,
+      b: ReturnState | SliceState
+    ) => boolean
+  }
 ): [Key, ReturnState | SliceState, SliceActions] => {
   const store = <FCStore>useStore()
-  const {initialState, actions} = useRef(actionSlice(key, store)).current
+  const {initialState, actions} = useRef(
+    actionSlice(key, store, options?.overrideInitialState)
+  ).current
   const state = useSelector((state: any) => {
     const sliceState = state[key] ?? initialState
     return stateSelector ? stateSelector(sliceState) : sliceState
-  }, equalityFunction)
+  }, options?.equalityFunction ?? shallowEqual)
   return useMemo(() => {
     return [key, state, actions as any]
   }, [key, state, actions])
