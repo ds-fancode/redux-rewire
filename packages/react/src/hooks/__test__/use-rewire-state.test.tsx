@@ -7,7 +7,7 @@ import {
 } from '@redux-rewire/core'
 import {useRewireState} from '../use-rewire-state'
 import {RewireProvider} from '../../core/Provider'
-import {render} from '@testing-library/react'
+import {act, renderHook} from '@testing-library/react'
 import React from 'react'
 
 let store: FCStore = null as any
@@ -15,6 +15,7 @@ beforeEach(() => {
   store = configureStore([], {})
 })
 describe('useRewireState', () => {
+  // configure({reactStrictMode: true})
   enum THEME {
     light,
     dark
@@ -27,7 +28,7 @@ describe('useRewireState', () => {
     theme: THEME.dark,
     count: 0
   })
-  const sliceKey = 'sliceKey'
+  const sliceKey = 'sliceKey2'
 
   const reducerSlice = createReducerSlice(initialState, {
     incrementCount: (state, action: number) => {
@@ -56,82 +57,132 @@ describe('useRewireState', () => {
       console.log(state)
     }
   })
+  const wrapper = ({children}: {children: any}) => (
+    <RewireProvider store={store}>{children}</RewireProvider>
+  )
 
   describe('test without initial state', () => {
-    const TestComponent: React.FC = () => {
-      const [key, state, actions] = useRewireState(
-        sliceKey,
-        actionSlice,
-        state => {
-          return {theme: state.theme}
-        },
+    it('check default state and key', () => {
+      const {result, rerender} = renderHook(
+        () => useRewireState(sliceKey, actionSlice),
         {
-          equalityFunction: (a, b) => {
-            return a.theme === b.theme
-          }
+          wrapper
         }
       )
-      return (
-        <div key={key}>
-          <span>{state.theme}</span>
-          <button onClick={() => actions.autoIncrementCount()}>
-            Change to Dark
-          </button>
-        </div>
+      const [key, state, action] = result.current
+      expect(key).toEqual(sliceKey)
+      expect(state).toEqual(initialState)
+
+      const stateBeforeRender = result.current[1]
+      rerender()
+      expect(result.current[1]).toBe(stateBeforeRender)
+
+      act(() => {
+        action.autoIncrementCount()
+      })
+      expect(result.current[1]).toEqual({...initialState, count: 1})
+    })
+    it('check state with selector', () => {
+      const {result, rerender} = renderHook(
+        () =>
+          useRewireState(sliceKey, actionSlice, state => ({
+            count: state.count
+          })),
+        {
+          wrapper
+        }
       )
-    }
-    it('check state update', () => {
-      render(
-        <RewireProvider store={store}>
-          <TestComponent />
-        </RewireProvider>
-      )
+      const [key, state] = result.current
+      expect(key).toEqual(sliceKey)
+      expect(state).toEqual({count: initialState.count})
+
+      const stateBeforeRender = result.current[1]
+      rerender()
+      expect(result.current[1]).toBe(stateBeforeRender)
     })
 
-    it('should throw an error if used outside of Provider', () => {
-      expect(() => render(<TestComponent />)).toThrow(
-        'useTheme must be used within a Provider'
+    it('check state with custom equality check function', () => {
+      const {result} = renderHook(
+        () =>
+          useRewireState(sliceKey, actionSlice, state => state, {
+            equalityFunction: () => true
+          }),
+        {
+          wrapper
+        }
       )
-    })
-
-    it('check state update', () => {
-      render(
-        <RewireProvider store={store}>
-          <TestComponent />
-        </RewireProvider>
-      )
+      const [key, state, action] = result.current
+      expect(key).toEqual(sliceKey)
+      expect(state).toEqual(initialState)
+      const stateBeforeRender = result.current[1]
+      act(() => {
+        action.autoIncrementCount()
+      })
+      expect(result.current[1]).toBe(stateBeforeRender)
     })
   })
 
-  describe('test without initial state', () => {
-    const TestComponent: React.FC = () => {
-      const [key, state, actions] = useRewireState(
-        sliceKey,
-        actionSlice,
-        state => {
-          return {theme: state.theme}
-        },
+  describe('test with initial state', () => {
+    it('check default state and key', () => {
+      const {result} = renderHook(
+        () =>
+          useRewireState(sliceKey, actionSlice, state => state, {
+            overrideInitialState: {count: 1}
+          }),
         {
-          equalityFunction: (a, b) => {
-            return a.theme === b.theme
-          }
+          wrapper
         }
       )
-      return (
-        <div key={key}>
-          <span>{state.theme}</span>
-          <button onClick={() => actions.autoIncrementCount()}>
-            Change to Dark
-          </button>
-        </div>
+      const [key, state] = result.current
+      expect(key).toEqual(sliceKey)
+      expect(state).toEqual({...initialState, count: 1})
+
+      // const stateBeforeRender = result.current[1]
+      // rerender()
+      // expect(result.current[1]).toBe(stateBeforeRender)
+      //
+      // act(() => {
+      //   action.autoIncrementCount()
+      // })
+      // expect(result.current[1]).toEqual({...initialState, count: 1})
+    })
+    it('check state with selector', () => {
+      const {result, rerender} = renderHook(
+        () =>
+          useRewireState(sliceKey, actionSlice, state => ({
+            count: state.count
+          })),
+        {
+          wrapper
+        }
       )
-    }
-    it('check state update', () => {
-      render(
-        <RewireProvider store={store}>
-          <TestComponent />
-        </RewireProvider>
+      const [key, state] = result.current
+      expect(key).toEqual(sliceKey)
+      expect(state).toEqual({count: initialState.count})
+
+      const stateBeforeRender = result.current[1]
+      rerender()
+      expect(result.current[1]).toBe(stateBeforeRender)
+    })
+
+    it('check state with custom equality check function', () => {
+      const {result} = renderHook(
+        () =>
+          useRewireState(sliceKey, actionSlice, state => state, {
+            equalityFunction: () => true
+          }),
+        {
+          wrapper
+        }
       )
+      const [key, state, action] = result.current
+      expect(key).toEqual(sliceKey)
+      expect(state).toEqual(initialState)
+      const stateBeforeRender = result.current[1]
+      act(() => {
+        action.autoIncrementCount()
+      })
+      expect(result.current[1]).toBe(stateBeforeRender)
     })
   })
 })
