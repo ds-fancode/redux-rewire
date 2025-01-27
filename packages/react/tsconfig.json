@@ -6,10 +6,7 @@
     "baseUrl": "src",
     "lib": ["es2022", "dom"],
     "jsx": "react",
-    "sourceMap": true,
-    "paths": {
-//      "@redux-rewire/core": ["../core/src/index.ts"]
-    }
+    "sourceMap": true
   },
   "references": [
     {

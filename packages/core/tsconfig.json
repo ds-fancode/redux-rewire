@@ -3,13 +3,14 @@
   "compilerOptions": {
     "rootDir": "src",
     "baseUrl": "src",
+    "outDir": "lib/esm",
+    "lib": ["DOM", "ESNext"],
     "composite": true,
     "declaration": true,
     "incremental": true,
     "declarationMap": true,
     "sourceMap": true,
-    "lib": ["DOM", "ESNext"],
-    "outDir": "lib/esm",
+    "noEmit": false
   },
   "include": [
     "src"
