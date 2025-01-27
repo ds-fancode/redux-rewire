@@ -1,0 +1,13 @@
+.DS_Store
+.eslintcache
+**/*.js
+**/*.d.ts
+**/*.d.ts.map
+**/*.js.map
+!jest.config.js
+!.eslint.config.js
+!.babel.config.js
+!publish.js
+.idea
+lib
+build

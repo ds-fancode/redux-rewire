@@ -1,10 +1,8 @@
-import type {Config} from 'jest'
-
-const config: Config = {
+module.exports = {
   verbose: true,
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node',
   passWithNoTests: true,
-  testRegex: '\\.(test|__tests__|spec)\\.ts$',
+  testRegex: '\\.(test|__tests__|__test__|spec)\\.tsx?$',
   moduleFileExtensions: ['ts', 'tsx', 'js'],
   collectCoverageFrom: ['src/**/**.(ts|tsx)', '!src/**/**.d.ts'],
   setupFiles: [],
@@ -20,4 +18,3 @@ const config: Config = {
       'identity-obj-proxy'
   }
 }
-export default config

@@ -6,15 +6,13 @@
     "lib": [
       "es2022"
     ],
-    "baseUrl": "src",
-    "rootDir": "src",
+    "target": "es2022",
+    "moduleDetection": "force",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "target": "es2022",
     "verbatimModuleSyntax": true,
     "allowJs": false,
     "resolveJsonModule": true,
-    "moduleDetection": "force",
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "sourceMap": true,
@@ -26,6 +24,7 @@
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "strictNullChecks": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true
   }
 }

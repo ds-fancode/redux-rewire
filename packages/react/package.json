@@ -31,7 +31,8 @@
     "@testing-library/react": "^16.1.0",
     "@types/jest": "^29.2.4",
     "@types/react": "^18.2.6",
-    "react": "19.0.0"
+    "react": "19.0.0",
+    "typescript": "5.7.2"
   },
   "peerDependencies": {
     "react": ">=18.x",
