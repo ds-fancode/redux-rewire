@@ -19,7 +19,7 @@ describe('useRewireState', () => {
     count: 0
   }
   const reducerSlice = createReducerSlice(initialState, {
-    incrementCount: (state, action: number) => {
+    incrementCount: (state, action: number, {globalState}) => {
       state.count = action
       return state
     },
@@ -27,16 +27,19 @@ describe('useRewireState', () => {
       state.count = state.count + 1
       return state
     },
-    decrementCount: (state, actionData: string) => {
+    decrementCount: (state, actionData: string, {store}) => {
       return state
     },
-    response: (state, actionData: number) => {
+    response: (state, actionData: number, {store}) => {
       return state
     }
   })
 
   const actionSlice = createActionSlice(reducerSlice, {
-    incrementCount: async (actionData, {state, actions}) => {
+    incrementCount: async (
+      actionData,
+      {state, actions, globalState, store}
+    ) => {
       console.log(state)
       const res = 2
       actions.response(res)

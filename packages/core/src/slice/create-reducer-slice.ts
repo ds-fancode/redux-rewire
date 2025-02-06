@@ -6,7 +6,7 @@ import type {AnyAction, Reducer} from 'redux'
 export type ReducerInputFunction<State> = (
   state: State,
   actionData: any,
-  props: {reduxKey: string; store: FCStore}
+  props: {rewireKey: string; store: FCStore; globalState: any}
 ) => State
 
 type UpdateInputType<State> = {
@@ -74,12 +74,14 @@ export const createReducerSlice = <
           updatedReducerMap[combinedKey] = store.isImmerDisabled()
             ? (draftState: typeof initialState, action: AnyAction) =>
                 reducers[reducerKey]!(draftState, action.payload, {
-                  reduxKey: key,
+                  rewireKey: key,
+                  globalState: store.getState(),
                   store
                 })
             : produce((draftState: typeof initialState, action: AnyAction) => {
                 return reducers[reducerKey]?.(draftState, action.payload, {
-                  reduxKey: key,
+                  rewireKey: key,
+                  globalState: store.getState(),
                   store
                 })
               })

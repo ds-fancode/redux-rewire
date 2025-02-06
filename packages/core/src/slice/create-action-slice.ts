@@ -17,6 +17,7 @@ type ActionArguments<
     actions: AllActions
     rewireKey: string
     prevState: State
+    globalState: any
     store: FCStore
   }
 ) => ActionFunction['returnType']
@@ -102,8 +103,8 @@ export const createActionSlice = <
         if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
         // Async actions will get updated state after reducer work is done
         // first make async called to make sure we have current state to be used in async action
-        const currentState =
-          (store.getState?.() as any)[nameSpacedKey] ?? initialState
+        const globalState = store.getState?.() ?? {}
+        const currentState = globalState?.[nameSpacedKey] ?? initialState
         if (
           actionMap &&
           actionMap[actionKey] &&
@@ -114,6 +115,7 @@ export const createActionSlice = <
             actions,
             rewireKey: nameSpacedKey,
             prevState: prevState,
+            globalState,
             store
           })
         }
