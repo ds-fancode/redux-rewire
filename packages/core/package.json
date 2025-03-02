@@ -22,7 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "immer": "^9.0.12",
-    "redux": "^4.2.0"
+    "redux": "^5.0.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.2",
