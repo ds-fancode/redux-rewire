@@ -48,7 +48,6 @@ export const createReducerSlice = <
         actionData: Parameters<ReducerObjType[key]>[1]
       ) => AnyAction
     }
-    reducers: Reducer<any, AnyAction>
   } => {
     if (!key) {
       throw new Error('Key is required to create a reducer slice')
@@ -102,11 +101,11 @@ export const createReducerSlice = <
       : initialState
 
     const updatedReducers = createReducers(key, updatedReducerMap, finalState)
+    store.reducerManager.add(key, updatedReducers)
     return {
       key,
       initialState: finalState,
-      reducerActions: updatedReducerActionMap as any,
-      reducers: updatedReducers
+      reducerActions: updatedReducerActionMap as any
     }
   }
 }

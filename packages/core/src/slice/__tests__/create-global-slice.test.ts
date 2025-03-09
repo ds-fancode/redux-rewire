@@ -19,7 +19,7 @@ describe('createGlobalStore', () => {
   }
   const globalReducerSlice = createReducerSlice(initialState, {
     incrementCount: (state, action: TEST) => {
-      state.count = action
+      state.count = state.count + 1
       return state
     },
     autoIncrementCount: state => {
@@ -46,13 +46,13 @@ describe('createGlobalStore', () => {
   })
 
   it('creating global store', () => {
-    const globalSlice1 = createGlobalSlice(globalSliceKey1, globalActionSlice)
-    expect(globalSlice1(store).getState()).toEqual(
-      globalSlice1(store).initialState
+    const globalSlice = createGlobalSlice(globalSliceKey1, globalActionSlice)
+    expect(globalSlice(store).getState()).toEqual(
+      globalSlice(store).initialState
     )
-    globalSlice1(store).actions.incrementCount(TEST.A)
-    expect(globalSlice1(store).getState().count).toEqual(
-      globalSlice1(store).initialState.count + 1
+    globalSlice(store).actions.incrementCount(TEST.A)
+    expect(globalSlice(store).getState().count).toEqual(
+      globalSlice(store).initialState.count + 1
     )
   })
 })

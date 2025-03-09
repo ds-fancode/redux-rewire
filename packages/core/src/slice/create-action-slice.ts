@@ -80,13 +80,11 @@ export const createActionSlice = <
     }
     const nameSpacedKey = store.nameSpace ? `${store.nameSpace}/${key}` : key
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
-    const {initialState, reducerActions, reducers} = reducerSlice(
+    const {initialState, reducerActions} = reducerSlice(
       nameSpacedKey,
       store,
       overrideInitialState
     )
-
-    store.reducerManager.add(nameSpacedKey, reducers)
 
     //#region create empty action
     const allAvailableActionKeys = Object.keys(actionMap).concat(
