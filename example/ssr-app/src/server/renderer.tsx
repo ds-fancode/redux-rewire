@@ -77,7 +77,7 @@ export const renderer = async (req: Request, res: Response) => {
         )
         this.push(replacedHtml)
       } else if (CLOSING_TAG_R.test(renderedHtml)) {
-        const execResult = CLOSING_TAG_R.exec(renderedHtml)
+        const execResult: any = CLOSING_TAG_R.exec(renderedHtml)
         const endOfClosingTag = execResult.index + execResult.flat().length - 1
 
         const before = renderedHtml.slice(0, endOfClosingTag)
