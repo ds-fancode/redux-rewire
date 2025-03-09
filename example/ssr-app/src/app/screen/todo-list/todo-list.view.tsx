@@ -1,43 +1,64 @@
 import React, {useEffect} from 'react'
 import {useRewireState} from '@redux-rewire/react'
-import TodoItem from './atoms/todo-item.view'
 import {todoAction} from './todo-list.actions'
-import {TodoInput} from './atoms/todo-input'
-import styles from './todo-styles.module.css'
-// import {settingStore} from '../../global-store/settings-store'
+import {
+  Header,
+  StyledList,
+  StyledListItem,
+  StyledListWrapper,
+  StyledTodoListWrapper
+} from './todo-styles'
 
-const TodoListWrapper = (props: any) => {
-  const [key, todoState, actions] = useRewireState('to-do', todoAction)
+const TodoListWrapper = (props: {source: string}) => {
+  const [, todoState, actions] = useRewireState(
+    `${props.source}/to-do`,
+    todoAction
+  )
+
   useEffect(() => {
     actions.mount()
+    function addTodo() {
+      actions.addTodo(`${Math.random()} Todo`)
+      setTimeout(addTodo, 500)
+    }
+    setTimeout(addTodo, 500)
   }, [])
-  console.log(styles)
+
   return (
-    <div className={styles.container}>
-      <div className={styles.todoHeaderContainer}>
-        <span className={styles.todoHeaderTitle}>{`Task List`}</span>
-        <TodoInput />
-      </div>
-      <div className={styles.todoListContainer}>
-        <div className={styles.listContainer}>
-          <div className={styles.todos__heading}>Active Tasks</div>
-          {todoState.todoList
-            ?.filter(v => !v.isDone)
-            ?.map(todoItem => (
-              <TodoItem {...todoItem} key={todoItem.id} source={key} />
-            ))}
+    <StyledTodoListWrapper>
+      <Header>{`Task List`}</Header>
+      <StyledListWrapper>
+        <div style={{flex: 1}}>
+          <Header>Active Tasks</Header>
+          <StyledList>
+            {todoState.todoList
+              ?.filter(v => !v.isDone)
+              ?.map(todoItem => {
+                return (
+                  <StyledListItem key={todoItem.id}>
+                    {todoItem.todo}
+                  </StyledListItem>
+                )
+              })}
+          </StyledList>
         </div>
 
-        <div className={styles.listContainer}>
-          <div className={styles.todos__heading}>Completed Tasks</div>
-          {todoState.todoList
-            ?.filter(v => v.isDone)
-            .map(todoItem => (
-              <TodoItem {...todoItem} key={todoItem.id} source={key} />
-            ))}
+        <div style={{flex: 1}}>
+          <Header>Completed Tasks</Header>
+          <StyledList>
+            {todoState.todoList
+              ?.filter(v => v.isDone)
+              .map(todoItem => {
+                return (
+                  <StyledListItem key={todoItem.id}>
+                    {todoItem.todo}
+                  </StyledListItem>
+                )
+              })}
+          </StyledList>
         </div>
-      </div>
-    </div>
+      </StyledListWrapper>
+    </StyledTodoListWrapper>
   )
 }
 

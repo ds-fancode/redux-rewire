@@ -75,20 +75,21 @@ export const createReducerSlice = <
             ? (draftState: typeof initialState, action: AnyAction) =>
                 reducers[reducerKey]!(draftState, action.payload, {
                   rewireKey: key,
-                  globalState: store.getState(),
+                  globalState: action.globalState,
                   store
                 })
             : produce((draftState: typeof initialState, action: AnyAction) => {
                 return reducers[reducerKey]?.(draftState, action.payload, {
                   rewireKey: key,
-                  globalState: store.getState(),
+                  globalState: action.globalState,
                   store
                 })
               })
           updatedReducerActionMap[reducerKey] = (data: any) => {
             return dispatch({
               type: combinedKey,
-              payload: data
+              payload: data,
+              globalState: store.getState()
             })
           }
         }
