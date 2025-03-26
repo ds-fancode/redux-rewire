@@ -1,18 +1,33 @@
-import React from 'react'
-import Styled from 'styled-components'
-import TodoListWrapper from './screen/todo-list'
+import React, {Suspense, use} from 'react'
+import {ServerComp} from './server-comp'
 
-const AppWrapper = Styled.div`
-background-color: blue;
-`
+const LazyComp = () => {
+  const data: any = use(
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('Hello')
+      }, 1000)
+    })
+  )
+  return <div>{data}</div>
+}
+
 export const App = () => {
+  const [load, setLoad] = React.useState(false)
+  console.log('Render > app')
   return (
     <html lang={'en'}>
       <head>
         <title>Kamlesh</title>
       </head>
       <body>
-        <TodoListWrapper source={`1`} />
+        <div onClick={() => setLoad(true)}>Title</div>
+        <Suspense fallback={<div>Loading 1...</div>}>
+          <ServerComp />
+        </Suspense>
+        {/*<Suspense fallback={<div>Loading 2...</div>}>*/}
+        {/*  {load ? <ServerComp /> : null}*/}
+        {/*</Suspense>*/}
       </body>
     </html>
   )

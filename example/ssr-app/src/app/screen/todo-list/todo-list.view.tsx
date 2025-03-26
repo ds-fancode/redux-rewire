@@ -4,13 +4,13 @@ import {todoAction} from './todo-list.actions'
 import {
   Header,
   StyledList,
-  StyledListItem,
   StyledListWrapper,
   StyledTodoListWrapper
 } from './todo-styles'
+import TodoItem from './todo-item/todo-item.view'
 
 const TodoListWrapper = (props: {source: string}) => {
-  const [, todoState, actions] = useRewireState(
+  const [key, todoState, actions] = useRewireState(
     `${props.source}/to-do`,
     todoAction
   )
@@ -21,7 +21,7 @@ const TodoListWrapper = (props: {source: string}) => {
       actions.addTodo(`${Math.random()} Todo`)
       setTimeout(addTodo, 500)
     }
-    setTimeout(addTodo, 500)
+    // setTimeout(addTodo, 500)
   }, [])
 
   return (
@@ -34,11 +34,7 @@ const TodoListWrapper = (props: {source: string}) => {
             {todoState.todoList
               ?.filter(v => !v.isDone)
               ?.map(todoItem => {
-                return (
-                  <StyledListItem key={todoItem.id}>
-                    {todoItem.todo}
-                  </StyledListItem>
-                )
+                return <TodoItem {...todoItem} source={key} key={todoItem.id} />
               })}
           </StyledList>
         </div>
@@ -49,11 +45,7 @@ const TodoListWrapper = (props: {source: string}) => {
             {todoState.todoList
               ?.filter(v => v.isDone)
               .map(todoItem => {
-                return (
-                  <StyledListItem key={todoItem.id}>
-                    {todoItem.todo}
-                  </StyledListItem>
-                )
+                return <TodoItem {...todoItem} source={key} key={todoItem.id} />
               })}
           </StyledList>
         </div>

@@ -25,10 +25,3 @@ export const Header = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
 `
-
-export const StyledListItem = styled.div`
-  padding-left: 0.5rem;
-  width: 100%;
-  height: 2rem;
-  font-size: 1.5rem;
-`

@@ -91,27 +91,30 @@ export const renderer = async (req: Request, res: Response) => {
   })
 
   const stream = renderToPipeableStream(
-    <React.StrictMode>
-      <StyleSheetManager sheet={sheet.instance}>
-        <RewireProvider store={store}>
-          <App />
-        </RewireProvider>
-      </StyleSheetManager>
-    </React.StrictMode>,
+    // <React.StrictMode>
+    <StyleSheetManager sheet={sheet.instance}>
+      <RewireProvider store={store}>
+        <App />
+      </RewireProvider>
+    </StyleSheetManager>,
+    // </React.StrictMode>,
     {
       bootstrapScripts: getClientEntryFiles(),
       onShellReady: () => {
         res.statusCode = didError ? 500 : 200
         res.setHeader('Content-type', 'text/html')
-        stream.pipe(readerWriter)
+        console.log('onShellReady')
+        stream.pipe(res)
       },
       onError: error => {
         didError = true
         console.error(error)
       },
-      onAllReady: () => {}
+      onAllReady: () => {
+        console.log('onAllReady')
+      }
     }
   )
-  setTimeout(() => stream.abort(), 5000)
-  readerWriter.pipe(res)
+  setTimeout(() => stream.abort(), 10000)
+  // readerWriter.pipe(res)
 }
