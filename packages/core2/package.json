@@ -1,0 +1,41 @@
+{
+  "name": "@redux-rewire/core2",
+  "version": "0.0.16",
+  "description": "State management library for react based applications",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/esm/index.d.ts",
+  "scripts": {
+    "test": "yarn run -T jest",
+    "test-watch": "yarn test -- --watch",
+    "test-ci": "yarn test --coverage && coveralls < coverage/lcov.info",
+    "lint": "yarn run -T eslint . --cache",
+    "lint-fix": "yarn lint --fix",
+    "prettier-check": "yarn run -T prettier --check \"**/*.{ts,tsx}\"",
+    "prettier-fix": "yarn prettier-check --write \"**/*.{ts,tsx}\"",
+    "build": "rm -rf ./lib && yarn run -T tsc && yarn run -T tsc --module CommonJS --verbatimModuleSyntax false --moduleResolution node --outDir lib/cjs",
+    "publish": "yarn build && node ./publish.js",
+    "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +",
+    "postinstall": "yarn build"
+  },
+  "author": "FanCode",
+  "license": "ISC",
+  "dependencies": {
+    "mutative": "^1.2.0",
+    "redux": "^5.0.1"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.23.2",
+    "@babel/preset-typescript": "^7.23.2",
+    "@testing-library/react": "^16.1.0",
+    "@types/jest": "^29.2.4",
+    "@types/react": "^18.2.6",
+    "jsdoc": "^4.0.0",
+    "react": "19.0.0",
+    "typescript": "5.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ds-fancode/redux-rewire"
+  }
+}

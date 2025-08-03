@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "jsx": "react",
+    "baseUrl": "src",
+    "outDir": "lib/esm",
+    "lib": ["DOM", "ESNext"],
+    "composite": true,
+    "declaration": true,
+    "incremental": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noEmit": false
+  },
+  "include": [
+    "src"
+  ]
+}
