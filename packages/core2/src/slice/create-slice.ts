@@ -1,6 +1,6 @@
 import type {AnyAction} from 'redux'
 import {create} from 'mutative'
-import type {FCStore} from '../types/base'
+import type {ActionFunction, FCStore} from '../types/base'
 
 export const createSlice = <
   State,
@@ -16,14 +16,14 @@ export const createSlice = <
   initialState: State,
   reducerObj: ReducerObj
 ) => {
-  const subscribers: Record<keyof State, any[]> = {} as any
+  const subscribers: any[] = [] as any
   let store: FCStore | null = null
-  const getReducer = (sliceKey: string) => {
+  const getReducer = (sliceKey: string, updatedInitialState: State) => {
     const updatedReducerMap = Object.keys(reducerObj).reduce((acc, key) => {
       acc[`${sliceKey}/${key}`] = reducerObj[key]
       return acc
     }, {} as any)
-    return (state: State = initialState, action: AnyAction) => {
+    return (state: State = updatedInitialState, action: AnyAction) => {
       const func = updatedReducerMap[action.type]
       if (func && typeof func === 'function') {
         return create(state, draft => {
@@ -51,35 +51,46 @@ export const createSlice = <
   }
 
   return {
-    initialState: initialState,
-    on: (stateKey: keyof State, cb: (state: State) => void) => {
-      if (subscribers[stateKey]?.length) {
-        subscribers[stateKey].push(cb)
-      } else {
-        subscribers[stateKey] = [cb]
+    on: (
+      cb: (state: State, actions: Actions, key: string) => void
+    ): ActionFunction['returnType'] => {
+      subscribers.push(cb)
+      return () => {
+        subscribers.splice(subscribers.indexOf(cb), 1)
       }
     },
-    addToStore: (sliceKey: string, storeObj: FCStore) => {
+    addToStore: (
+      sliceKey: string,
+      storeObj: FCStore,
+      options?: {
+        overrideInitialState?: Partial<State>
+      }
+    ) => {
       store = storeObj
       // add safe store check
       ///////////////////////////
       const updatedSliceKey = `${store?.nameSpace ? store?.nameSpace + '/' : ''}${sliceKey}`
-      const prevState = initialState
+      const updatedInitialState = {
+        ...initialState,
+        ...options?.overrideInitialState
+      }
+      const prevState = updatedInitialState
+      const actions = getActions(updatedSliceKey) as Actions
+      const reducer = getReducer(updatedSliceKey, updatedInitialState)
 
-      store.reducerManager.add(updatedSliceKey, getReducer(updatedSliceKey))
+      store.reducerManager.add(updatedSliceKey, reducer)
       const unsubscribe = store.subscribe(() => {
         const updatedState = store?.getState()?.[updatedSliceKey]
         if (prevState !== updatedState) {
-          Object.keys(subscribers).forEach(key => {
-            // @ts-ignore
-            subscribers[key]?.forEach?.(cb => cb(updatedState))
-          })
+          // @ts-ignore
+          subscribers.forEach(cb => cb(updatedState, actions, updatedSliceKey))
         }
       })
       return {
+        initialState: updatedInitialState,
         key: updatedSliceKey,
         unsubscribe,
-        actions: getActions(updatedSliceKey) as Actions
+        actions: actions
       }
     }
   }

@@ -13,17 +13,27 @@ export const RewireProvider = (props: any) => {
 export const useRewire = <
   Key extends string,
   ActionSlice extends ReturnType<typeof createSlice>,
-  SliceActions extends ReturnType<ActionSlice['addToStore']>['actions']
+  SliceActions extends ReturnType<ActionSlice['addToStore']>['actions'],
+  SliceState extends ReturnType<ActionSlice['addToStore']>['initialState']
 >(
   key: Key,
-  slice: ActionSlice
+  slice: ActionSlice,
+  options?: {
+    overrideInitialState?: Partial<SliceState>
+  }
 ): [Key, any, SliceActions] => {
   const store = useContext(RewireContext)
-  const [{actions, unsubscribe}] = useState(slice.addToStore(key, store))
-  const [state, setState] = useState(slice.initialState)
+  const [{actions, unsubscribe, initialState}] = useState(
+    slice.addToStore(key, store, options)
+  )
+  const [state, setState] = useState(initialState)
 
   useEffect(() => {
+    const unsub = slice.on(updateState => {
+      setState(updateState as any)
+    })
     return () => {
+      unsub()
       unsubscribe()
     }
   }, [key, slice])

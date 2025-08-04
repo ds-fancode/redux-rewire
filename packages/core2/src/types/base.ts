@@ -1,5 +1,8 @@
 import type {Middleware, Reducer, Store} from 'redux'
 
+export interface ActionFunction {
+  [key: string]: any
+}
 export type IStoreOptions = {
   disableImmer?: boolean
   debug?: boolean

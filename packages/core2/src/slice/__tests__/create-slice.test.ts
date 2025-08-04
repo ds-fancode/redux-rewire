@@ -33,8 +33,10 @@ describe('checking slice', () => {
 
     it('check subscription', done => {
       const {actions} = slice.addToStore(sliceKey, store)
-      slice.on('count2', state => {
+      slice.on((state, actions, key) => {
         expect(state.count).toBe(5)
+        expect(key).toEqual(sliceKey)
+        expect(actions).toEqual(actions)
         done()
       })
       actions.incrementCount(5)
@@ -44,7 +46,7 @@ describe('checking slice', () => {
       const {actions} = slice.addToStore(sliceKey, store)
       let callCount = 0
       const expectedCalls = 2
-      slice.on('count2', state => {
+      slice.on(state => {
         expect(state.count).toBe(5)
         callCount++
         if (callCount === expectedCalls) {
@@ -52,7 +54,7 @@ describe('checking slice', () => {
         }
       })
 
-      slice.on('count2', state => {
+      slice.on(state => {
         expect(state.count).toBe(5)
         callCount++
         if (callCount === expectedCalls) {
@@ -63,7 +65,7 @@ describe('checking slice', () => {
     }, 100)
     it('check un-subscriptions', done => {
       const {actions, unsubscribe} = slice.addToStore(sliceKey, store)
-      slice.on('count2', state => {
+      slice.on(state => {
         done(new Error('subscriber should not be called after unsubscribe'))
       })
       unsubscribe()
@@ -112,15 +114,17 @@ describe('checking slice', () => {
     })
     it('check subscription', done => {
       const {actions} = slice.addToStore(sliceKey, nameSpaceStore)
-      slice.on('count2', state => {
+      slice.on((state, actions, key) => {
         expect(state.count).toBe(5)
+        expect(key).toEqual(`${nameSpace}/sliceKey`)
+        expect(actions).toEqual(actions)
         done()
       })
       actions.incrementCount(5)
     }, 100)
     it('check un subscriptions', done => {
       const {actions, unsubscribe} = slice.addToStore(sliceKey, nameSpaceStore)
-      slice.on('count2', state => {
+      slice.on(state => {
         done(new Error('subscriber should not be called after unsubscribe'))
       })
       unsubscribe()
