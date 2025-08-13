@@ -21,6 +21,14 @@ export const todoReducer = createReducerSlice(initialState, {
     })
     return state
   },
+  handleUnDone: (state, actionData: Todo) => {
+    state.todoList.forEach(todo => {
+      if (todo.id === actionData.id) {
+        todo.isDone = false
+      }
+    })
+    return state
+  },
   handleDelete: (state, actionData: Todo) => {
     state.todoList = state.todoList.filter(todo => todo.id !== actionData.id)
     return state

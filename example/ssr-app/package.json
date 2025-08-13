@@ -26,6 +26,7 @@
     "@types/redux-logger": "^3.0.9",
     "@types/webpack-node-externals": "^3",
     "babel-loader": "^9.2.1",
+    "babel-plugin-styled-components": "^2.1.4",
     "css-loader": "^7.1.2",
     "mini-css-extract-plugin": "^2.9.2",
     "redux-logger": "^3.0.6",

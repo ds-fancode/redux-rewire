@@ -1,7 +1,6 @@
-import produce from 'immer'
-import type {FCStore} from '../store/create-store'
-
 import type {AnyAction, Reducer} from 'redux'
+import {create} from 'mutative'
+import type {FCStore} from '../types/base'
 
 export type ReducerInputFunction<State> = (
   state: State,
@@ -70,20 +69,27 @@ export const createReducerSlice = <
         ) {
           const combinedKey = `${key}/${reducerKey}`
           const {updatedReducerMap, updatedReducerActionMap} = acc
-          updatedReducerMap[combinedKey] = store.isImmerDisabled()
-            ? (draftState: typeof initialState, action: AnyAction) =>
-                reducers[reducerKey]!(draftState, action.payload, {
-                  rewireKey: key,
-                  globalState: action.globalState,
-                  store
-                })
-            : produce((draftState: typeof initialState, action: AnyAction) => {
+          updatedReducerMap[combinedKey] = (
+            state: typeof initialState,
+            action: AnyAction
+          ) => {
+            if (store.isImmerDisabled()) {
+              return reducers[reducerKey]!(state, action.payload, {
+                rewireKey: key,
+                globalState: action.globalState,
+                store
+              })
+            } else {
+              return create(state, (draftState: any) => {
                 return reducers[reducerKey]?.(draftState, action.payload, {
                   rewireKey: key,
                   globalState: action.globalState,
                   store
                 })
               })
+            }
+          }
+
           updatedReducerActionMap[reducerKey] = (data: any) => {
             return dispatch({
               type: combinedKey,

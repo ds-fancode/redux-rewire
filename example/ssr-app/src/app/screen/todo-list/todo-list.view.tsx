@@ -2,9 +2,9 @@ import React, {useEffect} from 'react'
 import {useRewireState} from '@redux-rewire/react'
 import {todoAction} from './todo-list.actions'
 import {
+  FlexWrapper,
   Header,
   StyledList,
-  StyledListWrapper,
   StyledTodoListWrapper
 } from './todo-styles'
 import TodoItem from './todo-item/todo-item.view'
@@ -21,20 +21,28 @@ const TodoListWrapper = (props: {source: string}) => {
       actions.addTodo(`${Math.random()} Todo`)
       setTimeout(addTodo, 500)
     }
-    // setTimeout(addTodo, 500)
+    setTimeout(addTodo, 2)
   }, [])
 
   return (
     <StyledTodoListWrapper>
       <Header>{`Task List`}</Header>
-      <StyledListWrapper>
+      <FlexWrapper>
         <div style={{flex: 1}}>
           <Header>Active Tasks</Header>
           <StyledList>
             {todoState.todoList
               ?.filter(v => !v.isDone)
               ?.map(todoItem => {
-                return <TodoItem {...todoItem} source={key} key={todoItem.id} />
+                return (
+                  <TodoItem
+                    {...todoItem}
+                    source={key}
+                    key={todoItem.id}
+                    markDone={actions.handleDone}
+                    markUnDone={actions.handleUnDone}
+                  />
+                )
               })}
           </StyledList>
         </div>
@@ -45,11 +53,19 @@ const TodoListWrapper = (props: {source: string}) => {
             {todoState.todoList
               ?.filter(v => v.isDone)
               .map(todoItem => {
-                return <TodoItem {...todoItem} source={key} key={todoItem.id} />
+                return (
+                  <TodoItem
+                    {...todoItem}
+                    source={key}
+                    key={todoItem.id}
+                    markDone={actions.handleDone}
+                    markUnDone={actions.handleUnDone}
+                  />
+                )
               })}
           </StyledList>
         </div>
-      </StyledListWrapper>
+      </FlexWrapper>
     </StyledTodoListWrapper>
   )
 }

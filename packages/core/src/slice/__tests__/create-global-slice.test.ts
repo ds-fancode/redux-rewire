@@ -1,7 +1,8 @@
 import {createReducerSlice} from '../create-reducer-slice'
 import {createActionSlice} from '../create-action-slice'
-import {configureStore, type FCStore} from '../../store/create-store'
+import {configureStore} from '../../store/create-store'
 import {createGlobalSlice} from '../create-global-slice'
+import type {FCStore} from '../../types/base'
 
 let store: FCStore = null as any
 

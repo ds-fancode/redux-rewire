@@ -1,14 +1,8 @@
-import type {Action, Reducer, ReducersMapObject, Store} from 'redux'
+import type {Action, Reducer, ReducersMapObject} from 'redux'
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
-import type {IStoreOptions} from './create-store.type'
 import {createGlobalSlice} from '../slice/create-global-slice'
-
-export interface FCStore extends Store {
-  reducerManager: ReturnType<typeof createReducerManager>
-  ioRunner: (actionReturn: any) => any
-  isImmerDisabled: () => boolean
-  nameSpace: string
-}
+import {customRequestIdleCallback} from '../utils/idelCallback'
+import type {FCStore, IStoreOptions} from '../types/base'
 
 function createReducerManager(options: IStoreOptions) {
   // Create an object which maps keys to reducers
@@ -118,6 +112,31 @@ export function configureStore<S extends {[x: string]: any}>(
     initialState,
     enhancer
   )
+  let actionQueue: Array<() => void> = []
+
+  const processQueue: Parameters<typeof customRequestIdleCallback>[0] = (
+    deadline: any
+  ) => {
+    // Process tasks as long as there is time left and the queue is not empty
+    while (
+      (deadline.timeRemaining() > 0 || deadline.didTimeout) &&
+      actionQueue.length > 0
+    ) {
+      const action = actionQueue.shift()
+      if (action && typeof action === 'function') {
+        action()
+      }
+    }
+    // If the queue is not empty, schedule the next idle callback
+    if (actionQueue.length > 0) {
+      customRequestIdleCallback(processQueue)
+    }
+  }
+
+  store.addToQueue = actionFunc => {
+    actionQueue.push(actionFunc)
+    customRequestIdleCallback(processQueue)
+  }
 
   // Optional: Put the reducer manager on the store so it is easily accessible
   store.reducerManager = reducerManager

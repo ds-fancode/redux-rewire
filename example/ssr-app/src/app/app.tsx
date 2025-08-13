@@ -1,5 +1,5 @@
 import React, {Suspense, use} from 'react'
-import {ServerComp} from './server-comp'
+import TodoListWrapper from './screen/todo-list'
 
 const LazyComp = () => {
   const data: any = use(
@@ -13,7 +13,6 @@ const LazyComp = () => {
 }
 
 export const App = () => {
-  const [load, setLoad] = React.useState(false)
   console.log('Render > app')
   return (
     <html lang={'en'}>
@@ -21,13 +20,9 @@ export const App = () => {
         <title>Kamlesh</title>
       </head>
       <body>
-        <div onClick={() => setLoad(true)}>Title</div>
-        <Suspense fallback={<div>Loading 1...</div>}>
-          <ServerComp />
+        <Suspense fallback={<div>{`showing todo list shimmers...`}</div>}>
+          <TodoListWrapper source={'root'} />
         </Suspense>
-        {/*<Suspense fallback={<div>Loading 2...</div>}>*/}
-        {/*  {load ? <ServerComp /> : null}*/}
-        {/*</Suspense>*/}
       </body>
     </html>
   )

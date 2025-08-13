@@ -1,5 +1,5 @@
-import type {FCStore} from '../store/create-store'
 import type {createActionSlice} from './create-action-slice'
+import type {FCStore} from '../types/base'
 
 export const createGlobalSlice = <
   ActionSliceReturnType extends ReturnType<typeof createActionSlice>

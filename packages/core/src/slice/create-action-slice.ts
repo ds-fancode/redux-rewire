@@ -1,7 +1,7 @@
-import type {FCStore} from '../store/create-store'
 import {createActionsReference} from './create-actions-reference'
 import {createReducerSlice} from './create-reducer-slice'
-import type {ActionFunction} from '../types/base'
+import type {ActionFunction, FCStore} from '../types/base'
+import {customRequestIdleCallback} from '../utils/idelCallback'
 
 type ActionArguments<
   Key,
@@ -95,28 +95,33 @@ export const createActionSlice = <
     // we already have mapped actionRef, we do not need to map action to execute reducerSlice and ioAction
     allAvailableActionKeys.forEach(actionKey => {
       actions[actionKey] = (data: any) => {
-        const prevState =
-          (store.getState?.() as any)[nameSpacedKey] ?? initialState
-        // before runIO started run our reducers to reducerSlice states
-        if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
-        // Async actions will get updated state after reducer work is done
-        // first make async called to make sure we have current state to be used in async action
-        const globalState = store.getState?.() ?? {}
-        const currentState = globalState?.[nameSpacedKey] ?? initialState
-        if (
-          actionMap &&
-          actionMap[actionKey] &&
-          typeof actionMap[actionKey] === 'function'
-        ) {
-          actionMap[actionKey]!(data, {
-            state: currentState,
-            actions,
-            rewireKey: nameSpacedKey,
-            prevState: prevState,
-            globalState,
-            store
-          })
+        const actionWrapper = () => {
+          const prevState =
+            (store.getState?.() as any)[nameSpacedKey] ?? initialState
+          // This order is important
+          // firstly, run our reducers to reducerSlice states
+          if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
+          // Async actions will get updated state after reducer work is done
+          // first make async called to make sure we have the current state to be used in async action
+          if (
+            actionMap[actionKey] &&
+            typeof actionMap[actionKey] === 'function'
+          ) {
+            customRequestIdleCallback(() => {
+              const globalState = store.getState?.() ?? {}
+              const currentState = globalState?.[nameSpacedKey] ?? initialState
+              actionMap[actionKey]?.(data, {
+                state: currentState,
+                actions,
+                rewireKey: nameSpacedKey,
+                prevState: prevState,
+                globalState,
+                store
+              })
+            })
+          }
         }
+        store.addToQueue(actionWrapper)
       }
     })
 
@@ -125,8 +130,16 @@ export const createActionSlice = <
       initialState: initialState as State,
       actions: actions,
       subscribe: cb => {
+        let tempPrevState = initialState as State
         return store.subscribe(() => {
-          cb(store.getState()?.[nameSpacedKey] ?? initialState)
+          const gState = store.getState() ?? {}
+          if (
+            gState[nameSpacedKey] &&
+            gState[nameSpacedKey] !== tempPrevState
+          ) {
+            tempPrevState = gState[nameSpacedKey] as State
+            cb(tempPrevState)
+          }
         })
       },
       getState: () => {

@@ -1,7 +1,8 @@
 import {createActionSlice} from '../create-action-slice'
 import {createInitialState} from '../create-initital-state'
 import {createReducerSlice} from '../create-reducer-slice'
-import {configureStore, type FCStore} from '../../store/create-store'
+import {configureStore} from '../../store/create-store'
+import type {FCStore} from '../../types/base'
 
 describe('createCommandSlice', () => {
   let store: FCStore = null as any

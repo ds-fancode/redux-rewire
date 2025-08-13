@@ -1,6 +1,7 @@
 import {createReducerSlice} from '../create-reducer-slice'
-import {configureStore, type FCStore} from '../../store/create-store'
+import {configureStore} from '../../store/create-store'
 import {createActionSlice} from '../create-action-slice'
+import type {FCStore} from '../../types/base'
 
 describe('checking slice', () => {
   describe('checking slice without name space', () => {
@@ -33,7 +34,6 @@ describe('checking slice', () => {
 
     const actionSlice = createActionSlice(reducerSlice, {
       incrementCount: (actionData, {state, store, actions}) => {
-        console.log(state)
         const res = 2
         actions.response(res)
         return 1
@@ -47,14 +47,25 @@ describe('checking slice', () => {
       }
     })
 
-    it('check state update', () => {
+    it('check state update', done => {
       const slice = actionSlice(sliceKey, store)
       expect(slice.getState()).toEqual(initialState)
+      slice.subscribe(state => {
+        expect(state.count).toEqual(initialState.count + 1)
+        done()
+      })
       slice.actions.incrementCount(1)
-      expect(slice.getState().count).toEqual(initialState.count + 1)
-      slice.actions.autoIncrementCount()
-      expect(slice.getState().count).toEqual(initialState.count + 2)
-    })
+    }, 2)
+
+    it('callback should not be called if state is not updated', done => {
+      const slice = actionSlice(sliceKey, store)
+      expect(slice.getState()).toEqual(initialState)
+      slice.subscribe(state => {
+        done('should not be called')
+      })
+      slice.actions.incrementCount(0)
+    }, 2000)
+
     it('check subscriptions', () => {
       const slice = actionSlice(sliceKey, store)
       const mockCallback = jest.fn()

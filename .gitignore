@@ -3,6 +3,7 @@ node_modules
 **/*.d.ts
 **/*.d.ts.map
 **/*.js.map
+*.tsbuildinfo
 !.eslint.config.js
 !.babel.config.js
 !.eslintrc.json

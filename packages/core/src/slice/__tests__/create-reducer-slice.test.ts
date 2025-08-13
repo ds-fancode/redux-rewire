@@ -1,5 +1,6 @@
 import {createReducerSlice} from '../create-reducer-slice'
-import {configureStore, type FCStore} from '../../store/create-store'
+import {configureStore} from '../../store/create-store'
+import type {FCStore} from '../../types/base'
 
 let store: FCStore = null as any
 

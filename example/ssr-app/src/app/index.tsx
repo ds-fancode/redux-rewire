@@ -6,17 +6,18 @@ import {RewireProvider} from '@redux-rewire/react'
 import {createLogger} from 'redux-logger'
 
 const logger = createLogger({
-  diff: true
+  diff: true,
+  collapsed: true
   // ...options
 })
 const ClientApp = () => {
   const store = configureStore([], {}, {middlewares: [logger]})
   return (
-    // <React.StrictMode>
-    <RewireProvider store={store}>
-      <App />
-    </RewireProvider>
-    // </React.StrictMode>
+    <React.StrictMode>
+      <RewireProvider store={store}>
+        <App />
+      </RewireProvider>
+    </React.StrictMode>
   )
 }
 

@@ -7,7 +7,7 @@ export const StyledTodoListWrapper = styled.div`
   justify-content: center;
 `
 
-export const StyledListWrapper = styled.div`
+export const FlexWrapper = styled.div`
   display: flex;
   justify-content: space-around;
 `

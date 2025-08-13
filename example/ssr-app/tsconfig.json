@@ -6,7 +6,6 @@
     "moduleResolution": "Bundler",
     "jsx": "react",
 
-
     "allowJs": true,
     "moduleDetection": "force",
     "verbatimModuleSyntax": true,
@@ -16,8 +15,11 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "paths": {}
+    "noEmit": true
   },
+  "references": [
+    {"path": "../../packages/react"},
+    {"path": "../../packages/core"}
+  ],
   "include": ["src"]
 }

@@ -21,7 +21,7 @@
   "author": "FanCode",
   "license": "ISC",
   "dependencies": {
-    "immer": "^9.0.12",
+    "mutative": "^1.2.0",
     "redux": "^5.0.1"
   },
   "devDependencies": {

@@ -133,7 +133,7 @@ function createAsyncFunction(
          */
         if (ioActions?.length) {
           dispatch?.({
-            type: `RESERVED_ACTIONS.ASYNC_ACTION/${key}/${mapKey}`,
+            type: `${RESERVED_ACTIONS.ASYNC_ACTION}/${key}/${mapKey}`,
             componentKey: key,
             asyncActionName: mapKey,
             ioActions

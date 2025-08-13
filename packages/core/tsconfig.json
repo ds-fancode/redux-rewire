@@ -10,7 +10,8 @@
     "incremental": true,
     "declarationMap": true,
     "sourceMap": true,
-    "noEmit": false
+    "noEmit": false,
+
   },
   "include": [
     "src"
