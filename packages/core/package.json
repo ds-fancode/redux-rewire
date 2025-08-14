@@ -1,10 +1,37 @@
 {
-  "name": "@redux-rewire/core",
+  "name": "@ds-fancode/redux-rewire-core",
   "version": "0.0.16",
   "description": "State management library for react based applications",
-  "main": "lib/cjs/index.js",
-  "module": "lib/esm/index.js",
-  "types": "lib/esm/index.d.ts",
+  "author": "FanCode",
+  "license": "ISC",
+  "keywords": [
+    "redux",
+    "reducer",
+    "state",
+    "predictable",
+    "functional",
+    "immutable",
+    "hot",
+    "live",
+    "replay",
+    "flux",
+    "elm"
+  ],
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/cjs/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/cjs/index.d.ts",
+      "import": "./dist/esm/index.mjs",
+      "default": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "test": "yarn run -T jest",
     "test-watch": "yarn test -- --watch",
@@ -13,13 +40,12 @@
     "lint-fix": "yarn lint --fix",
     "prettier-check": "yarn run -T prettier --check \"**/*.{ts,tsx}\"",
     "prettier-fix": "yarn prettier-check --write \"**/*.{ts,tsx}\"",
-    "build": "rm -rf ./lib && yarn run -T tsc && yarn run -T tsc --module CommonJS --verbatimModuleSyntax false --moduleResolution node --outDir lib/cjs",
-    "publish": "yarn build && node ./publish.js",
-    "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +",
-    "postinstall": "yarn build"
+    "clean": "rm -rf ./lib ./dist",
+    "build": "yarn clean && yarn run -T tsup",
+    "prepack": "yarn build",
+    "release": "release-it",
+    "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +"
   },
-  "author": "FanCode",
-  "license": "ISC",
   "dependencies": {
     "mutative": "^1.2.0",
     "redux": "^5.0.1"
@@ -34,5 +60,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ds-fancode/redux-rewire"
-  }
+  },
+  "sideEffects": false
 }

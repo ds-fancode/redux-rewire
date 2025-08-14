@@ -1,4 +1,4 @@
-import {createReducerSlice} from '@redux-rewire/core'
+import {createReducerSlice} from '@ds-fancode/redux-rewire-core'
 import {initialState} from './todo-list.init'
 import type {Todo} from './todo-list.type'
 

@@ -1,7 +1,7 @@
 import {useMemo, useRef} from 'react'
 import {shallowEqual, useSelector, useStore} from 'react-redux'
-import type {FCStore} from '@redux-rewire/core'
-import {createActionSlice} from '@redux-rewire/core'
+import type {FCStore} from '@ds-fancode/redux-rewire-core'
+import {createActionSlice} from '@ds-fancode/redux-rewire-core'
 
 export const useRewireState: {
   // overload 1

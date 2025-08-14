@@ -1,8 +1,8 @@
 import {hydrateRoot} from 'react-dom/client'
 import {App} from './app'
 import React from 'react'
-import {configureStore} from '@redux-rewire/core'
-import {RewireProvider} from '@redux-rewire/react'
+import {configureStore} from '@ds-fancode/redux-rewire-core'
+import {RewireProvider} from '@ds-fancode/redux-rewire-react'
 import {createLogger} from 'redux-logger'
 
 const logger = createLogger({

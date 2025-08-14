@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css'
-import {RewireProvider} from '@redux-rewire/react'
+import {RewireProvider} from '@ds-fancode/redux-rewire-react'
 import TodoList from '../components-slice/todo-list'
 import {store} from '../store'
 

@@ -1,6 +1,6 @@
 import {useMemo, useRef} from 'react'
 import {shallowEqual, useSelector, useStore} from 'react-redux'
-import {createGlobalSlice, type FCStore} from '@redux-rewire/core'
+import {createGlobalSlice, type FCStore} from '@ds-fancode/redux-rewire-core'
 
 export const useGlobalState: {
   // overload 1

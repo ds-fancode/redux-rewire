@@ -1,4 +1,4 @@
-import {createActionSlice} from '@redux-rewire/core'
+import {createActionSlice} from '@ds-fancode/redux-rewire-core'
 import {todoReducer} from './todo-list.reducer'
 
 export const todoAction = createActionSlice(todoReducer, {

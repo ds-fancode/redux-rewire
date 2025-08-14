@@ -1,4 +1,4 @@
-import {createActionSlice} from '@redux-rewire/core'
+import {createActionSlice} from '@ds-fancode/redux-rewire-core'
 import {todoReducer} from './todo-list.reducer'
 import {settingStore} from '../../global-store/settings-store'
 import {Theme} from '../../global-store/settings-store/setting.type'

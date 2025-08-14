@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {useRewireState} from '@redux-rewire/react'
+import {useRewireState} from '@ds-fancode/redux-rewire-react'
 import {todoAction} from './todo-item.actions'
 import styled from 'styled-components'
 import type {Todo} from './todo-item.type'

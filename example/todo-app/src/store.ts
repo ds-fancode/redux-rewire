@@ -1,4 +1,4 @@
-import {configureStore} from '@redux-rewire/core'
+import {configureStore} from '@ds-fancode/redux-rewire-core'
 import {createLogger} from 'redux-logger'
 import {settingStore} from './global-store/settings-store'
 

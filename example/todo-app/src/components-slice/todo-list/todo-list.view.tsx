@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {useGlobalState, useRewireState} from '@redux-rewire/react'
+import {useGlobalState, useRewireState} from '@ds-fancode/redux-rewire-react'
 import TodoItem from './atoms/todo-item.view'
 import {todoAction} from './todo-list.actions'
 import {TodoInput} from './atoms/todo-input'

@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@redux-rewire/core": "workspace:*",
-    "@redux-rewire/react": "workspace:*",
+    "@ds-fancode/redux-rewire-core": "workspace:*",
+    "@ds-fancode/redux-rewire-react": "workspace:*",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-icons": "^4.8.0",

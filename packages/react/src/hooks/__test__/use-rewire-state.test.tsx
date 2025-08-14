@@ -4,7 +4,7 @@ import {
   createInitialState,
   createReducerSlice,
   type FCStore
-} from '@redux-rewire/core'
+} from '@ds-fancode/redux-rewire-core'
 import {useRewireState} from '../use-rewire-state'
 import {RewireProvider} from '../../core/Provider'
 import {act, renderHook} from '@testing-library/react'

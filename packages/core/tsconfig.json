@@ -4,16 +4,12 @@
     "rootDir": "src",
     "baseUrl": "src",
     "outDir": "lib/esm",
-    "lib": ["DOM", "ESNext"],
     "composite": true,
     "declaration": true,
     "incremental": true,
     "declarationMap": true,
     "sourceMap": true,
-    "noEmit": false,
-
+    "noEmit": false
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src/**/*"]
 }
