@@ -10,6 +10,9 @@ import {RewireProvider} from '../../core/Provider'
 import {act, renderHook} from '@testing-library/react'
 import React from 'react'
 
+const delay = (delay?: number) =>
+  new Promise(resolve => setTimeout(resolve, delay ?? 10))
+
 let store: FCStore = null as any
 beforeEach(() => {
   store = configureStore([], {})
@@ -62,7 +65,7 @@ describe('useRewireState', () => {
   )
 
   describe('test without initial state', () => {
-    it('check default state and key', () => {
+    it('check default state and key', async () => {
       const {result, rerender} = renderHook(
         () => useRewireState(sliceKey, actionSlice),
         {
@@ -80,6 +83,7 @@ describe('useRewireState', () => {
       act(() => {
         action.autoIncrementCount()
       })
+      await delay(50)
       expect(result.current[1]).toEqual({...initialState, count: 1})
     })
     it('check state with selector', () => {

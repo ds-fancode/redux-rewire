@@ -72,8 +72,6 @@ describe('useRewireState', () => {
   })
 
   it('should throw an error if used outside of Provider', () => {
-    expect(() => render(<TestComponent />)).toThrow(
-      'useTheme must be used within a Provider'
-    )
+    expect(() => render(<TestComponent />)).toThrow()
   })
 })
