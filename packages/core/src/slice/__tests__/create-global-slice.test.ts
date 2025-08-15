@@ -5,7 +5,8 @@ import {createGlobalSlice} from '../create-global-slice'
 import type {FCStore} from '../../types/base'
 
 let store: FCStore = null as any
-
+const delay = (delay?: number) =>
+  new Promise(resolve => setTimeout(resolve, delay ?? 10))
 beforeEach(() => {
   store = configureStore([], {})
 })
@@ -46,12 +47,13 @@ describe('createGlobalStore', () => {
     }
   })
 
-  it('creating global store', () => {
+  it('creating global store', async () => {
     const globalSlice = createGlobalSlice(globalSliceKey1, globalActionSlice)
     expect(globalSlice(store).getState()).toEqual(
       globalSlice(store).initialState
     )
     globalSlice(store).actions.incrementCount(TEST.A)
+    await delay(0)
     expect(globalSlice(store).getState().count).toEqual(
       globalSlice(store).initialState.count + 1
     )

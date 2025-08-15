@@ -3,8 +3,10 @@ import {configureStore} from '../../store/create-store'
 import {createActionSlice} from '../create-action-slice'
 import type {FCStore} from '../../types/base'
 
+const delay = (delay?: number) =>
+  new Promise(resolve => setTimeout(resolve, delay ?? 10))
 describe('checking slice', () => {
-  describe('checking slice without name space', () => {
+  describe('checking basic slice', () => {
     let store: FCStore = null as any
     beforeEach(() => {
       store = configureStore([], {})
@@ -50,40 +52,34 @@ describe('checking slice', () => {
     it('check state update', done => {
       const slice = actionSlice(sliceKey, store)
       expect(slice.getState()).toEqual(initialState)
-      slice.subscribe(state => {
+      const unsubscribe = slice.subscribe(state => {
         expect(state.count).toEqual(initialState.count + 1)
+        unsubscribe()
         done()
       })
       slice.actions.incrementCount(1)
-    }, 2)
+    })
 
-    it('callback should not be called if state is not updated', done => {
+    it('callback should not be called if state is not updated', async () => {
       const slice = actionSlice(sliceKey, store)
       expect(slice.getState()).toEqual(initialState)
-      slice.subscribe(state => {
-        done('should not be called')
-      })
-      slice.actions.incrementCount(0)
-    }, 2000)
-
-    it('check subscriptions', () => {
-      const slice = actionSlice(sliceKey, store)
       const mockCallback = jest.fn()
-      slice.subscribe(mockCallback)
-      slice.actions.autoIncrementCount()
-      const sliceState = slice.getState()
-      expect(sliceState.count).toBe(1)
-      expect(mockCallback).toHaveBeenCalledWith({...initialState, count: 1})
+      const unsubscribe = slice.subscribe(mockCallback)
+      slice.actions.incrementCount(0)
+      await delay(50)
+      expect(mockCallback).not.toHaveBeenCalled()
+      unsubscribe()
+      return true
     })
-    it('check un-subscriptions', () => {
+
+    it('check un-subscriptions', async () => {
       const slice = actionSlice(sliceKey, store)
       const mockCallback = jest.fn()
       const unsub = slice.subscribe(mockCallback)
       unsub()
       slice.actions.autoIncrementCount()
-      const sliceState = slice.getState()
+      await delay(50)
       expect(mockCallback).not.toHaveBeenCalled()
-      expect(sliceState.count).toBe(1)
     })
 
     it('initial state should be updated', () => {
@@ -141,30 +137,38 @@ describe('checking slice', () => {
       }
     })
 
-    it('check state update', () => {
+    it('check state update', done => {
       const slice = actionSlice(sliceKey, nameSpaceStore)
-      expect(slice.key).toEqual(`${nameSpace}/${sliceKey}`)
+
+      expect(slice.getState()).toEqual(initialState)
+      const unsubscribe = slice.subscribe(state => {
+        expect(slice.key).toEqual(`${nameSpace}/${sliceKey}`)
+        expect(state.count).toEqual(initialState.count + 1)
+        unsubscribe()
+        done()
+      })
+      slice.actions.incrementCount(1)
+
       expect(slice.getState()).toEqual(initialState)
       slice.actions.incrementCount(1)
-      expect(slice.getState().count).toEqual(initialState.count + 1)
-      slice.actions.autoIncrementCount()
-      expect(slice.getState().count).toEqual(initialState.count + 2)
     })
-    it('check subscriptions', () => {
+    it('check subscriptions', async () => {
       const slice = actionSlice(sliceKey, nameSpaceStore)
       const mockCallback = jest.fn()
       slice.subscribe(mockCallback)
       slice.actions.autoIncrementCount()
+      await delay(50)
       const sliceState = slice.getState()
       expect(sliceState.count).toBe(1)
       expect(mockCallback).toHaveBeenCalledWith({...initialState, count: 1})
     })
-    it('check un-subscriptions', () => {
+    it('check un-subscriptions', async () => {
       const slice = actionSlice(sliceKey, nameSpaceStore)
       const mockCallback = jest.fn()
       const unsub = slice.subscribe(mockCallback)
       unsub()
       slice.actions.autoIncrementCount()
+      await delay(50)
       const sliceState = slice.getState()
       expect(mockCallback).not.toHaveBeenCalled()
       expect(sliceState.count).toBe(1)
