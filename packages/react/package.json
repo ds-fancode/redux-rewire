@@ -2,9 +2,28 @@
   "name": "@ds-fancode/redux-rewire-react",
   "version": "0.0.16",
   "description": "State management library for react based applications",
-  "main": "lib/cjs/index.js",
+  "keywords": [
+    "redux",
+    "reducer",
+    "state",
+    "predictable",
+    "functional",
+    "immutable",
+    "hot",
+    "live",
+    "replay",
+    "flux",
+    "elm"
+  ],
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
+  "types": "dist/cjs/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
   "scripts": {
     "test": "yarn run -T jest",
     "test-watch": "yarn test -- --watch",
@@ -15,8 +34,8 @@
     "prettier-fix": "yarn prettier-check --write \"**/*.{ts,tsx}\"",
     "clean": "rm -rf ./lib ./dist",
     "build": "yarn clean && yarn run -T tsup",
-    "publish": "yarn build && node ./publish.js",
-    "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +"
+    "prepack": "yarn build",
+    "release": "release-it"
   },
   "author": "FanCode",
   "license": "ISC",

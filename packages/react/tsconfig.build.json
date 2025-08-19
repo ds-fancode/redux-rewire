@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "incremental": false,
-    "composite": false
+    "composite": false,
+    "incremental": false
   }
 }
