@@ -17,9 +17,15 @@
     "flux",
     "elm"
   ],
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/cjs/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -28,10 +34,6 @@
       "default": "./dist/cjs/index.js"
     }
   },
-  "files": [
-    "dist",
-    "src"
-  ],
   "scripts": {
     "test": "yarn run -T jest",
     "test-watch": "yarn test -- --watch",
@@ -57,9 +59,13 @@
     "jsdoc": "^4.0.0",
     "typescript": "5.7.2"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/ds-fancode/redux-rewire"
   },
+  "packageManager": "yarn@4.6.0",
   "sideEffects": false
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@redux-rewire/legacy",
+  "name": "redux-rewire",
   "version": "0.0.16",
   "description": "State management library for react based applications",
   "main": "dist/cjs/index.js",

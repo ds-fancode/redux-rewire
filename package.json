@@ -1,5 +1,5 @@
 {
-  "name": "redux-rewire",
+  "name": "root-redux-rewire",
   "version": "0.0.16",
   "description": "State management library for react based applications",
   "scripts": {
@@ -54,6 +54,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ds-fancode/redux-rewire"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "packageManager": "yarn@4.6.0"
 }

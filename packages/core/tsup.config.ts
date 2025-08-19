@@ -1,28 +1,65 @@
-import {defineConfig} from 'tsup'
+import {defineConfig, type Options} from 'tsup'
 
 export default defineConfig(options => {
-  const baseConfig = {
-    entry: ['src/index.ts'],
+  const baseConfig: Options = {
+    entry: {
+      'index.debug': 'src/index.ts'
+    },
     tsconfig: 'tsconfig.build.json',
     splitting: false,
     sourcemap: true,
     clean: true,
-    // minify: !options.watch,
     minify: false,
-    dts: true
+    dts: false,
+    platform: 'neutral',
+    target: 'es2017'
+  }
+  const minifiedConfig = {
+    ...baseConfig,
+    sourcemap: false,
+    clean: false,
+    minify: true
   }
   return [
+    // esm
     {
       ...baseConfig,
-      entry: ['src/index.ts'],
       outDir: './dist/esm/',
-      format: ['esm']
+      format: ['esm'],
+      name: 'mjs-debug'
     },
     {
+      ...minifiedConfig,
+      entry: {
+        'index.min': 'src/index.ts'
+      },
+      outDir: './dist/esm/',
+      format: ['esm'],
+      name: 'mjs-minified'
+    },
+    // cjs
+    {
       ...baseConfig,
-      entry: ['src/index.ts'],
       outDir: './dist/cjs/',
-      format: ['cjs']
+      format: ['cjs'],
+      name: 'cjs-debug',
+      dts: true
+    },
+    {
+      ...minifiedConfig,
+      entry: {
+        'index.min': 'src/index.ts'
+      },
+      outDir: './dist/cjs/',
+      format: ['cjs'],
+      name: 'cjs-minified'
+    },
+    // global
+    {
+      ...baseConfig,
+      outDir: './dist/global/',
+      format: ['iife'],
+      dts: false
     }
   ]
 })

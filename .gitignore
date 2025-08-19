@@ -13,6 +13,8 @@ lib
 .DS_Store
 build
 dist
+.env
+.npmrc
 .docusaurus
 .yarn/*
 .eslintcache
