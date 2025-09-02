@@ -21,17 +21,23 @@
     "dist",
     "src"
   ],
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/cjs/index.d.ts",
+  "main": "dist/cjs/index.debug.js",
+  "module": "dist/esm/index.debug.mjs",
+  "types": "dist/cjs/index.debug.d.ts",
   "react-native": "src/index",
   "source": "src/index",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/cjs/index.d.ts",
-      "import": "./dist/esm/index.mjs",
-      "default": "./dist/cjs/index.js"
+      "types": "./dist/cjs/index.debug.d.ts",
+      "import": "./dist/esm/index.debug.mjs",
+      "require": "./dist/cjs/index.debug.js",
+      "production": {
+        "types": "./dist/cjs/index.min.d.ts",
+        "import": "./dist/esm/index.min.mjs",
+        "require": "./dist/cjs/index.min.js"
+      },
+      "default": "./dist/cjs/index.debug.js"
     }
   },
   "scripts": {
@@ -46,6 +52,7 @@
     "build": "yarn clean && yarn run -T tsup",
     "prepack": "yarn build",
     "release": "release-it",
+    "release-beta": "yarn release --increment auto --preRelease=beta --verbose",
     "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +"
   },
   "dependencies": {
@@ -66,6 +73,5 @@
     "type": "git",
     "url": "https://github.com/ds-fancode/redux-rewire"
   },
-  "packageManager": "yarn@4.6.0",
   "sideEffects": false
 }
