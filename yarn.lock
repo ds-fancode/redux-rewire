@@ -3977,8 +3977,8 @@ __metadata:
     react-redux: "npm:^9.2.0"
     typescript: "npm:5.7.2"
   peerDependencies:
+    "@ds-fancode/redux-rewire-core": "*"
     react: ">=18.x"
-    redux: ^4.2.0
   languageName: unknown
   linkType: soft
 
