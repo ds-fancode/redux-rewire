@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {useRewireState} from '@ds-fancode/redux-rewire-react'
 import {todoAction} from './todo-list.actions'
 import {
@@ -8,21 +8,25 @@ import {
   StyledTodoListWrapper
 } from './todo-styles'
 import TodoItem from './todo-item/todo-item.view'
+import {useSsrEffect2} from '../../hooks/use-ssr-effect'
 
 const TodoListWrapper = (props: {source: string}) => {
   const [key, todoState, actions] = useRewireState(
     `${props.source}/to-do`,
     todoAction
   )
-
-  useEffect(() => {
+  useSsrEffect2(key, todoState, () => {
     actions.mount()
-    function addTodo() {
-      actions.addTodo(`${Math.random()} Todo`)
-      setTimeout(addTodo, 500)
-    }
-    setTimeout(addTodo, 2)
-  }, [])
+  })
+
+  // useSsrEffect(
+  //   key,
+  //   todoState,
+  //   () => {
+  //     actions.mount()
+  //   },
+  //   true
+  // )
 
   return (
     <StyledTodoListWrapper>

@@ -40,11 +40,37 @@ export const getClientEntryFiles = function () {
   console.log('entryFiles', entryFiles)
   return entryFiles
 }
-
+async function wrapStream(
+  res: Response,
+  stream: ReturnType<typeof renderToPipeableStream>,
+  startText: string,
+  endText: string
+) {
+  let started = false
+  const transformStream = new Transform({
+    transform(chunk, encoding, callback) {
+      if (!started) {
+        console.log('[stream] html start')
+        this.push(startText.trim())
+        started = true
+      }
+      this.push(chunk)
+      callback()
+    },
+    flush(callback) {
+      console.log('[stream] html end')
+      this.push(endText.trim())
+      callback()
+    }
+  })
+  console.log('[stream] piping')
+  stream.pipe(transformStream).pipe(res)
+}
 export const renderer = async (req: Request, res: Response) => {
   const store = configureStore([], {})
   const sheet = new ServerStyleSheet()
   let didError = false
+  console.log('========= Starting renderer for ==========', req.url)
   res?.socket?.on('error', error => {
     console.error('Fatal', error)
   })
@@ -101,20 +127,29 @@ export const renderer = async (req: Request, res: Response) => {
     {
       bootstrapScripts: getClientEntryFiles(),
       onShellReady: () => {
-        res.statusCode = didError ? 500 : 200
-        res.setHeader('Content-type', 'text/html')
         console.log('onShellReady')
-        stream.pipe(res)
+      },
+      onShellError: error => {
+        console.error('onShellError', error)
       },
       onError: error => {
         didError = true
-        console.error(error)
+        console.error('onError', error)
       },
       onAllReady: () => {
+        const styleTags = sheet.getStyleTags()
+        res.statusCode = didError ? 500 : 200
+        res.setHeader('Content-type', 'text/html')
+        const headerText = `${styleTags}`
+        const footerText = `
+          <script id='fc-web-nonce-ele'>
+           window.__INIT_STATE__ = ${JSON.stringify(store.getState())}
+          </script>
+        `
+        wrapStream(res, stream, headerText, footerText)
         console.log('onAllReady')
       }
     }
   )
-  setTimeout(() => stream.abort(), 10000)
-  // readerWriter.pipe(res)
+  setTimeout(() => stream.abort(), 50000)
 }

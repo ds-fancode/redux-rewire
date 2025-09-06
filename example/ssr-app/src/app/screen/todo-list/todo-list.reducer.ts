@@ -5,6 +5,15 @@ import type {Todo} from './todo-list.type'
 export const todoReducer = createReducerSlice(initialState, {
   mount: (state, actionData: undefined) => state,
 
+  response: (state, actionData: string) => {
+    state.todoList.push({
+      id: state.todoList.length,
+      todo: actionData,
+      isDone: false
+    })
+    state.loaded = true
+    return state
+  },
   addTodo: (state, actionData: string) => {
     state.todoList.push({
       id: state.todoList.length,

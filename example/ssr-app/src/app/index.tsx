@@ -11,13 +11,15 @@ const logger = createLogger({
   // ...options
 })
 const ClientApp = () => {
-  const store = configureStore([], {}, {middlewares: [logger]})
+  const store = configureStore([], (window as any)?.__INIT_STATE__ ?? {}, {
+    middlewares: [logger]
+  })
   return (
-    <React.StrictMode>
-      <RewireProvider store={store}>
-        <App />
-      </RewireProvider>
-    </React.StrictMode>
+    // <React.StrictMode>
+    <RewireProvider store={store}>
+      <App />
+    </RewireProvider>
+    // </React.StrictMode>
   )
 }
 

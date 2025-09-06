@@ -11,6 +11,9 @@ app.use(
   })
 )
 
+app.get(['*.json', '*.ico'], (req, res) => {
+  res.send({ok: true})
+})
 app.get('*', renderer)
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000')
