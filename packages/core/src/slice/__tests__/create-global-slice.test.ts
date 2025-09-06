@@ -12,7 +12,8 @@ beforeEach(() => {
 })
 describe('createGlobalStore', () => {
   const initialState = {
-    count: 0
+    count: 0,
+    countryCode: 'IN'
   }
   const globalSliceKey1 = 'sliceKey1'
   enum TEST {
@@ -48,14 +49,37 @@ describe('createGlobalStore', () => {
   })
 
   it('creating global store', async () => {
-    const globalSlice = createGlobalSlice(globalSliceKey1, globalActionSlice)
-    expect(globalSlice(store).getState()).toEqual(
-      globalSlice(store).initialState
-    )
-    globalSlice(store).actions.incrementCount(TEST.A)
+    const globalSlice = createGlobalSlice(
+      globalSliceKey1,
+      globalActionSlice
+    ).init(store)
+    expect(globalSlice.getState()).toEqual(globalSlice.initialState)
+    globalSlice.actions.incrementCount(TEST.A)
     await delay(0)
-    expect(globalSlice(store).getState().count).toEqual(
-      globalSlice(store).initialState.count + 1
+    expect(globalSlice.getState().count).toEqual(
+      globalSlice.initialState.count + 1
     )
+  })
+
+  it('creating global store with server side state', async () => {
+    const serverState = {[globalSliceKey1]: {count: 5}}
+    const globalSlice = createGlobalSlice(globalSliceKey1, globalActionSlice)
+    ///
+    const customStore = configureStore([globalSlice], serverState)
+    const globalSliceInit = globalSlice.init(customStore)
+    expect(globalSliceInit.initialState.count).toEqual(5)
+    expect(globalSliceInit.initialState.countryCode).toEqual('IN')
+  })
+
+  it('creating global store with server side state and overriding state', async () => {
+    const serverState = {[globalSliceKey1]: {count: 5}}
+    const globalSlice = createGlobalSlice(globalSliceKey1, globalActionSlice)
+    globalSlice.overRideInitialState({countryCode: 'BD'})
+    ///
+    const customStore = configureStore([globalSlice], serverState)
+    const globalSliceInit = globalSlice.init(customStore)
+    globalSliceInit.actions.autoIncrementCount()
+    expect(globalSliceInit.initialState.count).toEqual(5)
+    expect(globalSliceInit.initialState.countryCode).toEqual('BD')
   })
 })

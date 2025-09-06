@@ -63,6 +63,9 @@ function createReducerManager(options: IStoreOptions) {
       // Generate a new combined reducer
       combinedReducer = combineReducers(reducers)
     },
+    hasKey(key: string): boolean {
+      return !!reducers[key]
+    },
 
     // Removes a reducer with the specified key
     remove: (key: string) => {
@@ -107,11 +110,7 @@ export function configureStore<S extends {[x: string]: any}>(
     // other store enhancers if any
   )
   // Create a store with the root reducer function being the one exposed by the manager.
-  const store: FCStore = createStore(
-    reducerManager.reduce,
-    initialState,
-    enhancer
-  )
+  const store: FCStore = createStore(reducerManager.reduce, {}, enhancer)
   let actionQueue: Array<() => void> = []
 
   const processQueue: Parameters<typeof customRequestIdleCallback>[0] = (
@@ -141,15 +140,14 @@ export function configureStore<S extends {[x: string]: any}>(
   // Optional: Put the reducer manager on the store so it is easily accessible
   store.reducerManager = reducerManager
   store.nameSpace = options.nameSpace ?? ''
+  store.getServerState = () => initialState ?? {}
+
   store.isImmerDisabled = () => options?.disableImmer ?? false
   slices.forEach(slice => {
-    slice(store)
+    slice.init(store)
   })
   if (typeof ioRunner === 'function') {
     store.ioRunner = ioRunner
-  } else {
-    // eslint-disable-next-line no-console
-    console.warn('None Io runner has been register while creating store')
   }
   return store
 }

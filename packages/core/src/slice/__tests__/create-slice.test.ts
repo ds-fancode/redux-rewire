@@ -16,7 +16,10 @@ describe('checking slice', () => {
       count2: 0
     }
     const sliceKey = 'sliceKey'
-
+    enum TEST {
+      A,
+      B
+    }
     const reducerSlice = createReducerSlice(initialState, {
       incrementCount: (state, action: number) => {
         state.count = action
@@ -26,25 +29,24 @@ describe('checking slice', () => {
         state.count = state.count + 1
         return state
       },
-      decrementCount: (state, actionData: string) => {
+      decrementCount: (state, actionData, {globalState}) => {
         return state
       },
-      response: (state, actionData: number) => {
+      response: (state, actionData: TEST) => {
         return state
       }
     })
 
     const actionSlice = createActionSlice(reducerSlice, {
       incrementCount: (actionData, {state, store, actions}) => {
-        const res = 2
-        actions.response(res)
+        actions.response(TEST.A)
         return 1
       },
       decrementCount: (actionData, {state, actions}) => {
-        console.log(state)
         return Promise.resolve(null)
       },
-      response2: (actionData: string) => {
+      response2: actionData => {
+        console.log(actionData)
         return {}
       }
     })
@@ -66,6 +68,7 @@ describe('checking slice', () => {
       const mockCallback = jest.fn()
       const unsubscribe = slice.subscribe(mockCallback)
       slice.actions.incrementCount(0)
+      slice.actions.response2()
       await delay(50)
       expect(mockCallback).not.toHaveBeenCalled()
       unsubscribe()
@@ -85,6 +88,13 @@ describe('checking slice', () => {
     it('initial state should be updated', () => {
       const slice = actionSlice(sliceKey, store, {count: 2})
       expect(slice.getState()).toEqual({...initialState, count: 2})
+    })
+
+    it('check wif serverside state is present', () => {
+      const serverState = {[sliceKey]: {count: 111}}
+      const customStore = configureStore([], serverState)
+      const slice = actionSlice(sliceKey, customStore)
+      expect(slice.getState().count).toEqual(111)
     })
   })
 
@@ -177,6 +187,12 @@ describe('checking slice', () => {
     it('initial state should be updated', () => {
       const slice = actionSlice(sliceKey, nameSpaceStore, {count: 2})
       expect(slice.getState()).toEqual({...initialState, count: 2})
+    })
+    it('check wif serverside state is present', () => {
+      const serverState = {[sliceKey]: {count: 111}}
+      const customStore = configureStore([], serverState)
+      const slice = actionSlice(sliceKey, customStore)
+      expect(slice.getState().count).toEqual(111)
     })
   })
 })

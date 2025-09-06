@@ -4,7 +4,7 @@ import type {FCStore} from '../types/base'
 
 export type ReducerInputFunction<State> = (
   state: State,
-  actionData: any,
+  actionData: any, //never,
   props: {rewireKey: string; store: FCStore; globalState: any}
 ) => State
 
@@ -74,6 +74,7 @@ export const createReducerSlice = <
             action: AnyAction
           ) => {
             if (store.isImmerDisabled()) {
+              // @ts-ignore
               return reducers[reducerKey]!(state, action.payload, {
                 rewireKey: key,
                 globalState: action.globalState,
@@ -81,6 +82,7 @@ export const createReducerSlice = <
               })
             } else {
               return create(state, (draftState: any) => {
+                // @ts-ignore
                 return reducers[reducerKey]?.(draftState, action.payload, {
                   rewireKey: key,
                   globalState: action.globalState,

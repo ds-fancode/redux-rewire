@@ -11,7 +11,7 @@ type ActionArguments<
 > = (
   actionData: Key extends keyof ReducerActions
     ? Parameters<ReducerActions[Key]>[0]
-    : any,
+    : never,
   props: {
     state: State
     actions: AllActions
@@ -34,7 +34,7 @@ export const createActionSlice = <
       AllActions
     >
   } & {
-    [key: string]: ActionArguments<any, ReducerActions, State, AllActions>
+    [key: string]: ActionArguments<string, ReducerActions, State, AllActions>
   },
   AllActions extends {
     [key in
@@ -52,23 +52,25 @@ export const createActionSlice = <
             : (data: Parameters<ActionMap[key]>[0]) => void
           : never
         : never
+  },
+  SliceReturnType extends {
+    key: string
+    initialState: State
+    actions: AllActions
+    subscribe: (cb: (state: State) => void) => () => void
+    getState: () => State
   }
 >(
   reducerSlice: ReducerSlice,
   actionMap: ActionMap
 ) => {
   // THIS LINE RUN ONLY ONCE
+  let result: SliceReturnType = null as any
   return (
     key: string,
     store: FCStore,
     overrideInitialState?: Partial<State>
-  ): {
-    key: string
-    initialState: State
-    actions: AllActions
-    subscribe: (cb: (state: State) => void) => () => void
-    getState: () => State
-  } => {
+  ): SliceReturnType => {
     // THIS LINE RUN MULTIPLE TIMES
     if (!key) {
       throw new Error('Key is required to create a action slice')
@@ -79,12 +81,20 @@ export const createActionSlice = <
       )
     }
     const nameSpacedKey = store.nameSpace ? `${store.nameSpace}/${key}` : key
+
+    if (store.reducerManager.hasKey(nameSpacedKey)) {
+      if (result === null) {
+        throw new Error(
+          'Action slice should not return null in any case, please check'
+        )
+      }
+      return result
+    }
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
-    const {initialState, reducerActions} = reducerSlice(
-      nameSpacedKey,
-      store,
-      overrideInitialState
-    )
+    const {initialState, reducerActions} = reducerSlice(nameSpacedKey, store, {
+      ...store.getServerState()?.[nameSpacedKey],
+      ...overrideInitialState
+    })
 
     //#region create empty action
     const allAvailableActionKeys = Object.keys(actionMap).concat(
@@ -94,10 +104,10 @@ export const createActionSlice = <
     const actions = createActionsReference(allAvailableActionKeys)
     // we already have mapped actionRef, we do not need to map action to execute reducerSlice and ioAction
     allAvailableActionKeys.forEach(actionKey => {
-      actions[actionKey] = (data: any) => {
+      actions[actionKey] = (data: never) => {
         const actionWrapper = () => {
           const prevState =
-            (store.getState?.() as any)[nameSpacedKey] ?? initialState
+            (store.getState?.() as any)?.[nameSpacedKey] ?? initialState
           // This order is important
           // firstly, run our reducers to reducerSlice states
           if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
@@ -107,17 +117,29 @@ export const createActionSlice = <
             actionMap[actionKey] &&
             typeof actionMap[actionKey] === 'function'
           ) {
-            customRequestIdleCallback(() => {
-              const globalState = store.getState?.() ?? {}
-              const currentState = globalState?.[nameSpacedKey] ?? initialState
-              actionMap[actionKey]?.(data, {
-                state: currentState,
-                actions,
-                rewireKey: nameSpacedKey,
-                prevState: prevState,
-                globalState,
-                store
-              })
+            customRequestIdleCallback(async () => {
+              try {
+                const globalState = store.getState?.() ?? {}
+                const currentState =
+                  globalState?.[nameSpacedKey] ?? initialState
+                const ioActions = await actionMap[actionKey]?.(data, {
+                  state: currentState,
+                  actions,
+                  rewireKey: nameSpacedKey,
+                  prevState: prevState,
+                  globalState,
+                  store
+                })
+                // need to keep this to support existing architecture
+                if (typeof store.ioRunner === 'function') {
+                  store.ioRunner(ioActions)
+                }
+              } catch (err) {
+                console.error(
+                  `error running ioActions check action for key ${actionKey}`,
+                  err
+                )
+              }
             })
           }
         }
@@ -125,11 +147,11 @@ export const createActionSlice = <
       }
     })
 
-    return {
+    result = {
       key: nameSpacedKey,
       initialState: initialState as State,
       actions: actions,
-      subscribe: cb => {
+      subscribe: (cb: any) => {
         let tempPrevState = initialState as State
         return store.subscribe(() => {
           const gState = store.getState() ?? {}
@@ -145,6 +167,7 @@ export const createActionSlice = <
       getState: () => {
         return store.getState()?.[nameSpacedKey] ?? initialState
       }
-    }
+    } as any
+    return result
   }
 }

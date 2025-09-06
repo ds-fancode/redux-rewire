@@ -1,15 +1,15 @@
-import type {ProviderProps} from 'react-redux'
+import React, {createContext, type ReactNode} from 'react'
 import {Provider} from 'react-redux'
-import React from 'react'
+import type {FCStore} from '@ds-fancode/redux-rewire-core'
 
-// export const RewireContext = createContext<{}>({})
+export const RewireContext = createContext<FCStore>(null as any)
 
 export const RewireProvider = React.memo(
-  ({store, children, ...args}: ProviderProps) => {
+  ({store, children}: {store: FCStore; children: ReactNode}) => {
     return (
-      <Provider store={store} {...args}>
-        {children}
-      </Provider>
+      <RewireContext.Provider value={store}>
+        <Provider store={store}>{children}</Provider>
+      </RewireContext.Provider>
     )
   }
 )

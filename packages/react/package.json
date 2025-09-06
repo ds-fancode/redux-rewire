@@ -1,6 +1,6 @@
 {
   "name": "@ds-fancode/redux-rewire-react",
-  "version": "0.0.16",
+  "version": "0.0.17-beta.3",
   "description": "State management library for react based applications",
   "author": "FanCode",
   "license": "ISC",
@@ -55,7 +55,7 @@
     "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +"
   },
   "dependencies": {
-    "react-redux": "^9.2.0"
+    "react-redux": "9.2.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.2",

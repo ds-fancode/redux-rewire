@@ -34,8 +34,8 @@ describe('useRewireState', () => {
   const sliceKey = 'sliceKey2'
 
   const reducerSlice = createReducerSlice(initialState, {
-    incrementCount: (state, action: number) => {
-      state.count = action
+    incrementCount: (state, actionData: number) => {
+      state.count = actionData
       return state
     },
     autoIncrementCount: state => {
@@ -52,7 +52,6 @@ describe('useRewireState', () => {
 
   const actionSlice = createActionSlice(reducerSlice, {
     incrementCount: async (actionData, {state, actions}) => {
-      console.log(state)
       const res = 2
       actions.response(res)
     },

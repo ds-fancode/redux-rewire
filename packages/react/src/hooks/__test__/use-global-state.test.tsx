@@ -15,8 +15,13 @@ beforeEach(() => {
   store = configureStore([], {})
 })
 describe('useRewireState', () => {
-  const initialState = {
-    count: 0
+  enum TEST {
+    A,
+    B
+  }
+  const initialState: {count: number; country: TEST} = {
+    count: 0,
+    country: TEST.B
   }
   const reducerSlice = createReducerSlice(initialState, {
     incrementCount: (state, action: number, {globalState}) => {
@@ -54,9 +59,13 @@ describe('useRewireState', () => {
     const [state, actions] = useGlobalState(globalSlice, state => {
       return state
     })
+    const [country] = useGlobalState(globalSlice, state => {
+      return state.country
+    })
     return (
       <div>
         <span>{state.count}</span>
+        <span>{country}</span>
         <button onClick={() => actions.autoIncrementCount()}>
           Change to Dark
         </button>

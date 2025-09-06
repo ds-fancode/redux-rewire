@@ -6,27 +6,30 @@ export const useGlobalState: {
   // overload 1
   <
     GlobalSlice extends ReturnType<typeof createGlobalSlice>,
-    SliceActions extends ReturnType<GlobalSlice>['actions'],
-    SliceState extends ReturnType<GlobalSlice>['initialState'],
+    GlobalSliceInit extends GlobalSlice['init'],
+    SliceActions extends ReturnType<GlobalSliceInit>['actions'],
+    SliceState extends ReturnType<GlobalSliceInit>['initialState'],
     ReturnState
   >(
     actionSlice: GlobalSlice
-  ): [SliceState, SliceActions]
+  ): [string, SliceState, SliceActions]
   // overload 2
   <
     GlobalSlice extends ReturnType<typeof createGlobalSlice>,
-    SliceActions extends ReturnType<GlobalSlice>['actions'],
-    SliceState extends ReturnType<GlobalSlice>['initialState'],
+    GlobalSliceInit extends GlobalSlice['init'],
+    SliceActions extends ReturnType<GlobalSliceInit>['actions'],
+    SliceState extends ReturnType<GlobalSliceInit>['initialState'],
     ReturnState
   >(
     actionSlice: GlobalSlice,
     stateSelector?: (_: SliceState) => ReturnState,
     equalityFunction?: (a: ReturnState, b: ReturnState) => boolean
-  ): [ReturnState, SliceActions]
+  ): [string, ReturnState, SliceActions]
 } = <
   GlobalSlice extends ReturnType<typeof createGlobalSlice>,
-  SliceActions extends ReturnType<GlobalSlice>['actions'],
-  SliceState extends ReturnType<GlobalSlice>['initialState'],
+  GlobalSliceInit extends GlobalSlice['init'],
+  SliceActions extends ReturnType<GlobalSliceInit>['actions'],
+  SliceState extends ReturnType<GlobalSliceInit>['initialState'],
   ReturnState
 >(
   globalSlice: GlobalSlice,
@@ -35,14 +38,14 @@ export const useGlobalState: {
     a: ReturnState | SliceState,
     b: ReturnState | SliceState
   ) => boolean = shallowEqual
-): [ReturnState | SliceState, SliceActions] => {
+): [string, ReturnState | SliceState, SliceActions] => {
   const store = <FCStore>useStore()
-  const {initialState, actions, key} = useRef(globalSlice(store)).current
+  const {initialState, actions, key} = useRef(globalSlice.init(store)).current
   const state = useSelector((state: any) => {
     const sliceState = state[key] ?? initialState
     return stateSelector ? stateSelector(sliceState) : sliceState
   }, equalityFunction)
   return useMemo(() => {
-    return [state, actions as any]
-  }, [state, actions])
+    return [key, state, actions as any]
+  }, [key, state, actions])
 }

@@ -17,9 +17,11 @@ export interface FCStore extends Store {
     reduce: Reducer
     add: (key: string, reducer: Reducer) => void
     remove: (key: string) => void
+    hasKey: (key: string) => boolean
   }
   ioRunner: (actionReturn: any) => any
   isImmerDisabled: () => boolean
   nameSpace: string
+  getServerState: () => any
   addToQueue: (actionFunc: any) => void
 }

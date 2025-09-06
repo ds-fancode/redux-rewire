@@ -1,7 +1,7 @@
 import {useMemo, useRef} from 'react'
 import {shallowEqual, useSelector, useStore} from 'react-redux'
-import type {FCStore} from '@ds-fancode/redux-rewire-core'
-import {createActionSlice} from '@ds-fancode/redux-rewire-core'
+import {createActionSlice, type FCStore} from '@ds-fancode/redux-rewire-core'
+// import {RewireContext} from '../core/Provider'
 
 export const useRewireState: {
   // overload 1
@@ -53,6 +53,7 @@ export const useRewireState: {
     ) => boolean
   }
 ): [Key, ReturnState | SliceState, SliceActions] => {
+  // const store1 = useContext(RewireContext)
   const store = <FCStore>useStore()
   const {initialState, actions} = useRef(
     actionSlice(key, store, options?.overrideInitialState)
