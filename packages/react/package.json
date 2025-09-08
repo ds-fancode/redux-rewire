@@ -51,7 +51,6 @@
     "clean": "rm -rf ./lib ./dist",
     "build": "yarn clean && yarn run -T tsup",
     "prepack": "yarn build",
-    "release": "release-it",
     "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +"
   },
   "dependencies": {
