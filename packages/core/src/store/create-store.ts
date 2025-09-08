@@ -4,11 +4,15 @@ import {createGlobalSlice} from '../slice/create-global-slice'
 import {customRequestIdleCallback} from '../utils/idelCallback'
 import type {FCStore, IStoreOptions} from '../types/base'
 
-function createReducerManager(options: IStoreOptions) {
+function createReducerManager(
+  initialReducers: ReducersMapObject,
+  options: IStoreOptions
+) {
   // Create an object which maps keys to reducers
   // Adding appInit reducer to skip redux store initialize with incorect reducer warning
   const {debug = false} = options
   const reducers: ReducersMapObject = {
+    ...initialReducers,
     appInit: (state = true, action: any) => {
       return state
     },
@@ -87,11 +91,22 @@ function createReducerManager(options: IStoreOptions) {
 
 export function configureStore<S extends {[x: string]: any}>(
   slices: Array<ReturnType<typeof createGlobalSlice>>,
-  initialState: S,
+  initialState?: S,
   options: IStoreOptions = {}
 ) {
   const {middlewares, ioRunner, debug} = options || {}
-  const reducerManager = createReducerManager(options)
+  /**
+   * Creating this temp reducers so that ssr state is not lost
+   * Also for compatibility with old redux-rewire arch
+   */
+  const tempReducers: ReducersMapObject = {}
+  if (initialState) {
+    for (const key in initialState) {
+      tempReducers[key] = (state: any = initialState[key]) => state ?? {}
+    }
+  }
+
+  const reducerManager = createReducerManager(tempReducers, options)
   let middlewareList = middlewares ?? []
   /**
    * Add dev to support for debugging in dev mode only
@@ -111,6 +126,7 @@ export function configureStore<S extends {[x: string]: any}>(
   )
   // Create a store with the root reducer function being the one exposed by the manager.
   const store: FCStore = createStore(reducerManager.reduce, {}, enhancer)
+  const preLoadedCache: Record<string, any> = {}
   let actionQueue: Array<() => void> = []
 
   const processQueue: Parameters<typeof customRequestIdleCallback>[0] = (
@@ -131,18 +147,26 @@ export function configureStore<S extends {[x: string]: any}>(
       customRequestIdleCallback(processQueue)
     }
   }
-
+  /**
+   * Adding some properties on store
+   * @param actionFunc
+   */
   store.addToQueue = actionFunc => {
+    // Optional: Put the reducer manager on the store so it is easily accessible
     actionQueue.push(actionFunc)
     customRequestIdleCallback(processQueue)
   }
-
-  // Optional: Put the reducer manager on the store so it is easily accessible
   store.reducerManager = reducerManager
   store.nameSpace = options.nameSpace ?? ''
-  store.getServerState = () => initialState ?? {}
-
-  store.isImmerDisabled = () => options?.disableImmer ?? false
+  store.getServerSnapshot = () => initialState ?? {}
+  store.setPreLoadedState = (key: string, state: any) => {
+    preLoadedCache[key] = state
+  }
+  store.getPreLoadedState = (key: string) => preLoadedCache[key]
+  store.disableAutoImmutability = () => options?.disableImmer ?? false
+  /**
+   * End
+   */
   slices.forEach(slice => {
     slice.init(store)
   })

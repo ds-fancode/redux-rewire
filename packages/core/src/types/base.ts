@@ -20,8 +20,11 @@ export interface FCStore extends Store {
     hasKey: (key: string) => boolean
   }
   ioRunner: (actionReturn: any) => any
-  isImmerDisabled: () => boolean
+  disableAutoImmutability: () => boolean
   nameSpace: string
-  getServerState: () => any
+  getServerSnapshot: () => Record<string, any>
+  setPreLoadedState: (key: string, state: any) => void
+  getPreLoadedState: (key: string) => Record<string, any>
+  preLoadedState: (key: string, state: any) => void
   addToQueue: (actionFunc: any) => void
 }

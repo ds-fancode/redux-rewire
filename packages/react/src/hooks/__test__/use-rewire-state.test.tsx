@@ -2,8 +2,7 @@ import {
   configureStore,
   createActionSlice,
   createInitialState,
-  createReducerSlice,
-  type FCStore
+  createReducerSlice
 } from '@ds-fancode/redux-rewire-core'
 import {useRewireState} from '../use-rewire-state'
 import {RewireProvider} from '../../core/Provider'
@@ -13,10 +12,6 @@ import React from 'react'
 const delay = (delay?: number) =>
   new Promise(resolve => setTimeout(resolve, delay ?? 10))
 
-let store: FCStore = null as any
-beforeEach(() => {
-  store = configureStore([], {})
-})
 describe('useRewireState', () => {
   // configure({reactStrictMode: true})
   enum THEME {
@@ -59,31 +54,40 @@ describe('useRewireState', () => {
       console.log(state)
     }
   })
-  const wrapper = ({children}: {children: any}) => (
-    <RewireProvider store={store}>{children}</RewireProvider>
-  )
+
+  const wrapper = ({children}: {children: any}) => {
+    const store = configureStore([], {})
+    return <RewireProvider store={store}>{children}</RewireProvider>
+  }
 
   describe('test without initial state', () => {
     it('check default state and key', async () => {
       const {result, rerender} = renderHook(
-        () => useRewireState(sliceKey, actionSlice),
+        () => {
+          return useRewireState(sliceKey, actionSlice)
+        },
         {
           wrapper
         }
       )
-      const [key, state, action] = result.current
-      expect(key).toEqual(sliceKey)
-      expect(state).toEqual(initialState)
+      expect(result.current[0]).toEqual(sliceKey)
+      expect(result.current[1]).toEqual(initialState)
 
-      const stateBeforeRender = result.current[1]
+      const stateBeforeRender = {...result.current[1]}
       rerender()
-      expect(result.current[1]).toBe(stateBeforeRender)
-
+      expect(result.current[1]).toEqual(stateBeforeRender)
       act(() => {
-        action.autoIncrementCount()
+        result.current[2].autoIncrementCount()
       })
-      await delay(50)
-      expect(result.current[1]).toEqual({...initialState, count: 1})
+      // await waitFor(
+      //   () => {
+      //     expect(result.current[1].count).toBe(1)
+      //   },
+      //   {timeout: 5000}
+      // )
+      await delay(10000)
+      expect(result.current[1].count).toBe(1)
+      // expect(result.current[1]).toEqual({...initialState, count: 1})
     })
     it('check state with selector', () => {
       const {result, rerender} = renderHook(

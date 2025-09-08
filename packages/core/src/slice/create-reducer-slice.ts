@@ -73,7 +73,7 @@ export const createReducerSlice = <
             state: typeof initialState,
             action: AnyAction
           ) => {
-            if (store.isImmerDisabled()) {
+            if (store.disableAutoImmutability()) {
               // @ts-ignore
               return reducers[reducerKey]!(state, action.payload, {
                 rewireKey: key,
@@ -104,9 +104,11 @@ export const createReducerSlice = <
       },
       {updatedReducerMap: {}, updatedReducerActionMap: {}}
     )
-    const finalState: State = overrideInitialState
-      ? {...initialState, ...overrideInitialState}
-      : initialState
+    const finalState: State = {
+      ...initialState,
+      ...store.getServerSnapshot()?.[key],
+      ...overrideInitialState
+    }
 
     const updatedReducers = createReducers(key, updatedReducerMap, finalState)
     store.reducerManager.add(key, updatedReducers)

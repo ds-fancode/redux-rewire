@@ -65,7 +65,6 @@ export const createActionSlice = <
   actionMap: ActionMap
 ) => {
   // THIS LINE RUN ONLY ONCE
-  let result: SliceReturnType = null as any
   return (
     key: string,
     store: FCStore,
@@ -82,19 +81,12 @@ export const createActionSlice = <
     }
     const nameSpacedKey = store.nameSpace ? `${store.nameSpace}/${key}` : key
 
-    if (store.reducerManager.hasKey(nameSpacedKey)) {
-      if (result === null) {
-        throw new Error(
-          'Action slice should not return null in any case, please check'
-        )
-      }
-      return result
-    }
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
-    const {initialState, reducerActions} = reducerSlice(nameSpacedKey, store, {
-      ...store.getServerState()?.[nameSpacedKey],
-      ...overrideInitialState
-    })
+    const {initialState, reducerActions} = reducerSlice(
+      nameSpacedKey,
+      store,
+      overrideInitialState
+    )
 
     //#region create empty action
     const allAvailableActionKeys = Object.keys(actionMap).concat(
@@ -147,7 +139,7 @@ export const createActionSlice = <
       }
     })
 
-    result = {
+    const result = {
       key: nameSpacedKey,
       initialState: initialState as State,
       actions: actions,

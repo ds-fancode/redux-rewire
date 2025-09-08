@@ -1,4 +1,4 @@
-import {useMemo, useRef} from 'react'
+import {useMemo, useState} from 'react'
 import {shallowEqual, useSelector, useStore} from 'react-redux'
 import {createActionSlice, type FCStore} from '@ds-fancode/redux-rewire-core'
 // import {RewireContext} from '../core/Provider'
@@ -53,16 +53,17 @@ export const useRewireState: {
     ) => boolean
   }
 ): [Key, ReturnState | SliceState, SliceActions] => {
-  // const store1 = useContext(RewireContext)
   const store = <FCStore>useStore()
-  const {initialState, actions} = useRef(
+  const [slice] = useState(() =>
     actionSlice(key, store, options?.overrideInitialState)
-  ).current
+  )
+
   const state = useSelector((state: any) => {
-    const sliceState = state[key] ?? initialState
+    const sliceState = state[slice.key] ?? slice.initialState
     return stateSelector ? stateSelector(sliceState) : sliceState
   }, options?.equalityFunction ?? shallowEqual)
+
   return useMemo(() => {
-    return [key, state, actions as any]
-  }, [key, state, actions])
+    return [slice.key as Key, state, slice.actions as any]
+  }, [slice.key, state, slice.actions])
 }

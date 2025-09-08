@@ -1,4 +1,4 @@
-import {useMemo, useRef} from 'react'
+import {useMemo, useState} from 'react'
 import {shallowEqual, useSelector, useStore} from 'react-redux'
 import {createGlobalSlice, type FCStore} from '@ds-fancode/redux-rewire-core'
 
@@ -40,12 +40,14 @@ export const useGlobalState: {
   ) => boolean = shallowEqual
 ): [string, ReturnState | SliceState, SliceActions] => {
   const store = <FCStore>useStore()
-  const {initialState, actions, key} = useRef(globalSlice.init(store)).current
+  const [slice] = useState(() => globalSlice.init(store))
+
   const state = useSelector((state: any) => {
-    const sliceState = state[key] ?? initialState
+    const sliceState = state[slice.key] ?? slice.initialState
     return stateSelector ? stateSelector(sliceState) : sliceState
   }, equalityFunction)
+
   return useMemo(() => {
-    return [key, state, actions as any]
-  }, [key, state, actions])
+    return [slice.key, state, slice.actions as any]
+  }, [slice.key, state, slice.actions])
 }

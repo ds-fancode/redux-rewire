@@ -56,10 +56,10 @@ describe('useRewireState', () => {
   const globalSlice = createGlobalSlice('global-key', actionSlice)
 
   const TestComponent: React.FC = () => {
-    const [state, actions] = useGlobalState(globalSlice, state => {
+    const [, state, actions] = useGlobalState(globalSlice, state => {
       return state
     })
-    const [country] = useGlobalState(globalSlice, state => {
+    const [, country] = useGlobalState(globalSlice, state => {
       return state.country
     })
     return (
