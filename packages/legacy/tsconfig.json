@@ -1,37 +1,14 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "es2022",
-    //    "verbatimModuleSyntax": true,
-    "allowJs": false,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "moduleResolution": "bundler",
-    "module": "ES2022",
-    "outDir": "lib/esm",
-    "sourceMap": true,
-    "lib": [
-      "es2022",
-      "dom"
-    ],
+    "rootDir": "src",
+    "baseUrl": "src",
+    "composite": true,
     "declaration": true,
     "incremental": true,
-    "rootDir": "src",
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-    //
-    "jsx": "react",
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "strictNullChecks": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": "src"
+    "declarationMap": true,
+    "sourceMap": true,
+    "jsx": "react"
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"]
 }

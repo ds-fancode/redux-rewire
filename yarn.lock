@@ -5337,9 +5337,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redux-rewire/core2@workspace:packages/core2":
+"@redux-rewire/core2@workspace:packages/experimental_core":
   version: 0.0.0-use.local
-  resolution: "@redux-rewire/core2@workspace:packages/core2"
+  resolution: "@redux-rewire/core2@workspace:packages/experimental_core"
   dependencies:
     "@babel/preset-env": "npm:^7.23.2"
     "@babel/preset-typescript": "npm:^7.23.2"
