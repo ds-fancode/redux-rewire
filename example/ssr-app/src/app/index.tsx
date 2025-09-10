@@ -15,11 +15,11 @@ const ClientApp = () => {
     middlewares: [logger]
   })
   return (
-    // <React.StrictMode>
-    <RewireProvider store={store}>
-      <App />
-    </RewireProvider>
-    // </React.StrictMode>
+    <React.StrictMode>
+      <RewireProvider store={store}>
+        <App />
+      </RewireProvider>
+    </React.StrictMode>
   )
 }
 

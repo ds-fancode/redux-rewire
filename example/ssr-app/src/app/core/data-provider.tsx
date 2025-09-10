@@ -1,21 +1,26 @@
-import React from 'react'
+import React, {createContext, useState} from 'react'
 
 export class DataProviderClass {
   private promisesMap: {[key: string]: Promise<any>} = {}
   add(key: string, promise: Promise<any>) {
+    console.log('DataProviderClass adding promise for key = ', key)
     this.promisesMap[key] = promise
   }
   get(key: string) {
     return this.promisesMap[key]
   }
+  remove(key: string) {
+    delete this.promisesMap[key]
+  }
 }
 
-export const DataContext = React.createContext<DataProviderClass>(null as any)
+export const DataContext = createContext<DataProviderClass>(null as any)
 
-export const DataProvider = (props: any) => {
-  const [value] = React.useState(new DataProviderClass())
+const DataProviderView = (props: any) => {
+  const [value] = useState(new DataProviderClass())
   console.log('DataProvider render')
-  return (
-    <DataContext.Provider value={value}>{props.children}</DataContext.Provider>
-  )
+  // @ts-ignore
+  return <DataContext value={value}>{props.children}</DataContext>
 }
+
+export const DataProvider = React.memo(DataProviderView)

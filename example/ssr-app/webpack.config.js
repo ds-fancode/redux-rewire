@@ -37,7 +37,7 @@ const clientApp = {
     path: path.resolve(__dirname, 'dist/client'), // The directory to output bundled files
     filename: 'main.js' // The name of the bundled JavaScript file
   },
-  mode: process.env?.NODE_ENV ?? 'development', // Use 'production' for production builds
+  mode: 'development', // Use 'production' for production builds
   devtool: 'inline-source-map', // Source maps for easier debugging
   devServer: {
     contentBase: './dist', // Where the dev server will look for files

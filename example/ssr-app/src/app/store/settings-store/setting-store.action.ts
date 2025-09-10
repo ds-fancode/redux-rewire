@@ -5,7 +5,7 @@ export const settingStoreAction = createActionSlice(settingStoreReducer, {
   mount: async (actionData, {actions}) => {
     // make api call
     console.log('settingStoreAction >> actions 1')
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise(resolve => setTimeout(resolve, 1000))
     console.log('settingStoreAction >> actions 2')
 
     actions.loaded()

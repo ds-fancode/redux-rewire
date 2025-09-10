@@ -3,7 +3,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "NODE_ENV=development webpack --watch",
-    "build": "NODE_ENV=production webpack --production"
+    "build": "NODE_ENV=production webpack"
   },
   "dependencies": {
     "@ds-fancode/redux-rewire-core": "workspace:*",

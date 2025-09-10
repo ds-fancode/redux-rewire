@@ -8,25 +8,16 @@ import {
   StyledTodoListWrapper
 } from './todo-styles'
 import TodoItem from './todo-item/todo-item.view'
-import {useSsrEffect2} from '../../hooks/use-ssr-effect'
+import {useDataSuspense} from '../../hooks/use-data-suspense'
 
 const TodoListWrapper = (props: {source: string}) => {
   const [key, todoState, actions] = useRewireState(
     `${props.source}/to-do`,
     todoAction
   )
-  useSsrEffect2(key, todoState, () => {
+  useDataSuspense(key, todoState, () => {
     actions.mount()
   })
-
-  // useSsrEffect(
-  //   key,
-  //   todoState,
-  //   () => {
-  //     actions.mount()
-  //   },
-  //   true
-  // )
 
   return (
     <StyledTodoListWrapper>

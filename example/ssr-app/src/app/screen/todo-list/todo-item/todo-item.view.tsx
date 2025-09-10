@@ -27,8 +27,13 @@ const TodoItem = React.memo(
       }
     )
     useEffect(() => {
+      console.log('TodoItem effect', props.isDone, state.todo?.isDone)
       if (props.isDone !== state.todo?.isDone) {
-        actions.updateToto(props)
+        actions.updateToto({
+          id: props.id,
+          todo: props.todo,
+          isDone: props.isDone
+        })
       }
     }, [props.isDone, state.todo?.isDone])
 

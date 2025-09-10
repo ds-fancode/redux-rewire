@@ -6,9 +6,10 @@ import {
 } from '@ds-fancode/redux-rewire-core'
 import {useRewireState} from '../use-rewire-state'
 import {RewireProvider} from '../../core/Provider'
-import {act, renderHook} from '@testing-library/react'
-import React from 'react'
+import {act, renderHook, waitFor} from '@testing-library/react'
+import React, {StrictMode} from 'react'
 
+// @ts-ignore
 const delay = (delay?: number) =>
   new Promise(resolve => setTimeout(resolve, delay ?? 10))
 
@@ -57,7 +58,11 @@ describe('useRewireState', () => {
 
   const wrapper = ({children}: {children: any}) => {
     const store = configureStore([], {})
-    return <RewireProvider store={store}>{children}</RewireProvider>
+    return (
+      <StrictMode>
+        <RewireProvider store={store}>{children}</RewireProvider>
+      </StrictMode>
+    )
   }
 
   describe('test without initial state', () => {
@@ -79,15 +84,12 @@ describe('useRewireState', () => {
       act(() => {
         result.current[2].autoIncrementCount()
       })
-      // await waitFor(
-      //   () => {
-      //     expect(result.current[1].count).toBe(1)
-      //   },
-      //   {timeout: 5000}
-      // )
-      await delay(10000)
-      expect(result.current[1].count).toBe(1)
-      // expect(result.current[1]).toEqual({...initialState, count: 1})
+      rerender()
+      // await delay(500)
+      await waitFor(() => {
+        expect(result.current[1].count).toBe(1)
+        expect(result.current[1]).toEqual({...initialState, count: 1})
+      })
     })
     it('check state with selector', () => {
       const {result, rerender} = renderHook(

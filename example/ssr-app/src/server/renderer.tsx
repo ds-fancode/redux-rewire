@@ -70,7 +70,7 @@ export const renderer = async (req: Request, res: Response) => {
   const store = configureStore([], {})
   const sheet = new ServerStyleSheet()
   let didError = false
-  console.log('========= Starting renderer for ==========', req.url)
+  console.log('========= Starting renderer for =========', req.url)
   res?.socket?.on('error', error => {
     console.error('Fatal', error)
   })

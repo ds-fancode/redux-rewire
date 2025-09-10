@@ -1,7 +1,7 @@
 import React, {use} from 'react'
 import {useGlobalState} from '@ds-fancode/redux-rewire-react'
 import {settingStore} from './store/settings-store'
-import {useSsrEffect2} from './hooks/use-ssr-effect'
+import {useDataSuspense} from './hooks/use-data-suspense'
 
 const LazyComp = () => {
   const data: any = use(
@@ -20,19 +20,10 @@ const AppBootView = (props: any) => {
     useGlobalState(settingStore)
   console.log('AppBootView render 1', settingState.loaded)
 
-  useSsrEffect2(settingKey, settingState, () => {
+  useDataSuspense(settingKey, settingState, () => {
     console.log('calling setting store mount')
     settingActions.mount()
   })
-  // useSsrEffect(
-  //   settingKey,
-  //   settingState,
-  //   () => {
-  //     console.log('calling setting store mount')
-  //     settingActions.mount()
-  //   },
-  //   true
-  // )
   console.log('AppBootView render 2', settingState.loaded)
   return settingState.loaded ? children : null
 }

@@ -1,11 +1,24 @@
-import {useContext, useEffect, useState} from 'react'
+import {startTransition, useContext, useEffect, useState} from 'react'
 import {RewireContext} from '../core/Provider'
 
-export const useSelector = () => {
+export const useSelector2 = (selector: any, equalityFnOrOptions: any) => {
   const {store} = useContext(RewireContext)
-  const [state, setState] = useState()
+  const [state, setState] = useState(selector(store.getState()))
 
-  useEffect(() => {})
+  useEffect(() => {
+    let prevState = state
+    const unsub = store.subscribe(() => {
+      const nextState = selector(store.getState())
+      if (!equalityFnOrOptions(prevState, nextState)) {
+        startTransition(() => {
+          setState(nextState)
+        })
+      }
+    })
+    return () => {
+      unsub?.()
+    }
+  }, [state])
 
-  return null
+  return state
 }
