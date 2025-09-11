@@ -89,9 +89,12 @@ function createReducerManager(
   }
 }
 
-export function configureStore<S extends {[x: string]: any}>(
-  slices: Array<ReturnType<typeof createGlobalSlice>>,
-  initialState?: S,
+export function configureStore<
+  GlobalSlice extends ReturnType<typeof createGlobalSlice>,
+  State extends {[x: string]: any}
+>(
+  globalSlices: Array<GlobalSlice>,
+  initialState?: State,
   options: IStoreOptions = {}
 ) {
   const {middlewares, ioRunner, debug} = options || {}
@@ -167,7 +170,7 @@ export function configureStore<S extends {[x: string]: any}>(
   /**
    * End
    */
-  slices.forEach(slice => {
+  globalSlices.forEach(slice => {
     slice.init(store)
   })
   if (typeof ioRunner === 'function') {

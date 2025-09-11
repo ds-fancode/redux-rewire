@@ -29,14 +29,14 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/cjs/index.debug.d.ts",
-      "import": "./dist/esm/index.debug.mjs",
-      "require": "./dist/cjs/index.debug.js",
       "production": {
         "types": "./dist/cjs/index.min.d.ts",
         "import": "./dist/esm/index.min.mjs",
         "require": "./dist/cjs/index.min.js"
       },
+      "types": "./dist/cjs/index.debug.d.ts",
+      "import": "./dist/esm/index.debug.mjs",
+      "require": "./dist/cjs/index.debug.js",
       "default": "./dist/cjs/index.debug.js"
     }
   },

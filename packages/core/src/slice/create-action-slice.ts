@@ -1,7 +1,7 @@
-import {createActionsReference} from './create-actions-reference'
-import {createReducerSlice} from './create-reducer-slice'
 import type {ActionFunction, FCStore} from '../types/base'
 import {customRequestIdleCallback} from '../utils/idelCallback'
+import {createActionsReference} from './create-actions-reference'
+import {createReducerSlice} from './create-reducer-slice'
 
 type ActionArguments<
   Key,
@@ -33,39 +33,30 @@ export const createActionSlice = <
       State,
       AllActions
     >
-  } & {
-    [key: string]: ActionArguments<string, ReducerActions, State, AllActions>
   },
   AllActions extends {
-    [key in
-      | keyof ReducerActions
-      | keyof ActionMap]: key extends keyof ReducerActions
-      ? ReducerActions[key] extends (...args: any[]) => any
-        ? Parameters<ReducerActions[key]>[0] extends undefined
-          ? () => void
-          : (data: Parameters<ReducerActions[key]>[0]) => void
-        : never
-      : key extends keyof ActionMap
-        ? ActionMap[key] extends (...args: any[]) => any
-          ? Parameters<ActionMap[key]>[0] extends undefined
-            ? () => void
-            : (data: Parameters<ActionMap[key]>[0]) => void
-          : never
-        : never
-  },
-  SliceReturnType extends {
-    key: string
-    initialState: State
-    actions: AllActions
-    subscribe: (cb: (state: State) => void) => () => void
-    getState: () => State
+    [Key in keyof ReducerActions]: ReducerActions[Key] extends (
+      ...args: any[]
+    ) => any
+      ? Parameters<ReducerActions[Key]>[0] extends undefined
+        ? () => void
+        : (data: Parameters<ReducerActions[Key]>[0]) => void
+      : never
   }
 >(
   reducerSlice: ReducerSlice,
   actionMap: ActionMap
 ) => {
   // THIS LINE RUN ONLY ONCE
-  return (
+  return <
+    SliceReturnType extends {
+      key: string
+      initialState: State
+      actions: AllActions
+      subscribe: (cb: (state: State) => void) => () => void
+      getState: () => State
+    }
+  >(
     key: string,
     store: FCStore,
     overrideInitialState?: Partial<State>

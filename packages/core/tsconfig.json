@@ -8,7 +8,8 @@
     "declaration": true,
     "incremental": true,
     "declarationMap": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "noEmit": false
   },
   "include": ["src/**/*"]
 }

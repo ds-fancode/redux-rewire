@@ -33,17 +33,11 @@ describe('createCommandSlice', () => {
       response: (actionData, {state, actions, prevState}) => {
         console.log(state)
       },
-      response2: (actionData: TEST, {state, actions, prevState}) => {
-        console.log(state)
-      },
       emptyActions: (a: number) => {}
     })('test', store)
     actionSlice.actions.mount(TEST.A)
     actionSlice.actions.emptyMount()
-    actionSlice.actions.emptyActions(1)
-    actionSlice.actions.emptyActions(2)
     actionSlice.actions.response({a: 1})
-    actionSlice.actions.response2(TEST.A)
 
     // assert.deepEqual(actual, void 0)
   })

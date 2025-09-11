@@ -1,20 +1,11 @@
-import type {AnyAction, Reducer} from 'redux'
 import {create} from 'mutative'
+import type {AnyAction, Reducer} from 'redux'
 import type {FCStore} from '../types/base'
 
-export type ReducerInputFunction<State> = (
-  state: State,
-  actionData: any, //never,
-  props: {rewireKey: string; store: FCStore; globalState: any}
-) => State
-
-type UpdateInputType<State> = {
-  [key: string]: (state: State, actionData: any) => State
-}
-
 export const createReducers = <State>(
-  reducerKey: string,
-  reducerMap: UpdateInputType<State>,
+  reducerMap: {
+    [key: string]: (state: State, actionData: any) => State
+  },
   initialState: State
 ): Reducer<State, AnyAction> => {
   return (state: State = initialState, action: AnyAction) => {
@@ -29,7 +20,11 @@ export const createReducers = <State>(
 export const createReducerSlice = <
   State,
   ReducerObjType extends {
-    [reducerKey: string]: ReducerInputFunction<State>
+    [reducerKey: string]: (
+      state: State,
+      actionData: never,
+      props: {rewireKey: string; store: FCStore; globalState: any}
+    ) => State
   }
 >(
   initialState: State,
@@ -110,7 +105,7 @@ export const createReducerSlice = <
       ...overrideInitialState
     }
 
-    const updatedReducers = createReducers(key, updatedReducerMap, finalState)
+    const updatedReducers = createReducers(updatedReducerMap, finalState)
     store.reducerManager.add(key, updatedReducers)
     return {
       key,

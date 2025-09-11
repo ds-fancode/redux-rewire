@@ -2,6 +2,7 @@ import {createReducerSlice} from '../create-reducer-slice'
 import {configureStore} from '../../store/create-store'
 import {createActionSlice} from '../create-action-slice'
 import type {FCStore} from '../../types/base'
+import * as console from 'node:console'
 
 const delay = (delay?: number) =>
   new Promise(resolve => setTimeout(resolve, delay ?? 10))
@@ -34,6 +35,9 @@ describe('checking slice', () => {
       },
       response: (state, actionData: TEST) => {
         return state
+      },
+      response2: state => {
+        return state
       }
     })
 
@@ -45,8 +49,8 @@ describe('checking slice', () => {
       decrementCount: (actionData, {state, actions}) => {
         return Promise.resolve(null)
       },
-      response2: actionData => {
-        console.log(actionData)
+      response: actionData => {
+        console.log(actionData === TEST.B)
         return {}
       }
     })

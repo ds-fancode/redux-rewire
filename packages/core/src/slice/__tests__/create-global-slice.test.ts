@@ -27,7 +27,7 @@ describe('createGlobalStore', () => {
       state.count = state.count + 1
       return state
     },
-    decrementCount: (state, actionData: string) => {
+    decrementCount: (state, actionData) => {
       return state
     },
     response: (state, actionData: TEST) => {
@@ -45,7 +45,6 @@ describe('createGlobalStore', () => {
   })
 
   const globalSlice = createGlobalSlice(globalSliceKey1, globalActionSlice)
-
   describe('createGlobalSlice basic', () => {
     it('creating global store', done => {
       const store = configureStore([], {})

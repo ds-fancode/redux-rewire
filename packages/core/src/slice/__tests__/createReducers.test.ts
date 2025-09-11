@@ -5,7 +5,6 @@ describe('createReducer', () => {
     it('__tests__ single reducer', () => {
       const state = {count: 0}
       const reducers = createReducers(
-        'test',
         {
           loadData: (state, action) => {
             return {...state, count: state.count + action.count}
