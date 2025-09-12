@@ -1,4 +1,4 @@
-import produce from 'immer'
+import {create} from 'mutative'
 import type {AnyAction} from 'redux'
 import {RESERVED_ACTIONS} from '../constant'
 import {createReducers} from './create-reducer'
@@ -28,8 +28,8 @@ export const createReducerSlice: CreateReducerSliceType = function (
     }>((acc, reducerKey) => {
       if (reducers[reducerKey]) {
         const combinedKey = `${key}/${reducerKey}`
-        acc[combinedKey] = produce(
-          (draftState: typeof initialState, action: AnyAction) => {
+        acc[combinedKey] = (state: typeof initialState, action: AnyAction) => {
+          return create(state, (draftState: any) => {
             try {
               return reducers[reducerKey]?.(draftState, action.payload, {
                 reduxKey: key,
@@ -50,8 +50,8 @@ export const createReducerSlice: CreateReducerSliceType = function (
               }, 0)
             }
             return draftState
-          }
-        )
+          })
+        }
       }
       return acc
     }, {})

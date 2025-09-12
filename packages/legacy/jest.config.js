@@ -12,11 +12,10 @@ module.exports = {
   testPathIgnorePatterns: [
     '<rootDir>/build/',
     '<rootDir>/node_modules/',
-    '<rootDir>/dist/',
+    '<rootDir>/dist/'
   ],
-  setupFilesAfterEnv: ['<rootDir>/jest.mock.ts'],
   moduleNameMapper: {
     '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2|svg)$':
-      'identity-obj-proxy',
-  },
+      'identity-obj-proxy'
+  }
 }

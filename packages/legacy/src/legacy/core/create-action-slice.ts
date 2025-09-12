@@ -7,15 +7,9 @@ export const createActionSlice: CreateActionSliceType = function (
   reducerSlice,
   actionMap
 ) {
-  return function (
-    key,
-    dispatch,
-    getState,
-    actionsRef,
-    ioRunner,
-    overrideInitialState
-  ) {
+  return function (key, store, _, actionsRef, ioRunner, overrideInitialState) {
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
+    const {dispatch, getState} = store || {}
     const {initialState, reducerActions, reducers} = reducerSlice(
       key,
       dispatch,
@@ -65,30 +59,33 @@ export const createActionSlice: CreateActionSliceType = function (
         inputNewState?: any,
         inputPrevState?: any
       ) => {
-        const prevState =
-          inputPrevState ?? (getState?.() as any)[key] ?? initialState
-        // before runIO started run our reducers to reducerSlice states
-        if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
+        const actionWrapper = () => {
+          const prevState =
+            inputPrevState ?? (getState?.() as any)[key] ?? initialState
+          // before runIO started run our reducers to reducerSlice states
+          if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
 
-        // Async actions will get updated state after reducer work is done
-        // first make async called to make sure we have current state to be used in async action
+          // Async actions will get updated state after reducer work is done
+          // first make async called to make sure we have current state to be used in async action
 
-        if (asyncActions[actionKey]) {
-          const ioActions: any[] = asyncActions[actionKey](
-            data,
-            inputNewState,
-            prevState
-          )
-          // execute IO
-          if (typeof ioRunner === 'function') {
-            try {
-              ioRunner(ioActions)
-            } catch (err) {
-              console.error('error running ioRunner', err)
+          if (asyncActions[actionKey]) {
+            const ioActions: any[] = asyncActions[actionKey](
+              data,
+              inputNewState,
+              prevState
+            )
+            // execute IO
+            if (typeof ioRunner === 'function') {
+              try {
+                ioRunner(ioActions)
+              } catch (err) {
+                console.error('error running ioRunner', err)
+              }
             }
           }
+          return true
         }
-        return true
+        store?.addToQueue(actionWrapper)
       }
     })
     //#endregion

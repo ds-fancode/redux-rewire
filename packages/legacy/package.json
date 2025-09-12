@@ -1,7 +1,9 @@
 {
-  "name": "redux-rewire",
-  "version": "0.0.16",
+  "name": "@ds-fancode/redux-rewire",
+  "version": "0.0.16-beta.1",
   "description": "State management library for react based applications",
+  "author": "FanCode",
+  "license": "ISC",
   "keywords": [
     "redux",
     "reducer",
@@ -19,11 +21,25 @@
     "dist",
     "src"
   ],
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/cjs/index.d.ts",
+  "main": "dist/cjs/index.debug.js",
+  "module": "dist/esm/index.debug.mjs",
+  "types": "dist/cjs/index.debug.d.ts",
   "react-native": "src/index",
   "source": "src/index",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/cjs/index.debug.d.ts",
+      "production": {
+        "types": "./dist/cjs/index.min.d.ts",
+        "import": "./dist/esm/index.min.mjs",
+        "require": "./dist/cjs/index.min.js"
+      },
+      "import": "./dist/esm/index.debug.mjs",
+      "require": "./dist/cjs/index.debug.js",
+      "default": "./dist/cjs/index.debug.js"
+    }
+  },
   "scripts": {
     "test": "yarn run -T jest",
     "test-watch": "yarn test -- --watch",
@@ -35,15 +51,12 @@
     "clean": "rm -rf ./lib ./dist",
     "build": "yarn clean && yarn run -T tsup",
     "prepack": "yarn build",
-    "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +",
-    "postinstall": "yarn build"
+    "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +"
   },
-  "author": "FanCode",
-  "license": "ISC",
   "dependencies": {
-    "immer": "^9.0.12",
-    "react-redux": "^9.2.0",
-    "redux": "^5.0.1"
+    "mutative": "1.2.0",
+    "react-redux": "9.2.0",
+    "redux": "5.0.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.2",
@@ -55,10 +68,15 @@
     "react": "19.0.0"
   },
   "peerDependencies": {
+    "@ds-fancode/redux-rewire-core": "*",
     "react": ">=18.x"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/ds-fancode/redux-rewire"
-  }
+  },
+  "sideEffects": false
 }

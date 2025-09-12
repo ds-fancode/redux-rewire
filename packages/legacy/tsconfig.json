@@ -10,5 +10,10 @@
     "sourceMap": true,
     "jsx": "react"
   },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ],
   "include": ["src"]
 }

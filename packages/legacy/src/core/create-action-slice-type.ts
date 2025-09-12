@@ -1,6 +1,5 @@
-import type {AnyAction, Dispatch} from 'redux'
-import type {IReduxStore} from './create-global-state.type'
 import type {CreateReducerSliceType} from './create-reducer-slice-type'
+import type {FCStore} from '@ds-fancode/redux-rewire-core'
 
 export type CreateActionSliceType<> = <
   ReducerSlice extends ReturnType<CreateReducerSliceType> = any,
@@ -40,8 +39,8 @@ export type ActionGetKeyType<
   ActionReturnType
 > = (
   key: string,
-  dispatch?: Dispatch<AnyAction>,
-  getState?: () => IReduxStore,
+  store?: FCStore,
+  _?: any,
   actionsRef?: any,
   ioRunner?: (arg: ActionReturnType) => any,
   overrideInitialState?: Parameters<ReducerSlice>[3]

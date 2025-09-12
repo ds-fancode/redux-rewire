@@ -1,6 +1,6 @@
 import {useMemo} from 'react'
 import {shallowEqual, useDispatch, useSelector, useStore} from 'react-redux'
-import type {FCStore} from '../core/create-store'
+import {type FCStore} from '@ds-fancode/redux-rewire-core'
 import type {UseRewireStateType} from './use-rewire-state.type'
 import {keyHandler} from '../helper/key-handler'
 

@@ -47,7 +47,7 @@ describe('checking slice', () => {
         actions.decrementCount()
         return 1
       },
-      decrementCount: (actionData, {state, actions}) => {
+      decrementCount: (actionData: string, {state, actions}) => {
         return Promise.resolve(null)
       },
       response: actionData => {

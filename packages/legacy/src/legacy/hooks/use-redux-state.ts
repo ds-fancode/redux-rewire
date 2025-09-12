@@ -1,6 +1,6 @@
 import {useMemo} from 'react'
-import {shallowEqual, useDispatch, useSelector, useStore} from 'react-redux'
-import type {FCStore} from '../../core/create-store'
+import {shallowEqual, useSelector, useStore} from 'react-redux'
+import type {FCStore} from '@ds-fancode/redux-rewire-core'
 import type {UseReduxStateType} from './use-redux-state.type'
 
 export const useReduxState: UseReduxStateType = function (
@@ -10,15 +10,13 @@ export const useReduxState: UseReduxStateType = function (
   equalityFn = shallowEqual,
   actionsRef
 ) {
-  const dispatch = useDispatch()
   const store = <FCStore>useStore()
   //#region create and return store
   const {initialState, actions} = useMemo(() => {
     // create once to make sure ref og actions do not change
     const {initialState, reducers, actions} = actionSlice(
       key,
-      dispatch,
-      store.getState,
+      store,
       actionsRef,
       store.ioRunner
     )

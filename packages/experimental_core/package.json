@@ -21,8 +21,8 @@
   "author": "FanCode",
   "license": "ISC",
   "dependencies": {
-    "mutative": "^1.2.0",
-    "redux": "^5.0.1"
+    "mutative": "1.2.0",
+    "redux": "5.0.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.2",

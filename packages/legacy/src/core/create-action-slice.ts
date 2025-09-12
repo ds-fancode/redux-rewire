@@ -7,15 +7,9 @@ export const createActionSlice: CreateActionSliceType = function (
   reducerSlice,
   actionMap
 ) {
-  return function (
-    key,
-    dispatch,
-    getState,
-    actionsRef,
-    ioRunner,
-    overrideInitialState
-  ) {
+  return function (key, store, _, actionsRef, ioRunner, overrideInitialState) {
     // All heavy-lifting is being done in this function to manage dependency of action and ioAction with each other, and for easy testing
+    const {dispatch, getState} = store || {}
     const {initialState, reducerActions, reducers, defaultActionReturnValue} =
       reducerSlice(key, dispatch, getState, overrideInitialState)
 

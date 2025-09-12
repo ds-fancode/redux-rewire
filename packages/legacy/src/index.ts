@@ -1,4 +1,3 @@
-export {configureStore, type FCStore} from './core/create-store'
 export {RewireProvider, RewireContext} from './shared/provider'
 /**
  * Helpers
