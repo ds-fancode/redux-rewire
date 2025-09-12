@@ -10,7 +10,9 @@ type ActionArguments<
   AllActions
 > = (
   actionData: Key extends keyof ReducerActions
-    ? Parameters<ReducerActions[Key]>[0]
+    ? Parameters<ReducerActions[Key]>[0] extends undefined
+      ? never
+      : Parameters<ReducerActions[Key]>[0]
     : never,
   props: {
     state: State
@@ -35,13 +37,21 @@ export const createActionSlice = <
     >
   },
   AllActions extends {
-    [Key in keyof ReducerActions]: ReducerActions[Key] extends (
-      ...args: any[]
-    ) => any
-      ? Parameters<ReducerActions[Key]>[0] extends undefined
-        ? () => void
-        : (data: Parameters<ReducerActions[Key]>[0]) => void
-      : never
+    [key in
+      | keyof ReducerActions
+      | keyof ActionMap]: key extends keyof ReducerActions
+      ? ReducerActions[key] extends (...args: any[]) => any
+        ? Parameters<ReducerActions[key]>[0] extends undefined
+          ? () => void
+          : (data: Parameters<ReducerActions[key]>[0]) => void
+        : never
+      : key extends keyof ActionMap
+        ? ActionMap[key] extends (...args: any[]) => any
+          ? Parameters<ActionMap[key]>[0] extends undefined
+            ? () => void
+            : (data: Parameters<ActionMap[key]>[0]) => void
+          : never
+        : never
   }
 >(
   reducerSlice: ReducerSlice,

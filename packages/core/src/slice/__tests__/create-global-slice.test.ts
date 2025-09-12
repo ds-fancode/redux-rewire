@@ -27,7 +27,7 @@ describe('createGlobalStore', () => {
       state.count = state.count + 1
       return state
     },
-    decrementCount: (state, actionData) => {
+    decrementCount: state => {
       return state
     },
     response: (state, actionData: TEST) => {
@@ -39,7 +39,7 @@ describe('createGlobalStore', () => {
     incrementCount: async (actionData, {state, actions}) => {
       actions.response(TEST.A)
     },
-    decrementCount: (actionData, {state, actions}) => {
+    decrementCount: (actionData: number, {state, actions}) => {
       console.log(state)
     }
   })
@@ -57,6 +57,7 @@ describe('createGlobalStore', () => {
         done()
       })
       globalSliceActive.actions.incrementCount(5)
+      globalSliceActive.actions.decrementCount()
     })
 
     it('creating global store with server side state', () => {

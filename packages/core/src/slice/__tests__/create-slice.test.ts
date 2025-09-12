@@ -30,7 +30,7 @@ describe('checking slice', () => {
         state.count = state.count + 1
         return state
       },
-      decrementCount: (state, actionData, {globalState}) => {
+      decrementCount: (state, actionData) => {
         return state
       },
       response: (state, actionData: TEST) => {
@@ -44,6 +44,7 @@ describe('checking slice', () => {
     const actionSlice = createActionSlice(reducerSlice, {
       incrementCount: (actionData, {state, store, actions}) => {
         actions.response(TEST.A)
+        actions.decrementCount()
         return 1
       },
       decrementCount: (actionData, {state, actions}) => {
