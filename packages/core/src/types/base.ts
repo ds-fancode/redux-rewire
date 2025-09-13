@@ -9,6 +9,7 @@ export type IStoreOptions = {
   middlewares?: Middleware[]
   ioRunner?: (actionReturn: any) => any
   nameSpace?: string
+  reactNative?: boolean
 }
 
 export interface FCStore extends Store {
@@ -27,4 +28,5 @@ export interface FCStore extends Store {
   getPreLoadedState: (key: string) => Record<string, any>
   preLoadedState: (key: string, state: any) => void
   addToQueue: (actionFunc: any) => void
+  reactNative: boolean
 }

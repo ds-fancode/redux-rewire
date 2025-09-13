@@ -131,23 +131,23 @@ export function configureStore<
   const store: FCStore = createStore(reducerManager.reduce, {}, enhancer)
   const preLoadedCache: Record<string, any> = {}
   let actionQueue: Array<() => void> = []
-
-  const processQueue: Parameters<typeof customRequestIdleCallback>[0] = (
-    deadline: any
-  ) => {
+  let asyncFunction = customRequestIdleCallback
+  if (options.reactNative) {
+    // @ts-ignore
+    if (InteractionManager.runAfterInteractions) {
+      // @ts-ignore
+      asyncFunction = InteractionManager.runAfterInteractions
+    }
+  }
+  const processQueue = () => {
     // Process tasks as long as there is time left and the queue is not empty
-    while (
-      (deadline.timeRemaining() > 0 || deadline.didTimeout) &&
-      actionQueue.length > 0
-    ) {
-      const action = actionQueue.shift()
-      if (action && typeof action === 'function') {
-        action()
-      }
+    const action = actionQueue.shift()
+    if (action && typeof action === 'function') {
+      action()
     }
     // If the queue is not empty, schedule the next idle callback
     if (actionQueue.length > 0) {
-      customRequestIdleCallback(processQueue)
+      asyncFunction(processQueue)
     }
   }
   /**
@@ -157,7 +157,7 @@ export function configureStore<
   store.addToQueue = actionFunc => {
     // Optional: Put the reducer manager on the store so it is easily accessible
     actionQueue.push(actionFunc)
-    customRequestIdleCallback(processQueue)
+    asyncFunction(processQueue)
   }
   store.reducerManager = reducerManager
   store.nameSpace = options.nameSpace ?? ''

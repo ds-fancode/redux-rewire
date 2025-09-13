@@ -1,5 +1,5 @@
 export const customRequestIdleCallback = (() => {
-  const requestIdleCallback = (
+  const requestIdleCallbackFallback = (
     cb: (props: {didTimeout: boolean; timeRemaining: () => number}) => void
   ): ReturnType<typeof setTimeout> => {
     const start = Date.now()
@@ -13,7 +13,7 @@ export const customRequestIdleCallback = (() => {
     }, 1) as any
   }
 
-  return requestIdleCallback
+  return window.requestIdleCallback || requestIdleCallbackFallback
 })()
 
 export const cancelCustomIdleCallback = (id => {
