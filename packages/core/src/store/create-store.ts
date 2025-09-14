@@ -1,8 +1,8 @@
 import type {Action, Reducer, ReducersMapObject} from 'redux'
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
 import {createGlobalSlice} from '../slice/create-global-slice'
-import {customRequestIdleCallback} from '../utils/idelCallback'
 import type {FCStore, IStoreOptions} from '../types/base'
+import {customRequestIdleCallback} from '../utils/idelCallback'
 
 function createReducerManager(
   initialReducers: ReducersMapObject,
@@ -131,14 +131,7 @@ export function configureStore<
   const store: FCStore = createStore(reducerManager.reduce, {}, enhancer)
   const preLoadedCache: Record<string, any> = {}
   let actionQueue: Array<() => void> = []
-  let asyncFunction = customRequestIdleCallback
-  if (options.reactNative) {
-    // @ts-ignore
-    if (InteractionManager.runAfterInteractions) {
-      // @ts-ignore
-      asyncFunction = InteractionManager.runAfterInteractions
-    }
-  }
+  store.asyncFunction = options.asyncFunction || customRequestIdleCallback
   const processQueue = () => {
     // Process tasks as long as there is time left and the queue is not empty
     const action = actionQueue.shift()
@@ -147,7 +140,7 @@ export function configureStore<
     }
     // If the queue is not empty, schedule the next idle callback
     if (actionQueue.length > 0) {
-      asyncFunction(processQueue)
+      store.asyncFunction(processQueue)
     }
   }
   /**
@@ -157,7 +150,7 @@ export function configureStore<
   store.addToQueue = actionFunc => {
     // Optional: Put the reducer manager on the store so it is easily accessible
     actionQueue.push(actionFunc)
-    asyncFunction(processQueue)
+    store.asyncFunction(processQueue)
   }
   store.reducerManager = reducerManager
   store.nameSpace = options.nameSpace ?? ''

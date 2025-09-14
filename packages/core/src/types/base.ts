@@ -10,6 +10,7 @@ export type IStoreOptions = {
   ioRunner?: (actionReturn: any) => any
   nameSpace?: string
   reactNative?: boolean
+  asyncFunction?: (cb: () => void) => void
 }
 
 export interface FCStore extends Store {
@@ -29,4 +30,5 @@ export interface FCStore extends Store {
   preLoadedState: (key: string, state: any) => void
   addToQueue: (actionFunc: any) => void
   reactNative: boolean
+  asyncFunction: (cb: () => void) => void
 }
