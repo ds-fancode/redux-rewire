@@ -1,5 +1,4 @@
 import type {ActionFunction, FCStore} from '../types/base'
-import {customRequestIdleCallback} from '../utils/idelCallback'
 import {createActionsReference} from './create-actions-reference'
 import {createReducerSlice} from './create-reducer-slice'
 
@@ -110,7 +109,7 @@ export const createActionSlice = <
             actionMap[actionKey] &&
             typeof actionMap[actionKey] === 'function'
           ) {
-            customRequestIdleCallback(async () => {
+            store.asyncFunction(async () => {
               try {
                 const globalState = store.getState?.() ?? {}
                 const currentState =
