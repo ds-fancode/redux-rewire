@@ -1,7 +1,7 @@
-import {useContext, useMemo, useState} from 'react'
 import {createGlobalSlice, shallowEqual} from '@ds-fancode/redux-rewire-core'
-import {useSelector2} from './useSelector'
+import {useContext, useMemo, useState} from 'react'
 import {RewireContext} from '../core/Provider'
+import {useRewireSelector} from './useSelector'
 
 export const useGlobalState: {
   // overload 1
@@ -43,15 +43,12 @@ export const useGlobalState: {
   const {store} = useContext(RewireContext)
   const [slice] = useState(() => globalSlice.init(store))
 
-  // const state = useSelector((state: any) => {
-  //   const sliceState = state[slice.key] ?? slice.initialState
-  //   return stateSelector ? stateSelector(sliceState) : sliceState
-  // }, equalityFunction)
-
-  const state = useSelector2((state: Record<string, any>) => {
-    const sliceState = state?.[slice.key] ?? slice.initialState
-    return stateSelector ? stateSelector(sliceState) : sliceState
-  }, equalityFunction)
+  const state = useRewireSelector(
+    slice.key,
+    stateSelector,
+    slice.initialState,
+    equalityFunction
+  )
 
   return useMemo(() => {
     return [slice.key, state, slice.actions as any]

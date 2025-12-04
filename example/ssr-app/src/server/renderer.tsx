@@ -1,13 +1,13 @@
-import type {Request, Response} from 'express'
-import React from 'react'
 import {configureStore} from '@ds-fancode/redux-rewire-core'
-import {renderToPipeableStream} from 'react-dom/server'
-import {App} from '../app/app'
 import {RewireProvider} from '@ds-fancode/redux-rewire-react'
-import {ServerStyleSheet, StyleSheetManager} from 'styled-components'
-import path from 'path'
+import type {Request, Response} from 'express'
 import fs from 'fs'
+import path from 'path'
+import React from 'react'
+import {renderToPipeableStream} from 'react-dom/server'
 import {Transform} from 'stream'
+import {ServerStyleSheet, StyleSheetManager} from 'styled-components'
+import {App} from '../app/app'
 
 let entryFiles: Array<string> = []
 export const getClientEntryFiles = function () {
@@ -67,7 +67,7 @@ async function wrapStream(
   stream.pipe(transformStream).pipe(res)
 }
 export const renderer = async (req: Request, res: Response) => {
-  const store = configureStore([], {})
+  const store = configureStore([], {}, {asyncFunction: cb => cb()})
   const sheet = new ServerStyleSheet()
   let didError = false
   console.log('========= Starting renderer for =========', req.url)

@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react'
 import {useRewireState} from '@ds-fancode/redux-rewire-react'
-import {todoAction} from './todo-item.actions'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
+import {todoAction} from './todo-item.actions'
 import type {Todo} from './todo-item.type'
 
 export const StyledListItem = styled.div`
@@ -15,7 +15,7 @@ export const StyledListItem = styled.div`
 const TodoItem = React.memo(
   (props: Todo & {source: string; markUnDone: any; markDone: any}) => {
     const [, state, actions] = useRewireState(
-      `${props.source}/${props.id}/item`,
+      `${props.source}/item/${props.id}`,
       todoAction,
       state => {
         return state
@@ -29,7 +29,7 @@ const TodoItem = React.memo(
     useEffect(() => {
       console.log('TodoItem effect', props.isDone, state.todo?.isDone)
       if (props.isDone !== state.todo?.isDone) {
-        actions.updateToto({
+        actions.updateItem({
           id: props.id,
           todo: props.todo,
           isDone: props.isDone

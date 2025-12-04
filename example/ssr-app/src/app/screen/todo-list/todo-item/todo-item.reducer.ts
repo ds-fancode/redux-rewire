@@ -4,7 +4,7 @@ import type {Todo} from './todo-item.type'
 
 export const todoReducer = createReducerSlice(initialState, {
   mount: (state, actionData: undefined) => state,
-  updateToto: (state, actionData: Todo) => {
+  updateItem: (state, actionData: Todo) => {
     state.todo = actionData
     return state
   }

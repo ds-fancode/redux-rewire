@@ -45,7 +45,17 @@ const clientApp = {
   },
   module: moduleConfig(false),
   resolve: {
-    extensions
+    extensions,
+    alias: {
+      '@ds-fancode/redux-rewire-core': path.resolve(
+        __dirname,
+        '../../packages/core/src'
+      ),
+      '@ds-fancode/redux-rewire-react': path.resolve(
+        __dirname,
+        '../../packages/react/src'
+      )
+    }
   },
   plugins: [
     new StatsWriterPlugin({
@@ -62,7 +72,10 @@ const clientApp = {
   ]
 }
 
-const allowlist = []
+const allowlist = [
+  '@ds-fancode/redux-rewire-core',
+  '@ds-fancode/redux-rewire-react'
+]
 const serverApp = {
   entry: './src/server/index.ts', // Your entry point (React app's root component)
   output: {

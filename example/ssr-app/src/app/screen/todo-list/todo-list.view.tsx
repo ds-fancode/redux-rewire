@@ -1,5 +1,8 @@
-import React from 'react'
 import {useRewireState} from '@ds-fancode/redux-rewire-react'
+import React, {useCallback, useState} from 'react'
+// import {useDataSuspense} from '../../hooks/use-data-suspense'
+import {useDataSuspense} from '../../hooks/use-data-suspense'
+import TodoItem from './todo-item/todo-item.view'
 import {todoAction} from './todo-list.actions'
 import {
   FlexWrapper,
@@ -7,21 +10,36 @@ import {
   StyledList,
   StyledTodoListWrapper
 } from './todo-styles'
-import TodoItem from './todo-item/todo-item.view'
-import {useDataSuspense} from '../../hooks/use-data-suspense'
 
 const TodoListWrapper = (props: {source: string}) => {
+  const [wrapperKey, setWrapperKey] = useState(1)
   const [key, todoState, actions] = useRewireState(
-    `${props.source}/to-do`,
+    `${props.source}/to-do-wrapper/${wrapperKey}`,
     todoAction
   )
+  console.log('TodoListWrapper render start', key, todoState.loaded)
   useDataSuspense(key, todoState, () => {
     actions.mount()
   })
 
+  const test = useCallback(() => {
+    actions.addTodo(`test ${Date.now()}`)
+  }, [actions])
+
+  console.log('TodoListWrapper render completed', key, todoState.loaded)
   return (
     <StyledTodoListWrapper>
-      <Header>{`Task List`}</Header>
+      <Header>
+        <span>Task List 2</span>
+        <button
+          onClick={() => {
+            setWrapperKey(s => s + 1)
+          }}
+        >
+          Reset
+        </button>
+        <button onClick={test}>Add Todo</button>
+      </Header>
       <FlexWrapper>
         <div style={{flex: 1}}>
           <Header>Active Tasks</Header>

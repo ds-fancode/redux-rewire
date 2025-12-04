@@ -5,6 +5,7 @@ import type {FCStore, IStoreOptions} from '../types/base'
 import {customRequestIdleCallback} from '../utils/idelCallback'
 
 function createReducerManager(
+  store: FCStore,
   initialReducers: ReducersMapObject,
   options: IStoreOptions
 ) {
@@ -41,12 +42,7 @@ function createReducerManager(
         }
         keysToRemove = []
       }
-      // Delegate to the combined reducer
-      if (action.hasOwnProperty('payload')) {
-        // to handle action like '@@redux/INITk.w.i.7.y.8'
-        return combinedReducer(state, action)
-      }
-      return state
+      return combinedReducer(state, action)
     },
 
     // Adds a new reducer with the specified key
@@ -60,12 +56,20 @@ function createReducerManager(
       if (reducers[key] && reducer.toString() === reducers[key]?.toString()) {
         return
       }
+      const ssrState = !!reducers[key]
 
       // Add the reducer to the reducer mapping
       reducers[key] = reducer
 
       // Generate a new combined reducer
       combinedReducer = combineReducers(reducers)
+      // to initialise the global store
+      if (!ssrState) {
+        store.dispatch({
+          type: '@@rewire/REDUCER_UPDATED',
+          payload: key
+        })
+      }
     },
     hasKey(key: string): boolean {
       return !!reducers[key]
@@ -97,7 +101,7 @@ export function configureStore<
   initialState?: State,
   options: IStoreOptions = {}
 ) {
-  const {middlewares, ioRunner, debug} = options || {}
+  const {middlewares, ioRunner} = options || {}
   /**
    * Creating this temp reducers so that ssr state is not lost
    * Also for compatibility with old redux-rewire arch
@@ -109,13 +113,11 @@ export function configureStore<
     }
   }
 
-  const reducerManager = createReducerManager(tempReducers, options)
   let middlewareList = middlewares ?? []
   /**
    * Add dev to support for debugging in dev mode only
    */
   const composeEnhancers =
-    debug &&
     typeof window === 'object' &&
     (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
       ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
@@ -128,7 +130,9 @@ export function configureStore<
     // other store enhancers if any
   )
   // Create a store with the root reducer function being the one exposed by the manager.
-  const store: FCStore = createStore(reducerManager.reduce, {}, enhancer)
+  const store: FCStore = createStore(s => s, {}, enhancer)
+  const reducerManager = createReducerManager(store, tempReducers, options)
+  store.replaceReducer(reducerManager.reduce)
   const preLoadedCache: Record<string, any> = {}
   let actionQueue: Array<() => void> = []
   store.asyncFunction = options.asyncFunction || customRequestIdleCallback

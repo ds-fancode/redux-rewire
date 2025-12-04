@@ -13,7 +13,9 @@ export const customRequestIdleCallback = (() => {
     }, 1) as any
   }
 
-  return window.requestIdleCallback || requestIdleCallbackFallback
+  return typeof window !== 'undefined' && window.requestIdleCallback
+    ? window.requestIdleCallback.bind(window)
+    : requestIdleCallbackFallback
 })()
 
 export const cancelCustomIdleCallback = (id => {

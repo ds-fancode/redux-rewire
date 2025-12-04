@@ -1,5 +1,5 @@
-import {useContext} from 'react'
 import {useStore} from '@ds-fancode/redux-rewire-react'
+import {use, useContext} from 'react'
 import {DataContext} from '../core/data-provider'
 
 export const useDataSuspense: <
@@ -14,44 +14,41 @@ export const useDataSuspense: <
 ) => void = (key, state, callback) => {
   const store = useStore()
   const dataContext = useContext(DataContext)
-  // console.log('[useDataSuspense] render 1', state.loaded)
+  console.log('[useDataSuspense] render start', state.loaded)
   let timeout: any
   let unsub: any
   if (!state.loaded) {
     let promiseObject = dataContext.get(key)
     // console.log('[useDataSuspense] promiseObject', key, promiseObject)
     if (!promiseObject) {
+      console.log('[useDataSuspense] creating promise >>', key)
       promiseObject = new Promise<void>((resolve, reject) => {
-        // console.log('[useDataSuspense] calling loader function', key)
         unsub = store.subscribe(() => {
           const state = store.getState() as any
           const isStateLoaded = !!state?.[key]?.loaded
-          // console.log(
-          //   '[useDataSuspense] store subscriber called',
-          //   key,
-          //   isStateLoaded
-          // )
           if (isStateLoaded) {
-            console.log('[useDataSuspense] resolving promise for', key)
+            console.log('[useDataSuspense] resolving promise >>', key)
             resolve()
           }
         })
-        setTimeout(() => {
-          callback?.()
-        }, 0)
+        callback?.()
+
         timeout = setTimeout(() => {
-          console.log('[useDataSuspense] timeout rejecting', key)
-          reject('[useDataSuspense] timeout rejecting')
+          console.log(
+            '[useDataSuspense] rejecting due to timeout of 10 sec>> ',
+            key
+          )
+          reject('rejecting')
         }, 10000)
       })
         .then(() => {
-          // console.log('[useDataSuspense] resolve', key)
+          console.log('[useDataSuspense] resolve >>', key)
         })
         .catch(() => {
-          console.error('[useDataSuspense] reject', key)
+          console.error('[useDataSuspense] catch >>', key)
         })
         .finally(() => {
-          // console.log('[useDataSuspense] finally', key)
+          console.log('[useDataSuspense] finally >>', key)
           dataContext.remove(key)
           unsub?.()
           if (timeout) {
@@ -60,10 +57,9 @@ export const useDataSuspense: <
         })
       dataContext.add(key, promiseObject)
     }
-    console.log(`[useDataSuspense]-[suspending] with key ${key}`)
-    throw promiseObject
-  } else {
-    // console.log('[useDataSuspense] state is already loaded', key)
+    console.log(`[useDataSuspense] returning use >>`, key)
+    return use(promiseObject)
   }
+  console.log(`[useDataSuspense] returning true >>`, key)
   return true
 }

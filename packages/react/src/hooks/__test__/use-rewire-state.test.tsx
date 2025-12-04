@@ -4,10 +4,10 @@ import {
   createInitialState,
   createReducerSlice
 } from '@ds-fancode/redux-rewire-core'
-import {useRewireState} from '../use-rewire-state'
-import {RewireProvider} from '../../core/Provider'
 import {act, renderHook, waitFor} from '@testing-library/react'
 import React, {StrictMode} from 'react'
+import {RewireProvider} from '../../core/Provider'
+import {useRewireState} from '../use-rewire-state'
 
 // @ts-ignore
 const delay = (delay?: number) =>
@@ -145,15 +145,6 @@ describe('useRewireState', () => {
       const [key, state] = result.current
       expect(key).toEqual(sliceKey)
       expect(state).toEqual({...initialState, count: 1})
-
-      // const stateBeforeRender = result.current[1]
-      // rerender()
-      // expect(result.current[1]).toBe(stateBeforeRender)
-      //
-      // act(() => {
-      //   action.autoIncrementCount()
-      // })
-      // expect(result.current[1]).toEqual({...initialState, count: 1})
     })
     it('check state with selector', () => {
       const {result, rerender} = renderHook(
@@ -192,6 +183,20 @@ describe('useRewireState', () => {
         action.autoIncrementCount()
       })
       expect(result.current[1]).toBe(stateBeforeRender)
+    })
+  })
+  describe('test with slice key changed at runtime', () => {
+    it('key changed with no intial state', () => {
+      const key1 = 'key1'
+      const {result} = renderHook(
+        () => useRewireState(key1, actionSlice, state => state),
+        {
+          wrapper
+        }
+      )
+      const [key, state] = result.current
+      expect(key).toEqual(key1)
+      expect(state).toEqual(initialState)
     })
   })
 })
