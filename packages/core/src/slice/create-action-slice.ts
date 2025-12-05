@@ -34,6 +34,8 @@ export const createActionSlice = <
       State,
       AllActions
     >
+  } & {
+    [key in Exclude<keyof ActionMap, keyof ReducerActions>]?: never
   },
   AllActions extends {
     [key in

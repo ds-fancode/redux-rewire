@@ -1,6 +1,6 @@
+import type {FCStore} from '@ds-fancode/redux-rewire-core'
 import {useMemo} from 'react'
 import {shallowEqual, useSelector, useStore} from 'react-redux'
-import type {FCStore} from '@ds-fancode/redux-rewire-core'
 import type {UseReduxStateType} from './use-redux-state.type'
 
 export const useReduxState: UseReduxStateType = function (
@@ -17,6 +17,7 @@ export const useReduxState: UseReduxStateType = function (
     const {initialState, reducers, actions} = actionSlice(
       key,
       store,
+      store.getState,
       actionsRef,
       store.ioRunner
     )

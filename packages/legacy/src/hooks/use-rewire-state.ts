@@ -1,8 +1,8 @@
-import {useMemo} from 'react'
-import {shallowEqual, useDispatch, useSelector, useStore} from 'react-redux'
 import {type FCStore} from '@ds-fancode/redux-rewire-core'
-import type {UseRewireStateType} from './use-rewire-state.type'
+import {useMemo} from 'react'
+import {shallowEqual, useSelector, useStore} from 'react-redux'
 import {keyHandler} from '../helper/key-handler'
+import type {UseRewireStateType} from './use-rewire-state.type'
 
 export const useRewireState: UseRewireStateType = function (
   key,
@@ -12,7 +12,6 @@ export const useRewireState: UseRewireStateType = function (
   equalityFn = shallowEqual,
   actionsRef
 ) {
-  const dispatch = useDispatch()
   const store = <FCStore>useStore()
   const finalKey = keyHandler.concat(parentKey, key)
   //#region create and return store
@@ -20,7 +19,7 @@ export const useRewireState: UseRewireStateType = function (
     // create once to make sure ref og actions do not change
     const {initialState, reducers, actions} = actionSlice(
       finalKey,
-      dispatch,
+      store,
       store.getState,
       actionsRef,
       store.ioRunner

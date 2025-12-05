@@ -1,8 +1,9 @@
+import type {FCStore} from '@ds-fancode/redux-rewire-core'
+import type {IReduxStore} from 'core/create-global-state.type'
 import type {
   ReducerGetKeyType,
   ReducerInputMap
 } from './create-reducer-slice-type'
-import type {FCStore} from '@ds-fancode/redux-rewire-core'
 
 type IoReturnAction = any[]
 
@@ -51,7 +52,7 @@ export type ActionGetKeyType<
 > = (
   key: string,
   store?: FCStore,
-  _?: any,
+  getState?: () => IReduxStore,
   actionsRef?: any,
   ioRunner?: Function,
   overrideInitialState?: any
