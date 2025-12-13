@@ -2,7 +2,7 @@ import type {FCStore} from '@ds-fancode/redux-rewire-core'
 import type {IReduxStore} from './create-global-state.type'
 import type {CreateReducerSliceType} from './create-reducer-slice-type'
 
-export type CreateActionSliceType<> = <
+export type CreateActionSliceType = <
   ReducerSlice extends ReturnType<CreateReducerSliceType> = any,
   ActionReturnType extends
     ReturnType<ReducerSlice>['defaultActionReturnValue'] = void

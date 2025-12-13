@@ -14,10 +14,10 @@ function createReducerManager(
   const {debug = false} = options
   const reducers: ReducersMapObject = {
     ...initialReducers,
-    appInit: (state = true, action: any) => {
+    appInit: (state = true, _: any) => {
       return state
     },
-    debug: (state = debug ?? false, action: any) => {
+    debug: (state = debug ?? false, _: any) => {
       return state
     }
   }
@@ -113,7 +113,7 @@ export function configureStore<
     }
   }
 
-  let middlewareList = middlewares ?? []
+  const middlewareList = middlewares ?? []
   /**
    * Add dev to support for debugging in dev mode only
    */
@@ -134,8 +134,8 @@ export function configureStore<
   const reducerManager = createReducerManager(store, tempReducers, options)
   store.replaceReducer(reducerManager.reduce)
   const preLoadedCache: Record<string, any> = {}
-  let actionQueue: Array<() => void> = []
-  store.asyncFunction = options.asyncFunction || customRequestIdleCallback
+  const actionQueue: (() => void)[] = []
+  store.asyncFunction = options.asyncFunction ?? customRequestIdleCallback
   const processQueue = () => {
     // Process tasks as long as there is time left and the queue is not empty
     const action = actionQueue.shift()
@@ -159,7 +159,7 @@ export function configureStore<
   store.reducerManager = reducerManager
   store.nameSpace = options.nameSpace ?? ''
   store.getServerSnapshot = () => initialState ?? {}
-  store.setPreLoadedState = (key: string, state: any) => {
+  store.setPreLoadedState = <S>(key: string, state: S) => {
     preLoadedCache[key] = state
   }
   store.getPreLoadedState = (key: string) => preLoadedCache[key]

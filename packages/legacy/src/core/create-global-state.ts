@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import type {CreateGlobalStateType} from './create-global-state.type'
 
 export const createGlobalState: CreateGlobalStateType = function (

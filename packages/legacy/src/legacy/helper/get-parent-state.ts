@@ -1,6 +1,6 @@
+import {keyHandler} from '../../helper/key-handler'
 import {IdentityKey} from '../core/create-initital-state'
 import type {CreateInitialStateType} from '../core/create-initital-state.type'
-import {keyHandler} from '../../helper/key-handler'
 
 function findClosesParentState(
   globalState: {[key: string]: any},
@@ -37,7 +37,6 @@ export const getParentState: getParentStateType = function (
     parentInitialState[IdentityKey]
   )
   if (foundParentState === null) {
-    // eslint-disable-next-line no-console
     console.error(
       `[ParentNotFound]: make sure '${key}' is child of ${parentInitialState[IdentityKey]} and not a sibling!`
     )

@@ -11,13 +11,13 @@ describe('createReducer', () => {
           },
           userInput: (state, action) => {
             return state
-          },
+          }
         },
         state
       )
 
       expect(reducers(state, {type: 'loadData', count: 2})).toEqual({
-        count: 2,
+        count: 2
       })
     })
   })

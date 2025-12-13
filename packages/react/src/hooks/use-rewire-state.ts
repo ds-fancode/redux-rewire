@@ -9,7 +9,6 @@ export const useRewireState: {
     ActionSlice extends ReturnType<typeof createActionSlice>,
     SliceActions extends ReturnType<ActionSlice>['actions'],
     SliceState extends ReturnType<ActionSlice>['initialState'],
-    ReturnState,
     Key extends string
   >(
     key: Key,

@@ -1,6 +1,6 @@
 import {defineConfig, type Options} from 'tsup'
 
-export default defineConfig(options => {
+export default defineConfig(() => {
   const baseConfig: Options = {
     entry: {
       'index.debug': 'src/index.ts'

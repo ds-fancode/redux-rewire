@@ -9,7 +9,7 @@ describe('createCommandSlice', () => {
       'test',
       {
         collection: {loaded: false},
-        test2: null,
+        test2: null
       },
       [] as any[]
     )
@@ -17,7 +17,7 @@ describe('createCommandSlice', () => {
       mount: (state, action) => state,
       response: (state, action) => {
         return {...state, response: action.response}
-      },
+      }
     })
     const {asyncActions, actions} = createActionSlice(reducerSlice, {
       mount: (actionData, {state, actions, prevState}) => {
@@ -29,12 +29,12 @@ describe('createCommandSlice', () => {
               data: {
                 componentId: '2',
                 navigatorType: 'push',
-                newScreen: 'HOME',
-              },
-            },
-          },
+                newScreen: 'HOME'
+              }
+            }
+          }
         ]
-      },
+      }
     })('test')
 
     const actionData = {collection: {id: 9}}
@@ -47,10 +47,10 @@ describe('createCommandSlice', () => {
           data: {
             componentId: '2',
             navigatorType: 'push',
-            newScreen: 'HOME',
-          },
-        },
-      },
+            newScreen: 'HOME'
+          }
+        }
+      }
     ]
     assert.deepEqual(actual, expected)
   })

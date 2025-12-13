@@ -69,20 +69,22 @@ export const createReducerSlice = <
             action: AnyAction
           ) => {
             if (store.disableAutoImmutability()) {
-              // @ts-ignore
-              return reducers[reducerKey]!(state, action.payload, {
+              return reducers[reducerKey]!(state, action.payload as never, {
                 rewireKey: key,
                 globalState: action.globalState,
                 store
               })
             } else {
               return create(state, (draftState: any) => {
-                // @ts-ignore
-                return reducers[reducerKey]?.(draftState, action.payload, {
-                  rewireKey: key,
-                  globalState: action.globalState,
-                  store
-                })
+                return reducers[reducerKey]?.(
+                  draftState,
+                  action.payload as never,
+                  {
+                    rewireKey: key,
+                    globalState: action.globalState,
+                    store
+                  }
+                )
               })
             }
           }

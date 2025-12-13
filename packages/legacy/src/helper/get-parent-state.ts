@@ -37,7 +37,6 @@ export const getParentState: getParentStateType = function (
     parentInitialState.state[IdentityKey]
   )
   if (foundParentState === null) {
-    // eslint-disable-next-line no-console
     console.error(
       `[ParentNotFound]: make sure '${key}' is child of ${parentInitialState.state[IdentityKey]} and not a sibling!`
     )

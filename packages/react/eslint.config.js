@@ -7,12 +7,8 @@ const finalConfig = [
       'no-restricted-imports': [
         'error',
         {
-          paths: [
-
-          ],
-          patterns: [
-
-          ]
+          paths: [],
+          patterns: []
         }
       ]
     }

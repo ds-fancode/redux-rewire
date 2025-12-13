@@ -9,8 +9,7 @@ export const useGlobalState: {
     GlobalSlice extends ReturnType<typeof createGlobalSlice>,
     GlobalSliceInit extends GlobalSlice['init'],
     SliceActions extends ReturnType<GlobalSliceInit>['actions'],
-    SliceState extends ReturnType<GlobalSliceInit>['initialState'],
-    ReturnState
+    SliceState extends ReturnType<GlobalSliceInit>['initialState']
   >(
     actionSlice: GlobalSlice
   ): [string, SliceState, SliceActions]
