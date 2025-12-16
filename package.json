@@ -9,6 +9,7 @@
     "lint-fix": "yarn workspaces foreach -Ap --exclude ssr-app --exclude example-todo-app  --exclude vanila-app run lint-fix",
     "prettier-check": "yarn workspaces foreach -Ap --exclude ssr-app --exclude example-todo-app  --exclude vanila-app run prettier-check",
     "prettier-fix": "yarn workspaces foreach -Ap --exclude ssr-app --exclude example-todo-app  --exclude vanila-app run prettier-fix",
+    "postinstall": "yarn workspace @ds-fancode/redux-rewire-core build && yarn workspace @ds-fancode/redux-rewire-react build && yarn workspace @ds-fancode/redux-rewire build",
     "clean-repo": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +"
   },
   "author": "FanCode",
