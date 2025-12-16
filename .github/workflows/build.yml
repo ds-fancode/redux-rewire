@@ -2,7 +2,6 @@ name: build package
 on:
   pull_request:
     branches:
-      - develop
       - main
       - "release/**"
     types:
@@ -14,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    runs-on: self-hosted-webapp-gcs-cache
+    runs-on: ubuntu-latest
     steps:
       - name: Configure github
         run: |
