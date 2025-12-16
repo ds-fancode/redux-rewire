@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "noEmit": false,
+    "outDir": "lib/esm",
+    "rootDir": "src",
+    "baseUrl": "src",
+    "lib": ["es2022", "dom"],
+    "jsx": "react",
+    "sourceMap": true
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ],
+  "include": ["src"]
+}

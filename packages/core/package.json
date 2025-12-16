@@ -1,0 +1,76 @@
+{
+  "name": "@ds-fancode/redux-rewire-core",
+  "version": "0.0.17-beta.14",
+  "description": "State management library for react based applications",
+  "author": "FanCode",
+  "license": "ISC",
+  "keywords": [
+    "redux",
+    "reducer",
+    "state",
+    "predictable",
+    "functional",
+    "immutable",
+    "hot",
+    "live",
+    "replay",
+    "flux",
+    "elm"
+  ],
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/cjs/index.debug.js",
+  "module": "dist/esm/index.debug.mjs",
+  "types": "dist/cjs/index.debug.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "production": {
+        "types": "./dist/cjs/index.min.d.ts",
+        "import": "./dist/esm/index.min.mjs",
+        "require": "./dist/cjs/index.min.js"
+      },
+      "types": "./dist/cjs/index.debug.d.ts",
+      "import": "./dist/esm/index.debug.mjs",
+      "require": "./dist/cjs/index.debug.js",
+      "default": "./dist/cjs/index.debug.js"
+    }
+  },
+  "scripts": {
+    "test": "yarn run -T jest",
+    "test-watch": "yarn test -- --watch",
+    "test-ci": "yarn test --coverage && coveralls < coverage/lcov.info",
+    "lint": "yarn run -T eslint . --cache",
+    "lint-fix": "yarn lint --fix",
+    "prettier-check": "yarn run -T prettier --check \"**/*.{ts,tsx}\"",
+    "prettier-fix": "yarn prettier-check --write \"**/*.{ts,tsx}\"",
+    "clean": "rm -rf ./lib ./dist",
+    "build": "yarn clean && yarn run -T tsup",
+    "prepack": "yarn build",
+    "release-beta": "yarn release --increment auto --preRelease=beta --verbose",
+    "clean-node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +"
+  },
+  "dependencies": {
+    "mutative": "1.2.0",
+    "redux": "5.0.1"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.23.2",
+    "@babel/preset-typescript": "^7.23.2",
+    "@types/jest": "^29.2.4",
+    "jsdoc": "^4.0.0",
+    "typescript": "5.7.2"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ds-fancode/redux-rewire"
+  },
+  "sideEffects": false
+}

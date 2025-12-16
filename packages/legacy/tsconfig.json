@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": "src",
+    "composite": true,
+    "declaration": true,
+    "incremental": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "jsx": "react"
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ],
+  "include": ["src"]
+}

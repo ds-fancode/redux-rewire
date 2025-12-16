@@ -2,9 +2,8 @@ name: build package
 on:
   pull_request:
     branches:
-      - develop
       - main
-      - 'release/**'
+      - "release/**"
     types:
       - opened
       - synchronize
@@ -28,37 +27,21 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.16.0
-          cache: yarn
+          node-version: 22.9.0
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v38
-        with:
-          path: .
-          files: src/**/*.{ts,tsx}
-
-      - name: List all changed files
-        run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Installing dependencies
-        run: yarn install --frozen-lockfile # for installing on CI
+        run: yarn install --immutable
 
       - name: Running lint
-        if: steps.changed-files.outputs.any_changed == 'true'
-        continue-on-error: true
         run: |
-          yarn eslint ${{ steps.changed-files.outputs.all_changed_files }}
+          yarn lint
 
       - name: Running prettier
-        if: steps.changed-files.outputs.any_changed == 'true'
-        continue-on-error: true
         run: |
-          yarn prettier ${{ steps.changed-files.outputs.all_changed_files }}
+          yarn prettier-check
 
       - name: Running tests & coverage
-        if: steps.changed-files.outputs.any_changed == 'true'
         run: yarn test --logHeapUsage --silent --runInBand --ci

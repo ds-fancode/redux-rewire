@@ -4,7 +4,7 @@
   - App.tsx [`useRewireState` without 'parentKey'] [`useGlobalState` - 'todo']
   - TodoListWrapper.tsx [`useSharedState` of 'DropStore' with 'sharedKey' = `dropState`] [`useGlobalState` - 'todo']
     - TodoList.tsx [`useGlobalState` - 'todo']
-        - Task.tsx [`useRewireState` with 'parentKey' = `app`] [`useGlobalState` - 'todo'] [`useSharedState` of 'DropStore' with 'sharedKey' = `dropState`]
+      - Task.tsx [`useRewireState` with 'parentKey' = `app`] [`useGlobalState` - 'todo'] [`useSharedState` of 'DropStore' with 'sharedKey' = `dropState`]
     - TodoStore [`createGlobalStore` with 'key' = `todo`]
     - DropStore [`createSharedStore` with 'partialKey' = `drop`]
 
@@ -18,7 +18,6 @@
   - `useGlobalStore`
 - Sibling to sibling communication
   - `useSharedState` with 'sharedKey' = `siblings`
-
 
 # Getting Started with Create React App
 

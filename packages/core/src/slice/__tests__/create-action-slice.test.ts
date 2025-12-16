@@ -1,0 +1,44 @@
+import {createActionSlice} from '../create-action-slice'
+import {createInitialState} from '../create-initital-state'
+import {createReducerSlice} from '../create-reducer-slice'
+import {configureStore} from '../../store/create-store'
+import type {FCStore} from '../../types/base'
+
+describe('createCommandSlice', () => {
+  let store: FCStore = null as any
+
+  beforeEach(() => {
+    store = configureStore([], {})
+  })
+  it('__tests__ single action', () => {
+    const initialState = createInitialState({
+      collection: {loaded: false},
+      test2: null
+    })
+    enum TEST {
+      A,
+      B
+    }
+    const reducerSlice = createReducerSlice(initialState, {
+      mount: (state, action: TEST) => state,
+      emptyMount: state => state,
+      response: (state, action: {a: number}) => {
+        return state
+      }
+    })
+    const actionSlice = createActionSlice(reducerSlice, {
+      mount: (actionData, {state, actions, prevState}) => {
+        console.log(state)
+      },
+      response: (actionData, {state, actions, prevState}) => {
+        console.log(state)
+      },
+      emptyActions: (a: number) => {}
+    })('test', store)
+    actionSlice.actions.mount(TEST.A)
+    actionSlice.actions.emptyMount()
+    actionSlice.actions.response({a: 1})
+
+    // assert.deepEqual(actual, void 0)
+  })
+})

@@ -1,21 +1,27 @@
 name: release package
 on:
   workflow_dispatch:
-    branches:
-      - main
     inputs:
       release-type:
         description: 'Release type (one of): patch, minor, major, prepatch, preminor, premajor, prerelease'
         type: choice
-        default: "prerelease"
+        default: 'prerelease'
         options:
-          - "patch"
-          - "minor"
-          - "major"
-          - "prepatch"
-          - "preminor"
-          - "premajor"
-          - "prerelease"
+          - 'patch'
+          - 'minor'
+          - 'major'
+          - 'prepatch'
+          - 'preminor'
+          - 'premajor'
+          - 'prerelease'
+        required: true
+      package-name:
+        description: 'Select the package to publish'
+        type: choice
+        default: 'core'
+        options:
+          - 'react'
+          - 'core'
         required: true
 jobs:
   release:
@@ -29,15 +35,17 @@ jobs:
       - run: echo "Running on branch | base branch - ${{github.base_ref}} | head branch - ${{github.head_ref}}"
 
       - name: Checkout branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT_GITHUB_ACTION }}
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.16.0
-          registry-url: 'https://registry.npmjs.org'
-          cache: yarn
+          node-version: 22.9.0
+          
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Installing dependencies
         run: yarn install --frozen-lockfile # for installing on CI
 
@@ -77,7 +85,6 @@ jobs:
 
       # Publish version to public repository
       - name: Publish
-        working-directory: ./lib
         run: npm publish --verbose --access public --tag ${{ env.RELEASE_TAG }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN_REDUX_REWIRE }}
