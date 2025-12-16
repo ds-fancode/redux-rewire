@@ -41,9 +41,8 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.16.0
-          registry-url: 'https://registry.npmjs.org'
-          cache: yarn
+          node-version: 22.9.0
+          
       - name: Enable Corepack
         run: corepack enable
 
