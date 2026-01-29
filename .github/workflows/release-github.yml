@@ -1,4 +1,4 @@
-name: Changesets Release
+name: Publish Github
 
 on:
   workflow_dispatch:
@@ -33,6 +33,8 @@ jobs:
         run: corepack enable
 
       - name: Install dependencies
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn install --immutable
 
       # On push to main: Only create Version PR (no publish)
