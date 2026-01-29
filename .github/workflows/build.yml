@@ -38,15 +38,23 @@ jobs:
         run: yarn install --immutable
 
       - name: Running lint
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn lint
 
       - name: Running prettier
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn prettier-check
 
       - name: Running tests & coverage
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn test --logHeapUsage --silent --runInBand --ci
 
       - name: Check for changesets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn changeset-status
