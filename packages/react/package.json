@@ -65,7 +65,7 @@
     "typescript": "5.7.2"
   },
   "peerDependencies": {
-    "@ds-fancode/redux-rewire-core": "*",
+    "@ds-fancode/redux-rewire-core": "workspace:^",
     "react": ">=19.2.1"
   },
   "publishConfig": {
