@@ -1,0 +1,74 @@
+name: Publish Beta
+
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+    packages: write
+
+jobs:
+    publish-beta:
+        name: Publish Beta
+        runs-on: self-hosted-webapp-gcs-cache
+        steps:
+            - name: Configure git
+              run: |
+                  git config --global user.email "fc-bot@fancode.com"
+                  git config --global user.name "fc-bot"
+
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 22.9.0
+
+            - name: Enable Corepack
+              run: corepack enable
+
+            - name: Install dependencies
+              run: yarn install --immutable
+
+            - name: Get snapshot tag
+              id: snapshot
+              run: |
+                  # Get branch name and sanitize it (replace / with -)
+                  BRANCH_NAME=${GITHUB_REF_NAME//\//-}
+                  # Get short commit hash
+                  COMMIT_HASH=$(git rev-parse --short HEAD)
+                  # Create snapshot tag: branchname-commithash
+                  SNAPSHOT_TAG="${BRANCH_NAME}-${COMMIT_HASH}"
+                  echo "tag=$SNAPSHOT_TAG" >> $GITHUB_OUTPUT
+                  echo "Snapshot tag: $SNAPSHOT_TAG"
+
+            - name: Version packages (snapshot)
+              if: ${{ steps.snapshot.outputs.tag != '' }}
+              run: yarn changeset version --snapshot ${{ steps.snapshot.outputs.tag }}
+
+            - name: Build packages
+              run: |
+                  yarn workspace @ds-fancode/redux-rewire-core build
+                  yarn workspace @ds-fancode/redux-rewire-react build
+                  yarn workspace @ds-fancode/redux-rewire build
+
+            - name: Publish beta to GitHub Packages
+              if: ${{ steps.snapshot.outputs.tag != '' }}
+              run: yarn changeset publish --tag ${{ steps.snapshot.outputs.tag }}
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Summary
+              run: |
+                  echo "## 🚀 Beta Published!" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "**Snapshot Tag:** \`${{ steps.snapshot.outputs.tag }}\`" >> $GITHUB_STEP_SUMMARY
+                  echo "**Branch:** \`${GITHUB_REF_NAME}\`" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "### Install" >> $GITHUB_STEP_SUMMARY
+                  echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+                  echo "yarn add @ds-fancode/redux-rewire-core@beta" >> $GITHUB_STEP_SUMMARY
+                  echo "yarn add @ds-fancode/redux-rewire-react@beta" >> $GITHUB_STEP_SUMMARY
+                  echo "yarn add @ds-fancode/redux-rewire@beta" >> $GITHUB_STEP_SUMMARY
+                  echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
