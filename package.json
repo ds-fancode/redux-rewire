@@ -13,7 +13,7 @@
     "clean-repo": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +",
     "changeset-version": "yarn changeset version",
     "changeset-publish": "yarn changeset publish",
-    "changeset-status": "yarn changeset status"
+    "changeset-status": "yarn changeset status --since=main"
   },
   "author": "FanCode",
   "license": "ISC",

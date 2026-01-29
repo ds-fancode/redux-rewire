@@ -27,6 +27,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch main branch for changeset comparison
+        run: git fetch origin main:main
+
       - uses: actions/setup-node@v3
         with:
           node-version: 22.9.0
