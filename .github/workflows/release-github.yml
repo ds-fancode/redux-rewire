@@ -14,7 +14,7 @@ concurrency:
 jobs:
   release:
     name: Release
-    runs-on: self-hosted-webapp-gcs-cache
+    runs-on: ubuntu-latest
     steps:
       - name: Configure git
         run: |

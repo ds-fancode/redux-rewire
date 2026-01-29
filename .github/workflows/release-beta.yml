@@ -10,7 +10,7 @@ permissions:
 jobs:
     publish-beta:
         name: Publish Beta
-        runs-on: self-hosted-webapp-gcs-cache
+        runs-on: ubuntu-latest
         steps:
             - name: Configure git
               run: |
