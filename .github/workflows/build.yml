@@ -24,6 +24,11 @@ jobs:
 
       - name: Checkout branch
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch main branch for changeset comparison
+        run: git fetch origin main:main
 
       - uses: actions/setup-node@v3
         with:
@@ -33,15 +38,28 @@ jobs:
         run: corepack enable
 
       - name: Installing dependencies
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn install --immutable
 
       - name: Running lint
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn lint
 
       - name: Running prettier
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn prettier-check
 
       - name: Running tests & coverage
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn test --logHeapUsage --silent --runInBand --ci
+
+      - name: Check for changesets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn changeset-status
