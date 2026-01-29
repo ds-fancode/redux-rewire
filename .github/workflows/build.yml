@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted-webapp-gcs-cache
     steps:
       - name: Configure github
         run: |
@@ -33,6 +33,8 @@ jobs:
         run: corepack enable
 
       - name: Installing dependencies
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn install --immutable
 
       - name: Running lint
@@ -45,3 +47,6 @@ jobs:
 
       - name: Running tests & coverage
         run: yarn test --logHeapUsage --silent --runInBand --ci
+
+      - name: Check for changesets
+        run: yarn changeset-status

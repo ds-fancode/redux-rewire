@@ -1,0 +1,52 @@
+name: Changesets Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release
+    runs-on: self-hosted-webapp-gcs-cache
+    steps:
+      - name: Configure git
+        run: |
+          git config --global user.email "fc-bot@fancode.com"
+          git config --global user.name "fc-bot"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.9.0
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      # On push to main: Only create Version PR (no publish)
+      - name: Create Release Pull Request
+        if: github.event_name == 'push'
+        uses: changesets/action@v1
+        with:
+          version: yarn changeset-version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # On manual dispatch: Publish packages
+      - name: Publish to GitHub Packages
+        if: github.event_name == 'workflow_dispatch'
+        run: yarn changeset-publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

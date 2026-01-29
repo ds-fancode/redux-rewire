@@ -10,7 +10,10 @@
     "prettier-check": "yarn workspaces foreach -Ap --exclude ssr-app --exclude example-todo-app  --exclude vanila-app run prettier-check",
     "prettier-fix": "yarn workspaces foreach -Ap --exclude ssr-app --exclude example-todo-app  --exclude vanila-app run prettier-fix",
     "postinstall": "yarn workspace @ds-fancode/redux-rewire-core build && yarn workspace @ds-fancode/redux-rewire-react build && yarn workspace @ds-fancode/redux-rewire build",
-    "clean-repo": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +"
+    "clean-repo": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'build' -type d -prune -exec rm -rf '{}' +",
+    "changeset-version": "yarn changeset version",
+    "changeset-publish": "yarn changeset publish",
+    "changeset-status": "yarn changeset status"
   },
   "author": "FanCode",
   "license": "ISC",
@@ -18,6 +21,7 @@
     "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.23.2",
+    "@changesets/cli": "^2.29.8",
     "@eslint/js": "9.39.2",
     "@release-it/conventional-changelog": "^10.0.1",
     "@types/jest": "^29.2.4",
