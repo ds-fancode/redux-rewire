@@ -1,27 +1,27 @@
-name: release package
+name: Publish NPM
 on:
   workflow_dispatch:
     inputs:
       release-type:
-        description: 'Release type (one of): patch, minor, major, prepatch, preminor, premajor, prerelease'
+        description: "Release type (one of): patch, minor, major, prepatch, preminor, premajor, prerelease"
         type: choice
-        default: 'prerelease'
+        default: "prerelease"
         options:
-          - 'patch'
-          - 'minor'
-          - 'major'
-          - 'prepatch'
-          - 'preminor'
-          - 'premajor'
-          - 'prerelease'
+          - "patch"
+          - "minor"
+          - "major"
+          - "prepatch"
+          - "preminor"
+          - "premajor"
+          - "prerelease"
         required: true
       package-name:
-        description: 'Select the package to publish'
+        description: "Select the package to publish"
         type: choice
-        default: 'core'
+        default: "core"
         options:
-          - 'react'
-          - 'core'
+          - "react"
+          - "core"
         required: true
 jobs:
   release:
@@ -42,12 +42,14 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 22.9.0
-          
+
       - name: Enable Corepack
         run: corepack enable
 
       - name: Installing dependencies
-        run: yarn install --frozen-lockfile # for installing on CI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn install --immutable
 
       - name: Bump release version
         if: startsWith(github.event.inputs.release-type, 'pre') != true
@@ -68,6 +70,8 @@ jobs:
           RELEASE_TYPE: ${{ github.event.inputs.release-type }}
 
       - name: Building Package
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn build
 
       # Commit changes
