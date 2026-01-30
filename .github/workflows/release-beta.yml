@@ -59,9 +59,14 @@ jobs:
           yarn workspace @ds-fancode/redux-rewire-react build
           yarn workspace @ds-fancode/redux-rewire build
 
+      - name: Creating .npmrc
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> "$HOME/.npmrc"
+          echo "@ds-fancode:registry=https://npm.pkg.github.com" >> "$HOME/.npmrc"
+
       - name: Publish beta to GitHub Packages
         if: ${{ steps.snapshot.outputs.tag != '' }}
-        run: yarn changeset publish --tag ${{ steps.snapshot.outputs.tag }}
+        run: yarn changeset publish --tag ${{ steps.snapshot.outputs.tag }} --no-git-tag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

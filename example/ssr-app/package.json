@@ -1,5 +1,6 @@
 {
   "name": "ssr-app",
+  "private": true,
   "type": "commonjs",
   "scripts": {
     "start": "NODE_ENV=development webpack --watch",
