@@ -1,8 +1,9 @@
 import type {Middleware, Reducer, Store} from 'redux'
 
-export interface ActionFunction {
-  [key: string]: any
+export interface ActionFunction<T = any> {
+  returnType: Promise<T>
 }
+
 export type IStoreOptions = {
   disableImmer?: boolean
   debug?: boolean

@@ -2,7 +2,7 @@ import type {Action, Reducer, ReducersMapObject} from 'redux'
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
 import {createGlobalSlice} from '../slice/create-global-slice'
 import type {FCStore, IStoreOptions} from '../types/base'
-import {customRequestIdleCallback} from '../utils/idelCallback'
+import {fallbackAsyncCallback} from '../utils/fallbackCallback'
 
 function createReducerManager(
   store: FCStore,
@@ -135,7 +135,7 @@ export function configureStore<
   store.replaceReducer(reducerManager.reduce)
   const preLoadedCache: Record<string, any> = {}
   const actionQueue: (() => void)[] = []
-  store.asyncFunction = options.asyncFunction ?? customRequestIdleCallback
+  store.asyncFunction = options.asyncFunction ?? fallbackAsyncCallback
   const processQueue = () => {
     // Process tasks as long as there is time left and the queue is not empty
     const action = actionQueue.shift()
