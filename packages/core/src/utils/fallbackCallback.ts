@@ -1,1 +1,2 @@
-export const fallbackAsyncCallback = (action: () => void) => action()
+export const fallbackAsyncCallback = (action: () => void) =>
+  Promise.resolve().then(action)

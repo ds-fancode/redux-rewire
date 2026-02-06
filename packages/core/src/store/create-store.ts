@@ -3,7 +3,7 @@ import {applyMiddleware, combineReducers, compose, createStore} from 'redux'
 import {createGlobalSlice} from '../slice/create-global-slice'
 import type {FCStore, IStoreOptions} from '../types/base'
 import {fallbackAsyncCallback} from '../utils/fallbackCallback'
-
+const batchSize = 5
 function createReducerManager(
   store: FCStore,
   initialReducers: ReducersMapObject,
@@ -137,12 +137,12 @@ export function configureStore<
   const actionQueue: (() => void)[] = []
   store.asyncFunction = options.asyncFunction ?? fallbackAsyncCallback
   const processQueue = () => {
-    // Process tasks as long as there is time left and the queue is not empty
-    const action = actionQueue.shift()
-    if (action && typeof action === 'function') {
-      action()
+    const batch = actionQueue.splice(0, batchSize)
+    for (const action of batch) {
+      if (action && typeof action === 'function') {
+        action()
+      }
     }
-    // If the queue is not empty, schedule the next idle callback
     if (actionQueue.length > 0) {
       store.asyncFunction(processQueue)
     }
