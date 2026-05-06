@@ -23,6 +23,11 @@ type ActionArguments<
   }
 ) => ActionFunction['returnType']
 
+type ActionFunctionReturnType<State = any> = Promise<{
+  returnActions: Awaited<ActionFunction['returnType']>
+  state: State
+}>
+
 export const createActionSlice = <
   ReducerSlice extends ReturnType<typeof createReducerSlice>,
   ReducerActions extends ReturnType<ReducerSlice>['reducerActions'],
@@ -43,14 +48,18 @@ export const createActionSlice = <
       | keyof ActionMap]: key extends keyof ReducerActions
       ? ReducerActions[key] extends (...args: any[]) => any
         ? Parameters<ReducerActions[key]>[0] extends undefined
-          ? () => void
-          : (data: Parameters<ReducerActions[key]>[0]) => void
+          ? () => ActionFunctionReturnType<State>
+          : (
+              data: Parameters<ReducerActions[key]>[0]
+            ) => ActionFunctionReturnType<State>
         : never
       : key extends keyof ActionMap
         ? ActionMap[key] extends (...args: any[]) => any
           ? Parameters<ActionMap[key]>[0] extends undefined
-            ? () => void
-            : (data: Parameters<ActionMap[key]>[0]) => void
+            ? () => ActionFunctionReturnType<State>
+            : (
+                data: Parameters<ActionMap[key]>[0]
+              ) => ActionFunctionReturnType<State>
           : never
         : never
   }
@@ -98,46 +107,51 @@ export const createActionSlice = <
     const actions = createActionsReference(allAvailableActionKeys)
     // we already have mapped actionRef, we do not need to map action to execute reducerSlice and ioAction
     allAvailableActionKeys.forEach(actionKey => {
-      actions[actionKey] = (data: never) => {
-        const actionWrapper = () => {
-          const prevState =
-            (store.getState?.() as any)?.[nameSpacedKey] ?? initialState
-          // This order is important
-          // firstly, run our reducers to reducerSlice states
-          if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
-          // Async actions will get updated state after reducer work is done
-          // first make async called to make sure we have the current state to be used in async action
-          if (
-            actionMap[actionKey] &&
-            typeof actionMap[actionKey] === 'function'
-          ) {
-            store.asyncFunction(async () => {
-              try {
-                const globalState = store.getState?.() ?? {}
-                const currentState =
-                  globalState?.[nameSpacedKey] ?? initialState
-                const ioActions = await actionMap[actionKey]?.(data, {
-                  state: currentState,
-                  actions,
-                  rewireKey: nameSpacedKey,
-                  prevState: prevState,
-                  globalState,
-                  store
-                })
-                // need to keep this to support existing architecture
-                if (typeof store.ioRunner === 'function') {
-                  store.ioRunner(ioActions)
+      actions[actionKey] = async (data: never) => {
+        return new Promise(resolve => {
+          const actionWrapper = async () => {
+            const prevState =
+              (store.getState?.() as any)?.[nameSpacedKey] ?? initialState
+            // This order is important
+            // firstly, run our reducers to reducerSlice states
+            if (reducerActions[actionKey]) reducerActions[actionKey]?.(data)
+            // Async actions will get updated state after reducer work is done
+            // first make async called to make sure we have the current state to be used in async action
+            const globalState = store.getState?.() ?? {}
+            const currentState = globalState?.[nameSpacedKey] ?? initialState
+            if (
+              actionMap[actionKey] &&
+              typeof actionMap[actionKey] === 'function'
+            ) {
+              store.asyncFunction(async () => {
+                try {
+                  const ioActions = await actionMap[actionKey]?.(data, {
+                    state: currentState,
+                    actions,
+                    rewireKey: nameSpacedKey,
+                    prevState: prevState,
+                    globalState,
+                    store
+                  })
+                  // need to keep this to support existing architecture
+                  if (typeof store.ioRunner === 'function') {
+                    store.ioRunner(ioActions)
+                  }
+                  resolve({returnActions: ioActions, state: currentState})
+                } catch (err) {
+                  console.error(
+                    `error running ioActions check action for key ${actionKey}`,
+                    err
+                  )
+                  resolve({returnActions: null, state: currentState})
                 }
-              } catch (err) {
-                console.error(
-                  `error running ioActions check action for key ${actionKey}`,
-                  err
-                )
-              }
-            })
+              })
+            } else {
+              resolve({returnActions: null, state: currentState})
+            }
           }
-        }
-        store.addToQueue(actionWrapper)
+          store.addToQueue(actionWrapper)
+        })
       }
     })
 

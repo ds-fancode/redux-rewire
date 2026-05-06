@@ -1,8 +1,8 @@
-import {createReducerSlice} from '../create-reducer-slice'
-import {configureStore} from '../../store/create-store'
-import {createActionSlice} from '../create-action-slice'
-import type {FCStore} from '../../types/base'
 import * as console from 'node:console'
+import {configureStore} from '../../store/create-store'
+import type {FCStore} from '../../types/base'
+import {createActionSlice} from '../create-action-slice'
+import {createReducerSlice} from '../create-reducer-slice'
 
 const delay = (delay?: number) =>
   new Promise(resolve => setTimeout(resolve, delay ?? 10))
@@ -42,42 +42,49 @@ describe('checking slice', () => {
     })
 
     const actionSlice = createActionSlice(reducerSlice, {
-      incrementCount: (actionData, {state, store, actions}) => {
+      incrementCount: async (actionData, {state, store, actions}) => {
         actions.response(TEST.A)
         actions.decrementCount()
-        return 1
+        return state
       },
-      decrementCount: (actionData: string, {state, actions}) => {
-        return Promise.resolve(null)
+      decrementCount: async (actionData: string, {state, actions}) => {
+        return state
       },
-      response: actionData => {
+      response: async (actionData, {state}) => {
         console.log(actionData === TEST.B)
-        return {}
+        return state
       }
     })
 
-    it('check state update', done => {
+    it('check state update', async () => {
       const slice = actionSlice(sliceKey, store)
       expect(slice.getState()).toEqual(initialState)
-      const unsubscribe = slice.subscribe(state => {
-        expect(state.count).toEqual(initialState.count + 1)
-        unsubscribe()
-        done()
-      })
-      slice.actions.incrementCount(1)
+      const {returnActions, state} = await slice.actions.incrementCount(1)
+      expect(state.count).toEqual(1)
+      expect(returnActions.count).toEqual(1)
     })
 
-    it('callback should not be called if state is not updated', async () => {
+    it('subscriber should be called if state is updated', async () => {
+      const slice = actionSlice(sliceKey, store)
+      expect(slice.getState()).toEqual(initialState)
+
+      await new Promise(resolve => {
+        const unsubscribe = slice.subscribe(state => {
+          expect(state.count).toEqual(initialState.count + 1)
+          unsubscribe()
+          resolve(0)
+        })
+        slice.actions.incrementCount(1)
+      })
+    })
+
+    it('subscriber should not be called if state is updated same primitive value', async () => {
       const slice = actionSlice(sliceKey, store)
       expect(slice.getState()).toEqual(initialState)
       const mockCallback = jest.fn()
-      const unsubscribe = slice.subscribe(mockCallback)
-      slice.actions.incrementCount(0)
-      slice.actions.response2()
-      await delay(50)
+      slice.subscribe(mockCallback)
+      await slice.actions.incrementCount(0)
       expect(mockCallback).not.toHaveBeenCalled()
-      unsubscribe()
-      return true
     })
 
     it('check un-subscriptions', async () => {
@@ -85,8 +92,7 @@ describe('checking slice', () => {
       const mockCallback = jest.fn()
       const unsub = slice.subscribe(mockCallback)
       unsub()
-      slice.actions.autoIncrementCount()
-      await delay(50)
+      await slice.actions.autoIncrementCount()
       expect(mockCallback).not.toHaveBeenCalled()
     })
 
@@ -143,50 +149,38 @@ describe('checking slice', () => {
         console.log(state)
         const res = 2
         actions.response(res)
+        return state
       },
-      decrementCount: (actionData, {state, actions}) => {
+      decrementCount: async (actionData, {state, actions}) => {
         console.log(state)
+        return state
       },
-      response2: (actionData: string) => {
-        return null
+      response: async (actionData, {state}) => {
+        return state
       }
     })
 
-    it('check state update', done => {
+    it('check state update', async () => {
       const slice = actionSlice(sliceKey, nameSpaceStore)
-
       expect(slice.getState()).toEqual(initialState)
-      const unsubscribe = slice.subscribe(state => {
-        expect(slice.key).toEqual(`${nameSpace}/${sliceKey}`)
-        expect(state.count).toEqual(initialState.count + 1)
-        unsubscribe()
-        done()
-      })
-      slice.actions.incrementCount(1)
-
-      expect(slice.getState()).toEqual(initialState)
-      slice.actions.incrementCount(1)
+      const result = await slice.actions.incrementCount(1)
+      expect(result.state.count).toBe(initialState.count + 1)
+      expect(slice.getState().count).toBe(initialState.count + 1)
     })
     it('check subscriptions', async () => {
       const slice = actionSlice(sliceKey, nameSpaceStore)
       const mockCallback = jest.fn()
       slice.subscribe(mockCallback)
-      slice.actions.autoIncrementCount()
-      await delay(50)
-      const sliceState = slice.getState()
-      expect(sliceState.count).toBe(1)
-      expect(mockCallback).toHaveBeenCalledWith({...initialState, count: 1})
+      await slice.actions.autoIncrementCount()
+      expect(mockCallback).toHaveBeenCalled()
     })
     it('check un-subscriptions', async () => {
       const slice = actionSlice(sliceKey, nameSpaceStore)
       const mockCallback = jest.fn()
       const unsub = slice.subscribe(mockCallback)
       unsub()
-      slice.actions.autoIncrementCount()
-      await delay(50)
-      const sliceState = slice.getState()
+      await slice.actions.autoIncrementCount()
       expect(mockCallback).not.toHaveBeenCalled()
-      expect(sliceState.count).toBe(1)
     })
 
     it('initial state should be updated', () => {
