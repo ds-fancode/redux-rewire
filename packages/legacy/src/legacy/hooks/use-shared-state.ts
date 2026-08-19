@@ -1,7 +1,7 @@
 import {useEffect, useMemo} from 'react'
 import {shallowEqual} from 'react-redux'
-import {createActionsReferenceFromActionSlice} from '../core/create-actions-reference'
 import {keyHandler} from '../../helper/key-handler'
+import {createActionsReferenceFromActionSlice} from '../core/create-actions-reference'
 import {useReduxState} from './use-redux-state'
 import type {UseReduxStateType} from './use-shared-state.type'
 
@@ -21,7 +21,7 @@ export const useSharedState: UseReduxStateType = function (
         createActionsReferenceFromActionSlice(sharedStore.actionSlice)
     }
     return sharedStore.actionsRefsKeyMap[finalKey]
-  }, [])
+  }, [finalKey])
   const [key, state, actions] = useReduxState(
     finalKey,
     sharedStore.actionSlice,
