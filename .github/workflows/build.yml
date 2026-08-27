@@ -11,6 +11,10 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,27 +43,27 @@ jobs:
 
       - name: Installing dependencies
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: yarn install --immutable
 
       - name: Running lint
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           yarn lint
 
       - name: Running prettier
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           yarn prettier-check
 
       - name: Running tests & coverage
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: yarn test --logHeapUsage --silent --runInBand --ci
 
       - name: Check for changesets
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: yarn changeset-status

@@ -39,25 +39,25 @@ jobs:
 
       - name: Install dependencies
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: yarn install --immutable
 
       - name: Creating .npmrc
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> "$HOME/.npmrc"
+          echo "//npm.pkg.github.com/:_authToken=${{ github.token }}" >> "$HOME/.npmrc"
           echo "@ds-fancode:registry=https://npm.pkg.github.com" >> "$HOME/.npmrc"
 
       # On push to main: Only create Version PR (no publish)
       - name: Bump version
         run: yarn changeset-version
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
 
       # Publish packages
       - name: Publish to GitHub Packages
         run: yarn changeset-publish
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
 
       - name: Commit release changes and create tag
         if: ${{ success() }}
@@ -82,4 +82,4 @@ jobs:
         if: ${{ success() }}
         run: git push origin HEAD:main && git push origin --tags
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}

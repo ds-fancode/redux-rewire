@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: yarn install --immutable
 
       - name: Get snapshot tag
@@ -48,12 +48,12 @@ jobs:
       - name: Version packages (snapshot)
         if: ${{ steps.snapshot.outputs.tag != '' }}
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: yarn changeset version --snapshot ${{ steps.snapshot.outputs.tag }}
 
       - name: Build packages
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           yarn workspace @ds-fancode/redux-rewire-core build
           yarn workspace @ds-fancode/redux-rewire-react build
@@ -61,18 +61,18 @@ jobs:
 
       - name: Creating .npmrc
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> "$HOME/.npmrc"
+          echo "//npm.pkg.github.com/:_authToken=${{ github.token }}" >> "$HOME/.npmrc"
           echo "@ds-fancode:registry=https://npm.pkg.github.com" >> "$HOME/.npmrc"
 
       - name: Publish beta to GitHub Packages
         if: ${{ steps.snapshot.outputs.tag != '' }}
         run: yarn changeset publish --tag ${{ steps.snapshot.outputs.tag }} --no-git-tag
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
 
       - name: Summary
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           echo "## 🚀 Beta Published!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
