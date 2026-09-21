@@ -1,5 +1,11 @@
 # @ds-fancode/redux-rewire
 
+## 1.0.1
+
+### Patch Changes
+
+- a4b89b3: Shared store fix in old redux-rewire
+
 ## 1.0.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@ds-fancode/redux-rewire",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "State management library for react based applications",
   "author": "FanCode",
   "license": "ISC",
